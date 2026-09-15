@@ -17,6 +17,7 @@ export const Header: React.FC = () => {
   const [topBannerClosed, setTopBannerClosed] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const cartTotalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -83,22 +84,96 @@ export const Header: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Employee User Info with B2B status */}
-            <div
-              onClick={() => {
-                setActivePage('mypage');
-                setMyPageTab('subsidy');
-              }}
-              className="flex items-center gap-1.5 cursor-pointer hover:text-[#181718]"
-            >
-              <span className="w-4 h-4 rounded-full bg-[#1f976b] text-white flex items-center justify-center text-[10px] font-bold">
-                G
-              </span>
-              <span className="font-semibold text-[#181718]">김지선</span>
-              <span className="text-[11px] text-[#1f976b] bg-[#e8f5ef] px-1.5 py-0.5 rounded font-medium">
-                B2B 임직원
-              </span>
-              <ChevronDown className="w-3 h-3 text-[#9c9c9c]" />
+            {/* Employee User Info with B2B status & Interactive Dropdown Menu */}
+            <div className="relative">
+              <div
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-1.5 cursor-pointer hover:text-[#181718] py-1 select-none"
+              >
+                <span className="w-4 h-4 rounded-full bg-[#1f976b] text-white flex items-center justify-center text-[10px] font-bold">
+                  G
+                </span>
+                <span className="font-semibold text-[#181718]">김지선</span>
+                <span className="text-[11px] text-[#1f976b] bg-[#e8f5ef] px-1.5 py-0.5 rounded font-medium">
+                  B2B 임직원
+                </span>
+                <ChevronDown className={`w-3 h-3 text-[#9c9c9c] transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180 text-[#df0000]' : ''}`} />
+              </div>
+
+              {/* B2B User Profile Quick Dropdown */}
+              {isUserMenuOpen && (
+                <div
+                  className="absolute right-0 top-full mt-1.5 w-64 bg-white rounded-lg shadow-xl border border-[#cbd2d4] p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150 text-left"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-[#edf0f1]">
+                    <div>
+                      <div className="font-bold text-sm text-[#181718]">김지선 임직원님</div>
+                      <div className="text-[11px] text-[#80888a] mt-0.5">(주)파트너스 B2B | EMP-2026-9243</div>
+                    </div>
+                    <span className="bg-[#e8f5ef] text-[#1f976b] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#a3d9bc]">
+                      골드
+                    </span>
+                  </div>
+
+                  <div className="my-2.5 bg-[#fffafa] border border-[#f9cdcd] rounded p-2.5 text-xs space-y-1">
+                    <div className="flex justify-between font-bold text-[#1f976b]">
+                      <span>9월 잔여지원금:</span>
+                      <span>{subsidyLedger.remainingSubsidy.toLocaleString()}원</span>
+                    </div>
+                    <div className="flex justify-between text-[11px] text-[#555a5c] pt-1 border-t border-[#f5baba]">
+                      <span>추천도서:</span>
+                      <span className="font-medium text-[#df0000]">
+                        {subsidyLedger.recommendedUsed ? '사용완료 (100% 지원)' : '1권 가능 (100% 지원)'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-[11px] text-[#555a5c]">
+                      <span>개인도서:</span>
+                      <span className="font-medium text-[#1f976b]">
+                        {subsidyLedger.personalUsed ? '사용완료 (50% 지원)' : '10,000원 한도 가능'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 text-xs pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActivePage('mypage');
+                        setMyPageTab('subsidy');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded hover:bg-[#f6f6f6] font-medium text-[#181718] flex items-center justify-between transition-colors"
+                    >
+                      <span>💳 나의 B2B 독서지원 현황</span>
+                      <span className="text-[#80888a] text-[10px]">&rarr;</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActivePage('mypage');
+                        setMyPageTab('orders');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded hover:bg-[#f6f6f6] font-medium text-[#181718] flex items-center justify-between transition-colors"
+                    >
+                      <span>📦 주문 / 배송 내역</span>
+                      <span className="text-[#80888a] text-[10px]">&rarr;</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActivePage('cart');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded hover:bg-[#ffebeb] font-bold text-[#df0000] flex items-center justify-between transition-colors"
+                    >
+                      <span>🛒 장바구니 이동</span>
+                      <span className="text-[#df0000] text-[10px]">&rarr;</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <span className="text-[#dadada]">|</span>
@@ -149,15 +224,11 @@ export const Header: React.FC = () => {
           onClick={() => setActivePage('explore')}
           className="flex items-center gap-2.5 cursor-pointer flex-shrink-0"
         >
-          <div className="w-10 h-10 rounded-full bg-[#df0000] flex items-center justify-center shadow-sm">
-            <span className="text-white font-extrabold text-base tracking-tighter">YP</span>
+          <div className="flex items-center justify-center">
+            <img src="https://cdn.ypbooks.co.kr/image/logo/202512/bf6263dd-acbc-481a-bbe9-ee745440f5ac.png" alt="영풍문고" style={{ width: '160px', height: '40px' }} />
+            <span className="pl-4 font-semibold text-[#555]">임직원 복지몰</span>
           </div>
-          <div>
-            <span className="text-2xl font-black tracking-tight text-[#181718]">영풍문고</span>
-            <span className="ml-2 text-[11px] font-bold text-[#1f976b] border border-[#1f976b] px-1.5 py-0.5 rounded">
-              B2B 독서지원
-            </span>
-          </div>
+
         </div>
 
         {/* Search Bar */}
@@ -180,177 +251,126 @@ export const Header: React.FC = () => {
           </form>
           {/* Keyword tags under search */}
           <div className="hidden sm:flex items-center gap-3 mt-1.5 text-[12px] text-[#7e7e7e] overflow-hidden whitespace-nowrap">
-            <span
-              onClick={() => setActivePage('explore')}
-              className="cursor-pointer hover:text-[#df0000]"
-            >
-              창비브랜드전
-            </span>
-            <span className="text-[#dadada]">·</span>
-            <span
-              onClick={() => setActivePage('explore')}
-              className="cursor-pointer hover:text-[#df0000]"
-            >
-              하루키 신간
-            </span>
-            <span className="text-[#dadada]">·</span>
-            <span
-              onClick={() => setActivePage('explore')}
-              className="cursor-pointer hover:text-[#df0000]"
-            >
-              트렌드코리아
-            </span>
-            <span className="text-[#dadada]">·</span>
-            <span
-              onClick={() => setActivePage('explore')}
-              className="cursor-pointer hover:text-[#df0000]"
-            >
-              흔한남매 23
-            </span>
-            <span className="text-[#dadada]">·</span>
-            <span
-              onClick={() => setActivePage('explore')}
-              className="cursor-pointer hover:text-[#df0000]"
-            >
-              그리스인조르바
-            </span>
+            <span className="text-[#df0000] font-bold">인기검색어</span>
+            <span className="cursor-pointer hover:text-[#df0000]" onClick={() => setActivePage('explore')}>1. 소설 보다</span>
+            <span className="cursor-pointer hover:text-[#df0000]" onClick={() => setActivePage('explore')}>2. 82년생 김지영</span>
+            <span className="cursor-pointer hover:text-[#df0000]" onClick={() => setActivePage('explore')}>3. 돈의 속성</span>
+            <span className="cursor-pointer hover:text-[#df0000]" onClick={() => setActivePage('explore')}>4. 트렌드 코리아</span>
           </div>
         </div>
 
-        {/* Right Ad banner matching payment.png / cart.png */}
+        {/* Right Promo Banner Card */}
         <div
           onClick={() => setActivePage('explore')}
-          className="hidden lg:flex items-center gap-3 bg-[#f6f6f6] p-2 rounded-lg border border-[#edf0f1] cursor-pointer hover:border-[#cbd2d4] transition-all max-w-[240px]"
+          className="hidden xl:flex items-center gap-3 bg-[#f6f6f6] border border-[#dadada] rounded-lg p-2.5 cursor-pointer hover:border-[#80888a] transition-all"
         >
-          <div className="w-12 h-16 bg-[#e1251b] rounded flex items-center justify-center text-white text-[10px] font-bold text-center px-1 shadow-sm flex-shrink-0">
-            찌니주의보
+          <div className="w-10 h-14 bg-[#df0000] rounded text-white font-black text-xs flex items-center justify-center text-center leading-tight">
+            찌니
+            <br />
+            주의보
           </div>
-          <div className="text-left">
-            <span className="text-[10px] text-[#80888a] font-medium bg-white px-1.5 py-0.5 rounded border border-[#edf0f1]">
+          <div className="space-y-0.5 pr-2">
+            <span className="text-[10px] bg-white border border-[#cbd2d4] px-1.5 py-0.2 rounded text-[#80888a] font-medium">
               AD
             </span>
-            <p className="text-xs font-semibold text-[#181718] mt-1 leading-tight line-clamp-2">
+            <div className="text-xs font-bold text-[#181718] hover:text-[#df0000]">
               다름을 품는 따뜻한 마음의 이야기
-            </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 4. Global Navigation Bar (GNB) with Red Accent Border */}
-      <nav className="border-t border-[#dadada] border-b-[2.5px] border-[#df0000] bg-white">
+      {/* 4. Bottom Main Navigation Bar (Red/Gray theme) */}
+      <nav className="border-t border-[#dadada] bg-white">
         <div className="max-w-[1280px] mx-auto px-4 h-12 flex items-center justify-between">
-          <div className="flex items-center space-x-1 sm:space-x-4 h-full">
-            {/* Category Dropdown Trigger */}
+          <div className="flex items-center space-x-1 sm:space-x-2 h-full">
+
+            {/* All Category Dropdown Trigger */}
             <div className="relative h-full flex items-center">
               <button
+                type="button"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className="flex items-center gap-2 h-full px-3 text-[#181718] font-bold text-sm sm:text-base hover:bg-[#f6f6f6] transition-colors"
+                className="flex items-center gap-2 bg-[#df0000] hover:bg-[#c90000] text-white px-4 h-9 rounded text-sm font-bold transition-colors mr-2"
               >
-                <Menu className="w-5 h-5 text-[#df0000]" />
+                <Menu className="w-4 h-4" />
                 <span>전체 카테고리</span>
               </button>
 
-              {/* Dropdown Menu */}
+              {/* Category Dropdown Menu */}
               {isCategoryOpen && (
-                <div className="absolute top-12 left-0 w-64 bg-white border border-[#cbd2d4] shadow-lg rounded-b-lg py-2 z-50">
-                  <div className="px-4 py-2 text-xs font-bold text-[#80888a] border-b border-[#f6f6f6]">
-                    B2B 독서지원 분야
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white border border-[#cbd2d4] rounded-lg shadow-xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-3 py-1.5 text-xs font-bold text-[#80888a] border-b border-[#edf0f1]">
+                    B2B 독서 지원 분야
                   </div>
-                  <button
-                    onClick={() => {
-                      setActivePage('explore');
-                      setIsCategoryOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#f6f6f6] flex items-center justify-between text-[#181718]"
-                  >
-                    <span>추천도서 (회사 100% 지원)</span>
-                    <span className="text-[11px] bg-[#ffebeb] text-[#df0000] px-1.5 py-0.5 rounded font-semibold">
-                      전액지원
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActivePage('explore');
-                      setIsCategoryOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#f6f6f6] flex items-center justify-between text-[#181718]"
-                  >
-                    <span>개인도서 (50% 지원, 최대 1만원)</span>
-                    <span className="text-[11px] bg-[#edf0f1] text-[#555a5c] px-1.5 py-0.5 rounded font-semibold">
-                      복합결제
-                    </span>
-                  </button>
-                  <div className="border-t border-[#edf0f1] my-1"></div>
-                  {['소설/시/희곡', '경영/경제', '인문/교양', '자기계발', '어린이/청소년', 'eBook/전자책'].map(
-                    (cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setActivePage('explore');
-                          setIsCategoryOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-[#595959] hover:bg-[#f6f6f6] hover:text-[#181718]"
-                      >
-                        {cat}
-                      </button>
-                    )
-                  )}
+                  {[
+                    '추천도서 (100% 전액지원)',
+                    '개인도서 (50% 복합지원)',
+                    '소설/문학',
+                    '경영/경제/재테크',
+                    '자기계발/리더십',
+                    '인문/교양/역사',
+                    '어린이/가족도서'
+                  ].map((cat, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setIsCategoryOpen(false);
+                        setActivePage('explore');
+                      }}
+                      className="w-full text-left px-4 py-2 text-xs text-[#181718] hover:bg-[#ffebeb] hover:text-[#df0000] font-medium flex items-center justify-between"
+                    >
+                      <span>{cat}</span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
-            {/* Nav links */}
+            {/* Main Category Tabs */}
             <button
               onClick={() => setActivePage('explore')}
-              className={`h-full px-2 sm:px-3 text-sm sm:text-base font-semibold transition-colors ${
-                activePage === 'explore'
-                  ? 'text-[#df0000] border-b-2 border-[#df0000]'
-                  : 'text-[#3d3c3f] hover:text-[#181718]'
-              }`}
+              className={`h-full px-2 sm:px-3 text-sm sm:text-base font-bold transition-colors ${activePage === 'explore'
+                ? 'text-[#df0000] border-b-2 border-[#df0000]'
+                : 'text-[#3d3c3f] hover:text-[#181718]'
+                }`}
+            >
+              도서 전체보기
+            </button>
+            <button
+              onClick={() => setActivePage('explore')}
+              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] cursor-pointer hidden sm:block"
             >
               베스트
             </button>
             <button
               onClick={() => setActivePage('explore')}
-              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] hidden sm:block"
+              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] cursor-pointer hidden md:block curso"
             >
-              신상품
+              신간도서
             </button>
             <button
               onClick={() => setActivePage('explore')}
-              className="h-full px-2 sm:px-3 text-sm sm:text-base font-bold text-[#df0000] hover:text-[#ea2e2e] flex items-center gap-1"
+              className="h-full px-2 sm:px-3 text-sm sm:text-base font-bold text-[#df0000] hover:text-[#c90000] cursor-pointer"
             >
-              <span>추천도서</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#df0000]"></span>
+              추천
             </button>
             <button
               onClick={() => setActivePage('explore')}
-              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718]"
+              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] cursor-pointer"
             >
               개인도서
-            </button>
-            <button
-              onClick={() => setActivePage('explore')}
-              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] hidden md:block"
-            >
-              기프티콘
-            </button>
-            <button
-              onClick={() => setActivePage('explore')}
-              className="h-full px-2 sm:px-3 text-sm sm:text-base font-medium text-[#3d3c3f] hover:text-[#181718] hidden lg:block text-[#df0000]"
-            >
-              컬처페이지
             </button>
           </div>
 
           {/* Right GNB status & Subsidies quick preview */}
           <div className="flex items-center space-x-3 text-xs">
             <button
+              type="button"
               onClick={() => {
                 setActivePage('mypage');
                 setMyPageTab('subsidy');
               }}
-              className="hidden sm:flex items-center gap-2 bg-[#f6f6f6] hover:bg-[#edf0f1] px-3 py-1.5 rounded-full border border-[#cbd2d4] text-[#181718]"
+              className="flex items-center gap-2 bg-[#f6f6f6] hover:bg-[#edf0f1] hover:border-[#df0000] px-3 py-1.5 rounded-full border border-[#cbd2d4] text-[#181718] cursor-pointer transition-all"
             >
               <span className="text-[#df0000] font-bold">9월 지원금</span>
               <span className="text-[#595959]">
@@ -360,12 +380,12 @@ export const Header: React.FC = () => {
             </button>
 
             <button
+              type="button"
               onClick={() => setActivePage('cart')}
-              className={`hidden md:block text-xs font-semibold px-2 py-1 rounded transition-colors ${
-                activePage === 'cart' ? 'bg-[#df0000] text-white' : 'text-[#595959] hover:text-[#df0000]'
-              }`}
+              className="bg-[#df0000] hover:bg-[#c90000] text-white text-xs font-bold px-3.5 py-1.5 rounded transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
-              장바구니 바로가기
+              <ShoppingCart className="w-3.5 h-3.5" />
+              <span>장바구니 바로가기</span>
             </button>
           </div>
         </div>

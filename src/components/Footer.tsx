@@ -8,10 +8,10 @@ export const Footer: React.FC = () => {
   return (
     <footer className="w-full bg-[#f9f9f9] border-t border-[#dadada] pt-10 pb-12 text-[#303030] text-xs select-none">
       <div className="max-w-[1280px] mx-auto px-4">
-        
+
         {/* Above row */}
         <div className="flex flex-col lg:flex-row justify-between gap-8 pb-8 border-b border-[#dadada]/60">
-          
+
           {/* Customer Service Info */}
           <div className="space-y-3">
             <div className="text-sm font-semibold text-[#80888a]">고객센터</div>
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
               <p>대표 메일: customer@ypbooks.co.kr</p>
               <p>대량 주문: webmaster@ypbooks.co.kr</p>
             </div>
-            
+
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => {
@@ -117,16 +117,14 @@ export const Footer: React.FC = () => {
         {/* Below row (Company information, policies & copyright) */}
         <div className="pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#df0000] flex items-center justify-center text-white font-extrabold text-xs">
-              YP
+            <div className="flex items-center justify-center text-white font-extrabold text-xs">
+              <img src="https://cdn.ypbooks.co.kr/front_web/assets/img/yp_logo.png" alt="서점다운 서점 영풍문고" style={{ width: '169px', height: '68px' }} />
             </div>
-            <div className="font-bold text-[#181718] text-sm">
-              서점다운서점 <span className="text-[#df0000]">영풍문고</span>
-            </div>
+
           </div>
 
           {/* Policy links */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#595959]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#595959] ">
             <a href="#terms" className="hover:text-[#181718]">이용약관</a>
             <span className="text-[#dadada]">|</span>
             <a href="#privacy" className="font-bold text-[#181718] hover:underline">개인정보처리방침</a>

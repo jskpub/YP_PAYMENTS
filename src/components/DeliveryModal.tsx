@@ -40,8 +40,8 @@ export const DeliveryModal: React.FC = () => {
   const sampleAddresses = [
     {
       post: '03154',
-      road: '서울특별시 종로구 종로 1 (교보빌딩 부근 영풍문고 종각종로본점)',
-      jibun: '서울특별시 종로구 종로1가 24'
+      road: '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)',
+      jibun: '서울특별시 종로구 서린동 33 영풍빌딩'
     },
     {
       post: '06110',
@@ -72,8 +72,8 @@ export const DeliveryModal: React.FC = () => {
     if (checked) {
       setRecipient('김지선');
       setPhonePrefix('010');
-      setPhoneMid('9243');
-      setPhoneEnd('6290');
+      setPhoneMid('1354');
+      setPhoneEnd('2468');
     }
   };
 
@@ -125,7 +125,7 @@ export const DeliveryModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 overflow-y-auto">
       <div className="relative w-full max-w-[620px] bg-white rounded-lg shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
-        
+
         {/* Header - Matching delivery_new.png red bar */}
         <div className="bg-[#df0000] text-white px-5 py-3.5 flex items-center justify-between flex-shrink-0">
           <h2 className="text-lg font-bold">배송지 변경</h2>
@@ -143,33 +143,30 @@ export const DeliveryModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setAddressModalTab('list')}
-            className={`flex-1 py-3 text-center transition-colors ${
-              addressModalTab === 'list'
-                ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
-                : 'text-[#80888a] hover:text-[#181718]'
-            }`}
+            className={`flex-1 py-3 text-center transition-colors ${addressModalTab === 'list'
+              ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
+              : 'text-[#80888a] hover:text-[#181718]'
+              }`}
           >
             주소록
           </button>
           <button
             type="button"
             onClick={() => setAddressModalTab('recent')}
-            className={`flex-1 py-3 text-center transition-colors ${
-              addressModalTab === 'recent'
-                ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
-                : 'text-[#80888a] hover:text-[#181718]'
-            }`}
+            className={`flex-1 py-3 text-center transition-colors ${addressModalTab === 'recent'
+              ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
+              : 'text-[#80888a] hover:text-[#181718]'
+              }`}
           >
             최근 배송지
           </button>
           <button
             type="button"
             onClick={() => setAddressModalTab('new')}
-            className={`flex-1 py-3 text-center transition-colors ${
-              addressModalTab === 'new'
-                ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
-                : 'text-[#80888a] hover:text-[#181718]'
-            }`}
+            className={`flex-1 py-3 text-center transition-colors ${addressModalTab === 'new'
+              ? 'text-[#181718] border-b-2 border-[#181718] font-bold'
+              : 'text-[#80888a] hover:text-[#181718]'
+              }`}
           >
             신규 배송지 등록
           </button>
@@ -177,7 +174,7 @@ export const DeliveryModal: React.FC = () => {
 
         {/* Modal Body */}
         <div className="p-5 overflow-y-auto flex-1 text-[#3d3c3f] text-sm">
-          
+
           {/* TAB 1: 주소록 */}
           {addressModalTab === 'list' && (
             <div className="space-y-3">
@@ -190,11 +187,10 @@ export const DeliveryModal: React.FC = () => {
                   <div
                     key={addr.id}
                     onClick={() => selectExistingAddress(addr)}
-                    className={`p-4 rounded border transition-all cursor-pointer flex items-start justify-between ${
-                      isCurrent
-                        ? 'border-[#df0000] bg-[#ffebeb]/30 ring-1 ring-[#df0000]'
-                        : 'border-[#cbd2d4] hover:border-[#80888a] bg-white'
-                    }`}
+                    className={`p-4 rounded border transition-all cursor-pointer flex items-start justify-between ${isCurrent
+                      ? 'border-[#df0000] bg-[#ffebeb]/30 ring-1 ring-[#df0000]'
+                      : 'border-[#cbd2d4] hover:border-[#80888a] bg-white'
+                      }`}
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -218,11 +214,10 @@ export const DeliveryModal: React.FC = () => {
                         e.stopPropagation();
                         selectExistingAddress(addr);
                       }}
-                      className={`text-xs px-3 py-1.5 rounded font-semibold border ${
-                        isCurrent
-                          ? 'bg-[#df0000] text-white border-[#df0000]'
-                          : 'bg-white text-[#555a5c] border-[#cbd2d4] hover:bg-[#f6f6f6]'
-                      }`}
+                      className={`text-xs px-3 py-1.5 rounded font-semibold border ${isCurrent
+                        ? 'bg-[#df0000] text-white border-[#df0000]'
+                        : 'bg-white text-[#555a5c] border-[#cbd2d4] hover:bg-[#f6f6f6]'
+                        }`}
                     >
                       {isCurrent ? '선택됨' : '선택'}
                     </button>
@@ -275,7 +270,7 @@ export const DeliveryModal: React.FC = () => {
           {/* TAB 3: 신규 배송지 등록 (Exact delivery_new.png) */}
           {addressModalTab === 'new' && (
             <form onSubmit={handleSubmitNewAddress} className="space-y-3.5">
-              
+
               {/* 배송 방식 선택 */}
               <div className="flex items-center gap-6 pb-1">
                 <label className="flex items-center gap-2 cursor-pointer text-sm font-medium">
@@ -557,7 +552,7 @@ export const DeliveryModal: React.FC = () => {
                           className="p-3 hover:bg-[#ffebeb]/40 cursor-pointer text-left transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="bg-[#edf0f1] text-[#181718] px-2 py-0.5 rounded text-xs font-mono font-bold">
+                            <span className="bg-[#edf0f1] text-[#181718] px-2 py-0.5 rounded text-xs font-bold">
                               {item.post}
                             </span>
                             <span className="text-sm font-bold text-[#181718]">{item.road}</span>

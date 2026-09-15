@@ -1,0 +1,76 @@
+/* ==========================================================================
+   Pretendard GOV Local Font Declarations (@font-face)
+   Asset Location: src/assets/fonts/
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Thin.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-ExtraLight.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard GOV';
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url('../assets/fonts/PretendardGOV-Black.woff') format('woff');
+}

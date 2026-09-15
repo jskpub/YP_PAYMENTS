@@ -16,7 +16,7 @@ export const ReceiptModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
       <div className="relative w-full max-w-lg bg-white rounded-lg shadow-2xl overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-150">
-        
+
         {/* Header */}
         <div className="bg-[#181718] text-white px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export const ReceiptModal: React.FC = () => {
         <div className="p-6 text-sm text-[#181718] space-y-4">
           <div className="text-center pb-3 border-b border-[#dadada]">
             <div className="text-xs text-[#80888a]">주문번호 (Order ID)</div>
-            <div className="font-mono font-bold text-lg text-[#df0000] mt-0.5">{order.orderId}</div>
+            <div className="font-bold text-lg text-[#df0000] mt-0.5">{order.orderId}</div>
             <div className="text-xs text-[#595959] mt-1">거래일시: {order.orderDate}</div>
           </div>
 
@@ -71,7 +71,7 @@ export const ReceiptModal: React.FC = () => {
                       {item.bookType === 'recommended' ? '추천도서 (100% 지원)' : '개인도서 (50% 지원)'} · {item.format === 'ebook' ? '전자책' : '종이책'} · {item.quantity}권
                     </div>
                   </div>
-                  <div className="text-right space-y-0.5 font-mono">
+                  <div className="text-right space-y-0.5">
                     <div className="text-[#181718] font-bold">{item.sellingPrice.toLocaleString()}원</div>
                     <div className="text-[#1f976b]">지원금 -{item.companySubsidy.toLocaleString()}원</div>
                     <div className="text-[#df0000] font-semibold">실부담 {item.employeePayment.toLocaleString()}원</div>

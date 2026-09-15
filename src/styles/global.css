@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Global Stylesheet (global.css)
+   ========================================================================== */
+
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./variables.css";
+@import "./ypbook.css";
+@import "./style_add.css";
+
+/* Tailwind v4 CSS Theme Extension Mapping */
+@theme {
+  --font-pretendard: var(--font-family-base);
+
+  --color-canvas: var(--color-canvas);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-foreground: var(--color-foreground);
+  --color-foreground-secondary: var(--color-foreground-secondary);
+  --color-muted: var(--color-muted);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+}
+
+/* Global Reset & Body Styles */
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-foreground);
+  background-color: var(--color-canvas);
+  margin: 0;
+  padding: 0;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

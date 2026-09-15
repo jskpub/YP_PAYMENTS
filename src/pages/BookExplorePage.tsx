@@ -23,7 +23,7 @@ export const BookExplorePage: React.FC = () => {
   return (
     <div className="w-full bg-[#f6f6f6] min-h-screen py-8">
       <div className="max-w-[1280px] mx-auto px-4 space-y-6">
-        
+
         {/* Top B2B Program Announcement Banner */}
         <div className="bg-gradient-to-r from-[#181718] to-[#363636] text-white p-6 rounded-xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1.5">
@@ -46,7 +46,7 @@ export const BookExplorePage: React.FC = () => {
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-lg min-w-[280px] space-y-2 text-xs">
             <div className="flex justify-between items-center text-neutral-300">
               <span>9월 지원금 잔여 한도</span>
-              <span className="text-sm font-bold text-white font-mono">
+              <span className="text-sm font-bold text-white">
                 {subsidyLedger.remainingSubsidy.toLocaleString()}원 / {subsidyLedger.monthlyLimit.toLocaleString()}원
               </span>
             </div>
@@ -77,32 +77,29 @@ export const BookExplorePage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFilterType('all')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                filterType === 'all'
-                  ? 'bg-[#181718] text-white shadow-sm'
-                  : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${filterType === 'all'
+                ? 'bg-[#181718] text-white shadow-sm'
+                : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
+                }`}
             >
               전체 도서 ({books.length})
             </button>
             <button
               onClick={() => setFilterType('recommended')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                filterType === 'recommended'
-                  ? 'bg-[#df0000] text-white shadow-sm'
-                  : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${filterType === 'recommended'
+                ? 'bg-[#df0000] text-white shadow-sm'
+                : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
+                }`}
             >
               <Award className="w-4 h-4" />
               추천도서 (회사 100% 지원)
             </button>
             <button
               onClick={() => setFilterType('personal')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${
-                filterType === 'personal'
-                  ? 'bg-[#1f976b] text-white shadow-sm'
-                  : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${filterType === 'personal'
+                ? 'bg-[#1f976b] text-white shadow-sm'
+                : 'bg-[#f6f6f6] text-[#595959] hover:bg-[#edf0f1]'
+                }`}
             >
               <Sparkles className="w-4 h-4" />
               개인도서 (50% 복합지원)
@@ -130,13 +127,12 @@ export const BookExplorePage: React.FC = () => {
                   {/* Badge & Type */}
                   <div className="flex items-center justify-between text-xs">
                     <span
-                      className={`px-2 py-0.5 rounded font-bold ${
-                        isRecommended
-                          ? 'bg-[#ffebeb] text-[#df0000] border border-[#f9cdcd]'
-                          : 'bg-[#edf0f1] text-[#1f976b] border border-[#cbd2d4]'
-                      }`}
+                      className={`px-2 py-0.5 rounded font-bold ${isRecommended
+                        ? 'bg-[#ffebeb] text-[#df0000] border border-[#f9cdcd]'
+                        : 'bg-[#edf0f1] text-[#1f976b] border border-[#cbd2d4]'
+                        }`}
                     >
-                      {isRecommended ? 'B2B 추천 100% 지원' : 'B2B 개인 50% 지원'}
+                      {isRecommended ? '추천도서 100% 지원' : '개인도서 50% 지원'}
                     </span>
                     <span className="text-[#80888a]">{book.publisher}</span>
                   </div>
@@ -172,22 +168,20 @@ export const BookExplorePage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleFormatChange(book.id, 'paper')}
-                      className={`flex-1 py-1 rounded text-xs font-medium border ${
-                        format === 'paper'
-                          ? 'bg-[#181718] text-white border-[#181718]'
-                          : 'bg-white text-[#595959] border-[#cbd2d4] hover:bg-[#f6f6f6]'
-                      }`}
+                      className={`flex-1 py-1 rounded text-xs font-medium border ${format === 'paper'
+                        ? 'bg-[#181718] text-white border-[#181718]'
+                        : 'bg-white text-[#595959] border-[#cbd2d4] hover:bg-[#f6f6f6]'
+                        }`}
                     >
                       종이책
                     </button>
                     <button
                       type="button"
                       onClick={() => handleFormatChange(book.id, 'ebook')}
-                      className={`flex-1 py-1 rounded text-xs font-medium border ${
-                        format === 'ebook'
-                          ? 'bg-[#181718] text-white border-[#181718]'
-                          : 'bg-white text-[#595959] border-[#cbd2d4] hover:bg-[#f6f6f6]'
-                      }`}
+                      className={`flex-1 py-1 rounded text-xs font-medium border ${format === 'ebook'
+                        ? 'bg-[#181718] text-white border-[#181718]'
+                        : 'bg-white text-[#595959] border-[#cbd2d4] hover:bg-[#f6f6f6]'
+                        }`}
                     >
                       전자책(eBook)
                     </button>
@@ -261,11 +255,10 @@ export const BookExplorePage: React.FC = () => {
                   />
                   <div className="flex-1 space-y-1.5">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${
-                        activeQuickDetailBook.bookType === 'recommended'
-                          ? 'bg-[#ffebeb] text-[#df0000]'
-                          : 'bg-[#edf0f1] text-[#1f976b]'
-                      }`}
+                      className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${activeQuickDetailBook.bookType === 'recommended'
+                        ? 'bg-[#ffebeb] text-[#df0000]'
+                        : 'bg-[#edf0f1] text-[#1f976b]'
+                        }`}
                     >
                       {activeQuickDetailBook.bookType === 'recommended' ? '추천도서 100% 지원' : '개인도서 50% 지원'}
                     </span>

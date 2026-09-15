@@ -3,7 +3,7 @@
  * Web 표준 가이드 및 B2B 복합결제 PRD 기준
  */
 
-export type BookType = 'recommended' | 'personal'; // 추천도서 (100% 회사 지원) | 개인도서 (50% 지원, 최대 10,000원)
+export type BookType = 'recommended' | 'personal' | 'general'; // 추천도서 | 개인도서 | 일반도서(지원금 미적용)
 export type BookFormat = 'paper' | 'ebook'; // 종이도서 | 전자도서
 export type PageTab = 'explore' | 'cart' | 'gift' | 'payment' | 'complete' | 'mypage';
 
@@ -40,6 +40,8 @@ export interface CartItem {
   itemSellingPrice: number;
   itemCompanySubsidy: number; // 회사 지원금
   itemEmployeePayment: number; // 직원 부담금
+  isSubsidyApplied?: boolean; // 지원금 적용 여부
+  subsidyNote?: string;       // 지원금 설명 노트
 }
 
 export interface Address {
@@ -69,6 +71,8 @@ export interface OrderItemRecord {
   sellingPrice: number;
   companySubsidy: number;
   employeePayment: number;
+  isSubsidyApplied?: boolean;
+  subsidyNote?: string;
 }
 
 export interface Order {
@@ -87,6 +91,7 @@ export interface Order {
   shippingFee: number;
   finalPaidAmount: number;     // totalEmployeePayment + shippingFee
   pointsUsed: number;
+  earnedPoints?: number;       // 적립 예정 포인트
   deliveryAddress: Address;
   deliveryMemo: string;
   paymentMethod: string;

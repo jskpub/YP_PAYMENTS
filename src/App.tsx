@@ -22,7 +22,7 @@ const AppContent: React.FC = () => {
   const { activePage, toastMessage } = useShop();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#181718] font-sans antialiased selection:bg-[#df0000] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-white text-[#181718] antialiased selection:bg-[#df0000] selection:text-white">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-70 bg-[#181718]/90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 duration-200">

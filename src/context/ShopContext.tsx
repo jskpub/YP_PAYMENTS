@@ -7,7 +7,7 @@ interface ShopContextType {
   setActivePage: (page: PageTab) => void;
   myPageTab: 'subsidy' | 'orders' | 'refund';
   setMyPageTab: (tab: 'subsidy' | 'orders' | 'refund') => void;
-  
+
   // Books catalog
   books: Book[];
   selectedBookForDetail: Book | null;
@@ -23,7 +23,10 @@ interface ShopContextType {
   removeSelectedFromCart: () => void;
   toggleItemSelection: (id: string) => void;
   toggleAllSelection: (selected: boolean) => void;
-  
+  applyCartSubsidy: (id: string) => void;
+  removeCartSubsidy: (id: string) => void;
+  updateItemFormat: (id: string, format: BookFormat) => void;
+
   // Free Gift
   selectedGiftId: string;
   setSelectedGiftId: (id: string) => void;
@@ -55,7 +58,7 @@ interface ShopContextType {
 
   // Subsidy & Ledger (B2B Rule Engine)
   subsidyLedger: SubsidyLedger;
-  calculateBookSubsidy: (book: Book, quantity?: number) => {
+  calculateBookSubsidy: (book: Book, formatOrQty?: BookFormat | number, qtyParam?: number) => {
     companySubsidy: number;
     employeePayment: number;
     ruleExplanation: string;
@@ -96,11 +99,46 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Address Modal
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [addressModalTab, setAddressModalTab] = useState<'list' | 'recent' | 'new'>('new');
+  const sanitizeAddressItem = (a: Address): Address => {
+    const isKyoboOrOld =
+      a.roadAddress.includes('교보') ||
+      a.jibunAddress.includes('교보') ||
+      a.roadAddress.includes('종로 1') ||
+      a.roadAddress.includes('종로1가') ||
+      a.roadAddress.includes('강남대로 542 영풍빌딩 13층') ||
+      a.id === 'addr-01';
+
+    const isOldPhone = a.phone1 && (a.phone1.includes('9243') || a.phone1.includes('6290'));
+
+    return {
+      ...a,
+      phone1: isOldPhone ? '010-1345-2468' : a.phone1,
+      roadAddress: isKyoboOrOld
+        ? '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)'
+        : a.roadAddress,
+      jibunAddress: isKyoboOrOld
+        ? '서울특별시 종로구 서린동 33 영풍빌딩'
+        : a.jibunAddress
+    };
+  };
+
   const [addresses, setAddresses] = useState<Address[]>(() => {
     const saved = localStorage.getItem('yp_addresses');
-    return saved ? JSON.parse(saved) : INITIAL_ADDRESSES;
+    if (saved) {
+      try {
+        const parsed: Address[] = JSON.parse(saved);
+        const sanitized = parsed.map(sanitizeAddressItem);
+        localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
+        return sanitized;
+      } catch (e) { }
+    }
+    return INITIAL_ADDRESSES.map(sanitizeAddressItem);
   });
-  const [selectedAddress, setSelectedAddress] = useState<Address>(addresses[0] || INITIAL_ADDRESSES[0]);
+
+  const [selectedAddress, setSelectedAddress] = useState<Address>(() => {
+    const addr = addresses[0] || INITIAL_ADDRESSES[0];
+    return sanitizeAddressItem(addr);
+  });
 
   // Toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -138,34 +176,207 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [subsidyLedger]);
 
   useEffect(() => {
-    localStorage.setItem('yp_addresses', JSON.stringify(addresses));
+    // Sanitize addresses before saving to localStorage and ensure state update if unsanitized entries exist
+    const needsCleanup = addresses.some(
+      (a) =>
+        a.roadAddress.includes('교보') ||
+        a.jibunAddress.includes('교보') ||
+        a.roadAddress.includes('종로 1') ||
+        a.roadAddress.includes('종로1가') ||
+        (a.phone1 && (a.phone1.includes('9243') || a.phone1.includes('6290')))
+    );
+    if (needsCleanup) {
+      const sanitized = addresses.map(sanitizeAddressItem);
+      setAddresses(sanitized);
+      if (selectedAddress) {
+        setSelectedAddress(sanitizeAddressItem(selectedAddress));
+      }
+      localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
+    } else {
+      localStorage.setItem('yp_addresses', JSON.stringify(addresses));
+    }
   }, [addresses]);
 
-  // Initial cart with items matching the screenshots
+  // B2B Subsidy Calculation rule
+  const calculateBookSubsidy = (book: Book, formatOrQty?: BookFormat | number, qtyParam?: number) => {
+    let format: BookFormat = 'paper';
+    let quantity = 1;
+
+    if (typeof formatOrQty === 'number') {
+      quantity = formatOrQty;
+    } else if (typeof formatOrQty === 'string') {
+      format = formatOrQty as BookFormat;
+      if (typeof qtyParam === 'number') {
+        quantity = qtyParam;
+      }
+    } else if (typeof qtyParam === 'number') {
+      quantity = qtyParam;
+    }
+
+    if (!book || typeof book.sellingPrice !== 'number' || isNaN(book.sellingPrice)) {
+      return {
+        companySubsidy: 0,
+        employeePayment: 0,
+        ruleExplanation: '',
+        canApply: false
+      };
+    }
+
+    const singlePrice = book.sellingPrice;
+    const totalSelling = singlePrice * quantity;
+
+    if (book.bookType === 'recommended') {
+      // 추천도서: 종이책만 100% 회사 지원 (월 1권 한도)
+      const isEbook = format === 'ebook';
+      const canApply = !subsidyLedger.recommendedUsed && !isEbook;
+      const singleSubsidy = isEbook ? 0 : singlePrice;
+      const companySubsidy = canApply && quantity > 0 ? singleSubsidy : 0;
+      const employeePayment = Math.max(0, totalSelling - companySubsidy);
+      return {
+        companySubsidy,
+        employeePayment,
+        ruleExplanation: isEbook
+          ? '추천도서는 종이도서만 100% 지원 가능합니다. (전자책 지원불가)'
+          : canApply
+            ? 'B2B 기업 추천도서 100% 전액 지원 (월 1권)'
+            : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply
+      };
+    } else if (book.bookType === 'personal') {
+      // 개인도서: MIN(판매금액 * 50%, 10,000원) (월 1권 한도)
+      const canApply = !subsidyLedger.personalUsed;
+      const singleSubsidy = Math.min(Math.floor(singlePrice * 0.5), 10000);
+      const companySubsidy = canApply && quantity > 0 ? singleSubsidy : 0;
+      const employeePayment = Math.max(0, totalSelling - companySubsidy);
+      return {
+        companySubsidy,
+        employeePayment,
+        ruleExplanation: canApply
+          ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)`
+          : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply
+      };
+    } else {
+      // 일반도서: B2B 지원금 미적용 (회사지원금 0원, 직원 전액부담)
+      return {
+        companySubsidy: 0,
+        employeePayment: totalSelling,
+        ruleExplanation: 'B2B 지원금 미적용 일반도서 (전액 본인부담)',
+        canApply: false
+      };
+    }
+  };
+
+  // Re-calculate cart item subsidies according to B2B Rules:
+  // 1) Recommended Book: 100% company subsidy for 1 copy (employee payment = 0 KRW for 1st copy)
+  // 2) Personal Book: MIN(sellingPrice * 50%, 10,000 KRW) company subsidy for 1 copy
+  // 3) General Book: 0 KRW company subsidy (100% employee payment regardless of quantity)
+  // 4) Quantities >= 2 for Recommended/Personal: Subsidy applies to 1 copy ONLY; additional copies are 100% employee payment.
+  const recalculateCartItem = (item: CartItem): CartItem => {
+    const freshBook = MOCK_BOOKS.find((b) => b.id === item.book.id) || item.book;
+    const singlePrice = freshBook.sellingPrice;
+    const totalSelling = singlePrice * item.quantity;
+    const isGeneral = freshBook.bookType === 'general';
+    const isApplied = !isGeneral && item.isSubsidyApplied === true; // 기본적으로 지원금 미적용 상태 (버튼 클릭 시에만 true)
+    let singleSubsidy = 0;
+    let note = '';
+
+    if (isGeneral) {
+      singleSubsidy = 0;
+      note = 'B2B 지원금 미적용 일반도서 (전액 본인부담)';
+    } else if (isApplied) {
+      if (freshBook.bookType === 'recommended') {
+        // 추천도서: 100% 회사 지원 (1권만 지원)
+        singleSubsidy = singlePrice;
+        note = item.quantity > 1
+          ? `B2B 추천도서 100% 지원 (1권 지원, ${item.quantity - 1}권 본인부담)`
+          : 'B2B 추천도서 100% 전액 지원 (직원부담 0원)';
+      } else {
+        // 개인도서: MIN(판매금액 * 50%, 10,000원) (1권만 지원)
+        singleSubsidy = Math.min(Math.floor(singlePrice * 0.5), 10000);
+        note = item.quantity > 1
+          ? `B2B 개인도서 50% 지원 (1권 최대 1만원 지원, ${item.quantity - 1}권 본인부담)`
+          : `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${singleSubsidy.toLocaleString()}원 차감)`;
+      }
+    } else {
+      singleSubsidy = 0;
+      note = '지원금 미적용 (전액 본인부담)';
+    }
+
+    const companySubsidy = item.quantity > 0 && isApplied ? singleSubsidy : 0;
+    const employeePayment = Math.max(0, totalSelling - companySubsidy);
+
+    return {
+      ...item,
+      book: freshBook,
+      isSubsidyApplied: isGeneral ? false : isApplied,
+      subsidyNote: note,
+      itemSellingPrice: totalSelling,
+      itemCompanySubsidy: companySubsidy,
+      itemEmployeePayment: employeePayment
+    };
+  };
+
+  // Initial cart with 3 book types (1 copy each): Recommended (18,000 KRW), Personal (20,000 KRW), General (4,950 KRW)
+  // All items default to isSubsidyApplied: false
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('yp_cart');
-    if (saved) return JSON.parse(saved);
-
-    // Default matching cart.png and payment.png:
-    // b-01: '소설 보다 가을 2026' (4,950원)
-    // b-02: '수족관' (15,930원)
-    const book1 = MOCK_BOOKS.find((b) => b.id === 'b-01') || MOCK_BOOKS[0];
-    const subsidy1 = Math.min(Math.floor(book1.sellingPrice * 0.5), 10000);
-
-    return [
-      {
-        id: 'cart-1',
-        book: book1,
-        quantity: 1,
-        format: 'paper',
-        deliveryType: 'normal',
-        estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
-        selected: true,
-        itemSellingPrice: book1.sellingPrice,
-        itemCompanySubsidy: subsidy1,
-        itemEmployeePayment: book1.sellingPrice - subsidy1
+    if (saved) {
+      try {
+        const parsed: CartItem[] = JSON.parse(saved);
+        return parsed.map((item) => recalculateCartItem(item));
+      } catch (e) {
+        // fallback if parse fails
       }
-    ];
+    }
+
+    const recBook = MOCK_BOOKS.find((b) => b.id === 'b-04') || MOCK_BOOKS[3]; // 추천도서 18,000원 ('제이')
+    const perBook = MOCK_BOOKS.find((b) => b.id === 'b-07') || MOCK_BOOKS[6]; // 개인도서 20,000원 ('인생을 바꾸는 투자학개론')
+    const genBook = MOCK_BOOKS.find((b) => b.id === 'b-01') || MOCK_BOOKS[0]; // 일반도서 4,950원 ('소설 보다 가을 2026')
+
+    const item1: CartItem = recalculateCartItem({
+      id: 'cart-1',
+      book: recBook,
+      quantity: 1,
+      format: 'paper',
+      deliveryType: 'normal',
+      estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
+      selected: true,
+      isSubsidyApplied: false,
+      itemSellingPrice: recBook.sellingPrice,
+      itemCompanySubsidy: 0,
+      itemEmployeePayment: recBook.sellingPrice
+    });
+
+    const item2: CartItem = recalculateCartItem({
+      id: 'cart-2',
+      book: perBook,
+      quantity: 1,
+      format: 'paper',
+      deliveryType: 'normal',
+      estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
+      selected: true,
+      isSubsidyApplied: false,
+      itemSellingPrice: perBook.sellingPrice,
+      itemCompanySubsidy: 0,
+      itemEmployeePayment: perBook.sellingPrice
+    });
+
+    const item3: CartItem = recalculateCartItem({
+      id: 'cart-3',
+      book: genBook,
+      quantity: 1,
+      format: 'paper',
+      deliveryType: 'normal',
+      estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
+      selected: true,
+      isSubsidyApplied: false,
+      itemSellingPrice: genBook.sellingPrice,
+      itemCompanySubsidy: 0,
+      itemEmployeePayment: genBook.sellingPrice
+    });
+
+    return [item1, item2, item3];
   });
 
   useEffect(() => {
@@ -185,7 +396,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         orderDate: '2026-08-12 14:23',
         employeeId: 'EMP-20240901',
         employeeName: '김지선',
-        employeePhone: '010-9243-6290',
+        employeePhone: '010-1345-2468',
         employeeEmail: 'clcclcu@naver.com',
         items: [
           {
@@ -198,7 +409,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
             quantity: 1,
             listPrice: pastBook.listPrice,
             sellingPrice: pastBook.sellingPrice,
-            companySubsidy: pastBook.sellingPrice, // 100% 회사 지원
+            companySubsidy: pastBook.sellingPrice,
             employeePayment: 0
           }
         ],
@@ -225,56 +436,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
 
-  // B2B Subsidy Calculation rule
-  const calculateBookSubsidy = (book: Book, quantity = 1) => {
-    const totalSelling = book.sellingPrice * quantity;
-    if (book.bookType === 'recommended') {
-      // 추천도서: 100% 회사 지원, 직원 부담 0원, 월 1권 제한
-      const canApply = !subsidyLedger.recommendedUsed;
-      const companySubsidy = canApply ? totalSelling : 0;
-      const employeePayment = totalSelling - companySubsidy;
-      return {
-        companySubsidy,
-        employeePayment,
-        ruleExplanation: canApply
-          ? 'B2B 기업 추천도서 100% 전액 지원 (직원부담 0원)'
-          : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
-        canApply
-      };
-    } else {
-      // 개인도서: MIN(판매금액 * 50%, 10,000원), 직원 결제: 나머지
-      const canApply = !subsidyLedger.personalUsed;
-      const singleSubsidy = Math.min(Math.floor(book.sellingPrice * 0.5), 10000);
-      const companySubsidy = canApply ? singleSubsidy * Math.min(quantity, 1) : 0;
-      const employeePayment = totalSelling - companySubsidy;
-      return {
-        companySubsidy,
-        employeePayment,
-        ruleExplanation: canApply
-          ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, ${companySubsidy.toLocaleString()}원 차감)`
-          : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
-        canApply
-      };
-    }
-  };
-
-  // Re-calculate cart item subsidies
-  const recalculateCartItem = (item: CartItem): CartItem => {
-    const totalSelling = item.book.sellingPrice * item.quantity;
-    let subsidy = 0;
-    if (item.book.bookType === 'recommended') {
-      subsidy = totalSelling;
-    } else {
-      subsidy = Math.min(Math.floor(item.book.sellingPrice * 0.5), 10000) * item.quantity;
-    }
-    return {
-      ...item,
-      itemSellingPrice: totalSelling,
-      itemCompanySubsidy: subsidy,
-      itemEmployeePayment: Math.max(0, totalSelling - subsidy)
-    };
-  };
-
   const addToCart = (book: Book, format: BookFormat = 'paper', quantity = 1, directToPayment = false) => {
     // Check monthly limit warnings
     if (book.bookType === 'recommended' && subsidyLedger.recommendedUsed) {
@@ -300,9 +461,10 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deliveryType: 'normal',
         estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
         selected: true,
+        isSubsidyApplied: false, // 기본적으로 미적용 상태로 추가
         itemSellingPrice: book.sellingPrice * quantity,
         itemCompanySubsidy: 0,
-        itemEmployeePayment: 0
+        itemEmployeePayment: book.sellingPrice * quantity
       });
       return [...prev, newItem];
     });
@@ -341,6 +503,32 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCart((prev) => prev.map((i) => ({ ...i, selected })));
   };
 
+  const applyCartSubsidy = (id: string) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: true }) : item
+      )
+    );
+    showToast('회사 지원금이 정상 적용되었습니다.');
+  };
+
+  const removeCartSubsidy = (id: string) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: false }) : item
+      )
+    );
+    showToast('지원금 적용이 취소되어 전액 본인부담으로 변경되었습니다.');
+  };
+
+  const updateItemFormat = (id: string, format: BookFormat) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id ? recalculateCartItem({ ...item, format }) : item
+      )
+    );
+  };
+
   // Addresses
   const addAddress = (newAddrData: Omit<Address, 'id'>) => {
     const newAddress: Address = {
@@ -364,7 +552,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const totalProductDiscount = totalListPrice - totalSellingPrice;
   const totalCompanySubsidy = selectedItems.reduce((acc, i) => acc + i.itemCompanySubsidy, 0);
   const totalEmployeePayment = selectedItems.reduce((acc, i) => acc + i.itemEmployeePayment, 0);
-  
+
   // Free shipping policy: free over 10,000 won or 30,000 won (matches cart.png: 5,500원 도서 시 2,500원 배송비)
   const FREE_SHIPPING_THRESHOLD = 30000;
   const shippingFee = selectedItems.length === 0 || totalSellingPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 2500;
@@ -408,7 +596,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       listPrice: item.book.listPrice,
       sellingPrice: item.itemSellingPrice,
       companySubsidy: item.itemCompanySubsidy,
-      employeePayment: item.itemEmployeePayment
+      employeePayment: item.itemEmployeePayment,
+      isSubsidyApplied: item.isSubsidyApplied,
+      subsidyNote: item.subsidyNote
     }));
 
     const newOrder: Order = {
@@ -416,7 +606,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       orderDate: formattedDate,
       employeeId: 'EMP-20240901',
       employeeName: selectedAddress.recipient || '김지선',
-      employeePhone: selectedAddress.phone1 || '010-9243-6290',
+      employeePhone: selectedAddress.phone1 || '010-1345-2468',
       employeeEmail: 'clcclcu@naver.com',
       items: orderItems,
       totalListPrice,
@@ -427,6 +617,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       shippingFee,
       finalPaidAmount: finalPaymentAmount,
       pointsUsed: 0,
+      earnedPoints: totalRewardPoints,
       deliveryAddress: selectedAddress,
       deliveryMemo: deliveryMemo || '문 앞에 놓아주세요.',
       paymentMethod,
@@ -495,12 +686,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       prev.map((o) =>
         o.orderId === orderId
           ? {
-              ...o,
-              status: '주문취소',
-              isRefunded: true,
-              refundDate,
-              refundReason: reason
-            }
+            ...o,
+            status: '주문취소',
+            isRefunded: true,
+            refundDate,
+            refundReason: reason
+          }
           : o
       )
     );
@@ -530,6 +721,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         removeSelectedFromCart,
         toggleItemSelection,
         toggleAllSelection,
+        applyCartSubsidy,
+        removeCartSubsidy,
+        updateItemFormat,
         selectedGiftId,
         setSelectedGiftId,
         cartStats,

@@ -70,7 +70,7 @@ export const PaymentPage: React.FC = () => {
   return (
     <div className="w-full bg-white py-8 min-h-screen text-[#3d3c3f]">
       <div className="max-w-[1280px] mx-auto px-4 space-y-6">
-        
+
         {/* Top Header: Title & Step Indicator */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#dadada] pb-5 gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#181718] tracking-tight">결제하기</h1>
@@ -79,10 +79,10 @@ export const PaymentPage: React.FC = () => {
 
         {/* 2-Column Payment Layout matching payment.png */}
         <form onSubmit={handlePaymentSubmit} className="grid grid-cols-1 lg:grid-cols-[1fr_290px] gap-8 items-start">
-          
+
           {/* LEFT COLUMN: Accordions / Sections */}
           <div className="space-y-4">
-            
+
             {/* 1. 배송지 Accordion */}
             <div className="border border-[#cbd2d4] rounded-lg overflow-hidden bg-white">
               <div
@@ -172,7 +172,7 @@ export const PaymentPage: React.FC = () => {
                   {/* 연락처1 */}
                   <div className="grid grid-cols-[100px_1fr] items-center gap-2">
                     <span className="font-medium text-[#555a5c]">연락처1*</span>
-                    <div className="flex items-center gap-2 font-mono">
+                    <div className="flex items-center gap-2">
                       <input
                         type="text"
                         readOnly
@@ -191,7 +191,7 @@ export const PaymentPage: React.FC = () => {
                           type="text"
                           readOnly
                           value={selectedAddress.postalCode}
-                          className="w-24 h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm font-mono"
+                          className="w-24 h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm"
                         />
                         <button
                           type="button"
@@ -299,19 +299,20 @@ export const PaymentPage: React.FC = () => {
                             <img
                               src={item.book.coverImage}
                               alt={item.book.title}
-                              className="w-14 h-20 object-contain rounded border border-[#edf0f1] shadow-2xs flex-shrink-0"
+                              className="w-14 h-20 object-contain rounded border border-[#edf0f1] flex-shrink-0"
                             />
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <span
-                                  className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold flex items-center gap-0.5 ${
-                                    item.book.bookType === 'recommended'
-                                      ? 'bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]'
-                                      : 'bg-[#e8f5ef] text-[#1f976b] border border-[#a3d9bc]'
-                                  }`}
+                                  className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold flex items-center gap-0.5 ${item.book.bookType === 'recommended'
+                                    ? 'bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]'
+                                    : item.book.bookType === 'personal'
+                                      ? 'bg-[#e8f5ef] text-[#1f976b] border border-[#a3d9bc]'
+                                      : 'bg-[#f6f6f6] text-[#555a5c] border border-[#cbd2d4]'
+                                    }`}
                                 >
                                   <Award className="w-2.5 h-2.5" />
-                                  {item.book.bookType === 'recommended' ? '추천도서(100%)' : '개인도서(50%)'}
+                                  {item.book.bookType === 'recommended' ? 'B2B 추천도서 (100% 지원)' : 'B2B 개인도서 (50% 지원, 최대 1만원)'}
                                 </span>
 
                                 <span className="text-[10px] bg-[#181718] text-white px-1.5 py-0.5 rounded font-medium flex items-center gap-0.5">
@@ -332,7 +333,7 @@ export const PaymentPage: React.FC = () => {
                               </div>
 
                               <div className="font-bold text-sm text-[#181718]">{item.book.title}</div>
-                              
+
                               <div className="text-[11px]">
                                 {item.isSubsidyApplied ? (
                                   <span className="text-[#1f976b] font-medium flex items-center gap-1">
@@ -470,7 +471,7 @@ export const PaymentPage: React.FC = () => {
 
               {activeAccordion.paymentMethod && (
                 <div className="p-5 space-y-4 text-xs">
-                  
+
                   {/* Option 1: 퀵계좌이체 */}
                   <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-[#f6f6f6]">
                     <input
@@ -534,11 +535,10 @@ export const PaymentPage: React.FC = () => {
                           key={item.id}
                           type="button"
                           onClick={() => setSelectedMethod(item.id)}
-                          className={`relative h-12 rounded border text-xs font-semibold flex items-center justify-center transition-all ${
-                            selectedMethod === item.id
-                              ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]'
-                              : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
-                          }`}
+                          className={`relative h-12 rounded border text-xs font-semibold flex items-center justify-center transition-all ${selectedMethod === item.id
+                            ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]'
+                            : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
+                            }`}
                         >
                           {item.badge && (
                             <span
@@ -553,7 +553,7 @@ export const PaymentPage: React.FC = () => {
                     </div>
 
                     {/* Accordion Benefits Box matching screenshot */}
-                    <div className="mt-4 space-y-1.5 text-xs text-[#555a5c]">
+                    <div className="mt-4 space-y-1.5 text-xs text-[#555a5c]" style={{ display: 'none' }}>
                       {[
                         '퀵계좌이체 1만원 이상 결제시 0.5% 할인',
                         '영풍빠른결제 이벤트 응모시 2천원 적립',
@@ -633,7 +633,7 @@ export const PaymentPage: React.FC = () => {
 
           {/* RIGHT COLUMN: Sidebar (Buyer info & Payment summary) matching payment.png */}
           <div className="space-y-4 lg:sticky lg:top-24">
-            
+
             {/* 주문자 정보 Box */}
             <div className="border border-[#cbd2d4] rounded-lg p-4 bg-white space-y-3 text-xs">
               <h3 className="font-bold text-sm text-[#181718] border-b border-[#edf0f1] pb-2">
@@ -648,18 +648,18 @@ export const PaymentPage: React.FC = () => {
 
                 <div>
                   <span className="text-[#555a5c] block mb-0.5">연락처*</span>
-                  <div className="flex items-center gap-1 font-mono text-xs">
+                  <div className="flex items-center gap-1 text-xs">
                     <span className="px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]">010</span>
                     <span>-</span>
-                    <span className="px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]">9243</span>
+                    <span className="px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]">1357</span>
                     <span>-</span>
-                    <span className="px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]">6290</span>
+                    <span className="px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]">2468</span>
                   </div>
                 </div>
 
                 <div>
                   <span className="text-[#555a5c] block mb-0.5">이메일</span>
-                  <div className="p-1.5 bg-[#f6f6f6] rounded border border-[#cbd2d4] font-mono text-xs truncate">
+                  <div className="p-1.5 bg-[#f6f6f6] rounded border border-[#cbd2d4] text-xs truncate">
                     clcclcu@naver.com
                   </div>
                 </div>
@@ -688,7 +688,7 @@ export const PaymentPage: React.FC = () => {
 
                 {/* B2B 기업 지원금 차감 표시 */}
                 <div className="flex justify-between text-[#1f976b] font-semibold bg-[#e8f5ef] p-1.5 rounded">
-                  <span>B2B 회사 지원금</span>
+                  <span>회사 지원금</span>
                   <span>- {cartStats.totalCompanySubsidy.toLocaleString()}원</span>
                 </div>
 
