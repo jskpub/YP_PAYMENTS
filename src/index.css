@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  /* warm grey — 주로 텍스트에 사용됨 */
+  --white: #ffffff;
+  --wgrey01: #f6f6f6;
+  --wgrey02: #dadada;
+  --wgrey03: #c3c2c2;
+  --wgrey04: #aeaeae;
+  --wgrey05: #9c9c9c;
+  --wgrey06: #7e7e7e;
+  --wgrey07: #595959;
+  --wgrey08: #363636;
+  --wgrey09: #181718;
+
+  /* cool grey — 주로 배경/보더에 사용됨 */
+  --cgrey01: #edf0f1;
+  --cgrey02: #cbd2d4;
+  --cgrey03: #b5bec0;
+  --cgrey04: #9da6a8;
+  --cgrey05: #80888a;
+  --cgrey06: #686e70;
+  --cgrey07: #555a5c;
+  --cgrey08: #3c4142;
+  --cgrey09: #1e2021;
+
+  /* red — 브랜드 강조 스케일 */
+  --red01: #ffebeb;
+  --red02: #f9cdcd;
+  --red03: #f5baba;
+  --red04: #fd9999;
+  --red05: #f87e7e;
+  --red06: #f55d5d;
+  --red07: #f14646;
+  --red08: #ea2e2e;
+  --red09: #df0000;
+
+  /* green */
+  --green: #4aaf70;
+  --green01: #1f976b;
+
+  /* etc */
+  --warning: #ee293b;
+  --nowdream: #be1d27;
+
+  /* semantic tokens */
+  --color-canvas: var(--white);
+  --color-surface: var(--wgrey01);
+  --color-surface-alt: var(--cgrey01);
+  --color-foreground: var(--wgrey09);
+  --color-foreground-secondary: var(--wgrey07);
+  --color-muted: var(--wgrey05);
+  --color-border: var(--cgrey02);
+  --color-border-strong: var(--cgrey04);
+  --color-primary: var(--red09);
+  --color-primary-hover: var(--red08);
+  --color-primary-soft: var(--red01);
+  --color-success: var(--green01);
+  --color-warning: var(--warning);
+  --color-danger: var(--red09);
+  --color-danger-soft: var(--red01);
+
+  /* typography */
+  --font-family-base: 'Pretendard GOV', 'PretendardGOVVariable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, Roboto, sans-serif;
+  --line-height-heading: 1.4;
+  --line-height-body: 1.5;
+  --letter-spacing-default: 0;
+
+  /* layout */
+  --layout-wrap-min-width: 1280px;
+  --layout-inner-max-width: 1280px;
+  --layout-inner-padding: 20px;
+}
+
+body {
+  font-family: var(--font-family-base);
+  color: var(--color-foreground);
+  background-color: var(--color-canvas);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  word-break: keep-all;
+}
+
+/* Custom utility & brand styles matching ypbook.css */
+.yp-primary-btn {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  transition: background-color 150ms ease-out;
+}
+.yp-primary-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.yp-sub-btn {
+  border: 1px solid var(--wgrey02);
+  background-color: #ffffff;
+  color: var(--wgrey08);
+  transition: all 150ms ease-out;
+}
+.yp-sub-btn:hover {
+  border-color: var(--wgrey05);
+  color: var(--wgrey09);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c3c2c2;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9c9c9c;
+}

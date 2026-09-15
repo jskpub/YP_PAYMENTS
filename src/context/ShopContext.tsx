@@ -1,0 +1,572 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Book, CartItem, Order, SubsidyLedger, Address, PageTab, BookFormat } from '../types';
+import { MOCK_BOOKS, INITIAL_ADDRESSES } from '../data/mockBooks';
+
+interface ShopContextType {
+  activePage: PageTab;
+  setActivePage: (page: PageTab) => void;
+  myPageTab: 'subsidy' | 'orders' | 'refund';
+  setMyPageTab: (tab: 'subsidy' | 'orders' | 'refund') => void;
+  
+  // Books catalog
+  books: Book[];
+  selectedBookForDetail: Book | null;
+  setSelectedBookForDetail: (book: Book | null) => void;
+
+  // Cart
+  cart: CartItem[];
+  cartTab: 'normal' | 'nowdream';
+  setCartTab: (tab: 'normal' | 'nowdream') => void;
+  addToCart: (book: Book, format?: BookFormat, quantity?: number, directToPayment?: boolean) => void;
+  updateQuantity: (id: string, newQty: number) => void;
+  removeFromCart: (id: string) => void;
+  removeSelectedFromCart: () => void;
+  toggleItemSelection: (id: string) => void;
+  toggleAllSelection: (selected: boolean) => void;
+  
+  // Free Gift
+  selectedGiftId: string;
+  setSelectedGiftId: (id: string) => void;
+
+  // Pricing calculations
+  cartStats: {
+    totalListPrice: number;
+    totalSellingPrice: number;
+    totalProductDiscount: number;
+    totalCompanySubsidy: number;
+    totalEmployeePayment: number;
+    shippingFee: number;
+    finalPaymentAmount: number;
+    totalRewardPoints: number;
+    freeShippingShortfall: number; // 30,000원 기준 부족분
+    freeShippingProgress: number; // 0 to 100
+    selectedCount: number;
+  };
+
+  // Addresses
+  addresses: Address[];
+  selectedAddress: Address;
+  setSelectedAddress: (address: Address) => void;
+  addAddress: (address: Omit<Address, 'id'>) => void;
+  isAddressModalOpen: boolean;
+  setIsAddressModalOpen: (open: boolean) => void;
+  addressModalTab: 'list' | 'recent' | 'new';
+  setAddressModalTab: (tab: 'list' | 'recent' | 'new') => void;
+
+  // Subsidy & Ledger (B2B Rule Engine)
+  subsidyLedger: SubsidyLedger;
+  calculateBookSubsidy: (book: Book, quantity?: number) => {
+    companySubsidy: number;
+    employeePayment: number;
+    ruleExplanation: string;
+    canApply: boolean;
+  };
+
+  // Orders
+  orders: Order[];
+  currentOrder: Order | null;
+  setCurrentOrder: (order: Order | null) => void;
+  processPayment: (paymentMethod: string, culturalDeduction: boolean, deliveryMemo: string) => Order;
+  cancelOrder: (orderId: string, reason?: string) => boolean;
+
+  // Receipt Modal
+  isReceiptModalOpen: boolean;
+  setIsReceiptModalOpen: (open: boolean) => void;
+  selectedOrderForReceipt: Order | null;
+  setSelectedOrderForReceipt: (order: Order | null) => void;
+
+  // Estimate Modal
+  isEstimateModalOpen: boolean;
+  setIsEstimateModalOpen: (open: boolean) => void;
+
+  // Notification Toast
+  toastMessage: string | null;
+  showToast: (msg: string) => void;
+}
+
+const ShopContext = createContext<ShopContextType | undefined>(undefined);
+
+export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [activePage, setActivePage] = useState<PageTab>('cart');
+  const [myPageTab, setMyPageTab] = useState<'subsidy' | 'orders' | 'refund'>('subsidy');
+  const [cartTab, setCartTab] = useState<'normal' | 'nowdream'>('normal');
+  const [selectedBookForDetail, setSelectedBookForDetail] = useState<Book | null>(null);
+  const [selectedGiftId, setSelectedGiftId] = useState<string>('g-01');
+
+  // Address Modal
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [addressModalTab, setAddressModalTab] = useState<'list' | 'recent' | 'new'>('new');
+  const [addresses, setAddresses] = useState<Address[]>(() => {
+    const saved = localStorage.getItem('yp_addresses');
+    return saved ? JSON.parse(saved) : INITIAL_ADDRESSES;
+  });
+  const [selectedAddress, setSelectedAddress] = useState<Address>(addresses[0] || INITIAL_ADDRESSES[0]);
+
+  // Toast
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((prev) => (prev === msg ? null : prev));
+    }, 3500);
+  };
+
+  // Receipt & Estimate Modals
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const [selectedOrderForReceipt, setSelectedOrderForReceipt] = useState<Order | null>(null);
+  const [isEstimateModalOpen, setIsEstimateModalOpen] = useState(false);
+
+  // Subsidy Ledger (B2B Rule Engine State)
+  const [subsidyLedger, setSubsidyLedger] = useState<SubsidyLedger>(() => {
+    const saved = localStorage.getItem('yp_b2b_subsidy');
+    if (saved) return JSON.parse(saved);
+    return {
+      month: '2026-09',
+      monthlyLimit: 30000,
+      recommendedUsed: false,
+      personalUsed: false,
+      recommendedSubsidyAmount: 0,
+      personalSubsidyAmount: 0,
+      totalUsedSubsidy: 0,
+      remainingSubsidy: 30000,
+      totalEmployeePaid: 0
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('yp_b2b_subsidy', JSON.stringify(subsidyLedger));
+  }, [subsidyLedger]);
+
+  useEffect(() => {
+    localStorage.setItem('yp_addresses', JSON.stringify(addresses));
+  }, [addresses]);
+
+  // Initial cart with items matching the screenshots
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('yp_cart');
+    if (saved) return JSON.parse(saved);
+
+    // Default matching cart.png and payment.png:
+    // b-01: '소설 보다 가을 2026' (4,950원)
+    // b-02: '수족관' (15,930원)
+    const book1 = MOCK_BOOKS.find((b) => b.id === 'b-01') || MOCK_BOOKS[0];
+    const subsidy1 = Math.min(Math.floor(book1.sellingPrice * 0.5), 10000);
+
+    return [
+      {
+        id: 'cart-1',
+        book: book1,
+        quantity: 1,
+        format: 'paper',
+        deliveryType: 'normal',
+        estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
+        selected: true,
+        itemSellingPrice: book1.sellingPrice,
+        itemCompanySubsidy: subsidy1,
+        itemEmployeePayment: book1.sellingPrice - subsidy1
+      }
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('yp_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Orders history
+  const [orders, setOrders] = useState<Order[]>(() => {
+    const saved = localStorage.getItem('yp_orders');
+    if (saved) return JSON.parse(saved);
+
+    // Initial mock order (8월 독서 지원 프로그램 주문 내역)
+    const pastBook = MOCK_BOOKS.find((b) => b.id === 'b-04') || MOCK_BOOKS[3];
+    return [
+      {
+        orderId: 'YP-20260812-49102',
+        orderDate: '2026-08-12 14:23',
+        employeeId: 'EMP-20240901',
+        employeeName: '김지선',
+        employeePhone: '010-9243-6290',
+        employeeEmail: 'clcclcu@naver.com',
+        items: [
+          {
+            bookId: pastBook.id,
+            title: pastBook.title,
+            author: pastBook.author,
+            coverImage: pastBook.coverImage,
+            format: 'paper',
+            bookType: 'recommended',
+            quantity: 1,
+            listPrice: pastBook.listPrice,
+            sellingPrice: pastBook.sellingPrice,
+            companySubsidy: pastBook.sellingPrice, // 100% 회사 지원
+            employeePayment: 0
+          }
+        ],
+        totalListPrice: 18000,
+        totalSellingPrice: 16200,
+        totalDiscount: 1800,
+        totalCompanySubsidy: 16200,
+        totalEmployeePayment: 0,
+        shippingFee: 0,
+        finalPaidAmount: 0,
+        pointsUsed: 0,
+        deliveryAddress: INITIAL_ADDRESSES[0],
+        deliveryMemo: '문 앞에 놓아주세요.',
+        paymentMethod: 'B2B 회사 전액 지원 (0원 결제)',
+        culturalDeduction: true,
+        status: '배송완료'
+      }
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('yp_orders', JSON.stringify(orders));
+  }, [orders]);
+
+  const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+
+  // B2B Subsidy Calculation rule
+  const calculateBookSubsidy = (book: Book, quantity = 1) => {
+    const totalSelling = book.sellingPrice * quantity;
+    if (book.bookType === 'recommended') {
+      // 추천도서: 100% 회사 지원, 직원 부담 0원, 월 1권 제한
+      const canApply = !subsidyLedger.recommendedUsed;
+      const companySubsidy = canApply ? totalSelling : 0;
+      const employeePayment = totalSelling - companySubsidy;
+      return {
+        companySubsidy,
+        employeePayment,
+        ruleExplanation: canApply
+          ? 'B2B 기업 추천도서 100% 전액 지원 (직원부담 0원)'
+          : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply
+      };
+    } else {
+      // 개인도서: MIN(판매금액 * 50%, 10,000원), 직원 결제: 나머지
+      const canApply = !subsidyLedger.personalUsed;
+      const singleSubsidy = Math.min(Math.floor(book.sellingPrice * 0.5), 10000);
+      const companySubsidy = canApply ? singleSubsidy * Math.min(quantity, 1) : 0;
+      const employeePayment = totalSelling - companySubsidy;
+      return {
+        companySubsidy,
+        employeePayment,
+        ruleExplanation: canApply
+          ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, ${companySubsidy.toLocaleString()}원 차감)`
+          : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply
+      };
+    }
+  };
+
+  // Re-calculate cart item subsidies
+  const recalculateCartItem = (item: CartItem): CartItem => {
+    const totalSelling = item.book.sellingPrice * item.quantity;
+    let subsidy = 0;
+    if (item.book.bookType === 'recommended') {
+      subsidy = totalSelling;
+    } else {
+      subsidy = Math.min(Math.floor(item.book.sellingPrice * 0.5), 10000) * item.quantity;
+    }
+    return {
+      ...item,
+      itemSellingPrice: totalSelling,
+      itemCompanySubsidy: subsidy,
+      itemEmployeePayment: Math.max(0, totalSelling - subsidy)
+    };
+  };
+
+  const addToCart = (book: Book, format: BookFormat = 'paper', quantity = 1, directToPayment = false) => {
+    // Check monthly limit warnings
+    if (book.bookType === 'recommended' && subsidyLedger.recommendedUsed) {
+      showToast('⚠️ 이번 달 추천도서 100% 지원은 이미 사용 완료되었습니다.');
+    } else if (book.bookType === 'personal' && subsidyLedger.personalUsed) {
+      showToast('⚠️ 이번 달 개인도서 50% 지원은 이미 사용 완료되었습니다.');
+    }
+
+    setCart((prev) => {
+      const existing = prev.find((i) => i.book.id === book.id && i.format === format);
+      if (existing) {
+        return prev.map((i) =>
+          i.id === existing.id
+            ? recalculateCartItem({ ...i, quantity: i.quantity + quantity })
+            : i
+        );
+      }
+      const newItem: CartItem = recalculateCartItem({
+        id: `cart-${Date.now()}`,
+        book,
+        quantity,
+        format,
+        deliveryType: 'normal',
+        estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
+        selected: true,
+        itemSellingPrice: book.sellingPrice * quantity,
+        itemCompanySubsidy: 0,
+        itemEmployeePayment: 0
+      });
+      return [...prev, newItem];
+    });
+
+    if (directToPayment) {
+      setActivePage('payment');
+    } else {
+      showToast(`'${book.title}'이(가) 장바구니에 담겼습니다.`);
+    }
+  };
+
+  const updateQuantity = (id: string, newQty: number) => {
+    if (newQty < 1) return;
+    setCart((prev) =>
+      prev.map((i) => (i.id === id ? recalculateCartItem({ ...i, quantity: newQty }) : i))
+    );
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart((prev) => prev.filter((i) => i.id !== id));
+    showToast('상품이 장바구니에서 삭제되었습니다.');
+  };
+
+  const removeSelectedFromCart = () => {
+    setCart((prev) => prev.filter((i) => !i.selected));
+    showToast('선택한 상품이 삭제되었습니다.');
+  };
+
+  const toggleItemSelection = (id: string) => {
+    setCart((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, selected: !i.selected } : i))
+    );
+  };
+
+  const toggleAllSelection = (selected: boolean) => {
+    setCart((prev) => prev.map((i) => ({ ...i, selected })));
+  };
+
+  // Addresses
+  const addAddress = (newAddrData: Omit<Address, 'id'>) => {
+    const newAddress: Address = {
+      ...newAddrData,
+      id: `addr-${Date.now()}`
+    };
+    if (newAddress.isDefault) {
+      setAddresses((prev) => [newAddress, ...prev.map((a) => ({ ...a, isDefault: false }))]);
+    } else {
+      setAddresses((prev) => [...prev, newAddress]);
+    }
+    setSelectedAddress(newAddress);
+    setIsAddressModalOpen(false);
+    showToast('배송지가 정상적으로 등록되었습니다.');
+  };
+
+  // Cart / Payment stats calculation
+  const selectedItems = cart.filter((i) => i.selected);
+  const totalListPrice = selectedItems.reduce((acc, i) => acc + i.book.listPrice * i.quantity, 0);
+  const totalSellingPrice = selectedItems.reduce((acc, i) => acc + i.itemSellingPrice, 0);
+  const totalProductDiscount = totalListPrice - totalSellingPrice;
+  const totalCompanySubsidy = selectedItems.reduce((acc, i) => acc + i.itemCompanySubsidy, 0);
+  const totalEmployeePayment = selectedItems.reduce((acc, i) => acc + i.itemEmployeePayment, 0);
+  
+  // Free shipping policy: free over 10,000 won or 30,000 won (matches cart.png: 5,500원 도서 시 2,500원 배송비)
+  const FREE_SHIPPING_THRESHOLD = 30000;
+  const shippingFee = selectedItems.length === 0 || totalSellingPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 2500;
+  const freeShippingShortfall = Math.max(0, FREE_SHIPPING_THRESHOLD - totalSellingPrice);
+  const freeShippingProgress = Math.min(100, Math.round((totalSellingPrice / FREE_SHIPPING_THRESHOLD) * 100));
+  const finalPaymentAmount = totalEmployeePayment + shippingFee;
+  const totalRewardPoints = selectedItems.reduce((acc, i) => acc + i.book.rewardPoint * i.quantity, 0);
+
+  const cartStats = {
+    totalListPrice,
+    totalSellingPrice,
+    totalProductDiscount,
+    totalCompanySubsidy,
+    totalEmployeePayment,
+    shippingFee,
+    finalPaymentAmount,
+    totalRewardPoints,
+    freeShippingShortfall,
+    freeShippingProgress,
+    selectedCount: selectedItems.length
+  };
+
+  // Payment process - generates 1 unified Order ID managing company subsidy + employee payment
+  const processPayment = (
+    paymentMethod: string,
+    culturalDeduction: boolean,
+    deliveryMemo: string
+  ): Order => {
+    const orderId = `YP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.floor(10000 + Math.random() * 90000)}`;
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const orderItems = selectedItems.map((item) => ({
+      bookId: item.book.id,
+      title: item.book.title,
+      author: item.book.author,
+      coverImage: item.book.coverImage,
+      format: item.format,
+      bookType: item.book.bookType,
+      quantity: item.quantity,
+      listPrice: item.book.listPrice,
+      sellingPrice: item.itemSellingPrice,
+      companySubsidy: item.itemCompanySubsidy,
+      employeePayment: item.itemEmployeePayment
+    }));
+
+    const newOrder: Order = {
+      orderId,
+      orderDate: formattedDate,
+      employeeId: 'EMP-20240901',
+      employeeName: selectedAddress.recipient || '김지선',
+      employeePhone: selectedAddress.phone1 || '010-9243-6290',
+      employeeEmail: 'clcclcu@naver.com',
+      items: orderItems,
+      totalListPrice,
+      totalSellingPrice,
+      totalDiscount: totalProductDiscount,
+      totalCompanySubsidy,
+      totalEmployeePayment,
+      shippingFee,
+      finalPaidAmount: finalPaymentAmount,
+      pointsUsed: 0,
+      deliveryAddress: selectedAddress,
+      deliveryMemo: deliveryMemo || '문 앞에 놓아주세요.',
+      paymentMethod,
+      culturalDeduction,
+      status: '결제완료'
+    };
+
+    // Update B2B Subsidy Ledger (Simultaneous DB update for corporate subsidy + monthly limits)
+    setSubsidyLedger((prev) => {
+      const hasRecommended = orderItems.some((i) => i.bookType === 'recommended');
+      const hasPersonal = orderItems.some((i) => i.bookType === 'personal');
+      const addedSubsidy = totalCompanySubsidy;
+
+      return {
+        ...prev,
+        recommendedUsed: prev.recommendedUsed || hasRecommended,
+        personalUsed: prev.personalUsed || hasPersonal,
+        recommendedBookTitle: hasRecommended
+          ? orderItems.find((i) => i.bookType === 'recommended')?.title
+          : prev.recommendedBookTitle,
+        personalBookTitle: hasPersonal
+          ? orderItems.find((i) => i.bookType === 'personal')?.title
+          : prev.personalBookTitle,
+        totalUsedSubsidy: prev.totalUsedSubsidy + addedSubsidy,
+        remainingSubsidy: Math.max(0, prev.remainingSubsidy - addedSubsidy),
+        totalEmployeePaid: prev.totalEmployeePaid + totalEmployeePayment
+      };
+    });
+
+    // Save order & clear paid items from cart
+    setOrders((prev) => [newOrder, ...prev]);
+    setCurrentOrder(newOrder);
+    setCart((prev) => prev.filter((i) => !i.selected));
+
+    setActivePage('complete');
+    showToast(`주문번호 ${orderId} 결제가 정상 완료되었습니다.`);
+    return newOrder;
+  };
+
+  // Reverse transaction: Refund / Cancel order with simultaneous restoration of corporate subsidy + monthly quota!
+  const cancelOrder = (orderId: string, reason = '고객 변심 및 재신청 요청'): boolean => {
+    const orderToCancel = orders.find((o) => o.orderId === orderId);
+    if (!orderToCancel || orderToCancel.isRefunded) return false;
+
+    // Restore B2B Subsidy Ledger
+    setSubsidyLedger((prev) => {
+      const hasRecommended = orderToCancel.items.some((i) => i.bookType === 'recommended');
+      const hasPersonal = orderToCancel.items.some((i) => i.bookType === 'personal');
+      const restoredSubsidy = orderToCancel.totalCompanySubsidy;
+
+      return {
+        ...prev,
+        recommendedUsed: hasRecommended ? false : prev.recommendedUsed,
+        personalUsed: hasPersonal ? false : prev.personalUsed,
+        totalUsedSubsidy: Math.max(0, prev.totalUsedSubsidy - restoredSubsidy),
+        remainingSubsidy: Math.min(prev.monthlyLimit, prev.remainingSubsidy + restoredSubsidy),
+        totalEmployeePaid: Math.max(0, prev.totalEmployeePaid - orderToCancel.totalEmployeePayment)
+      };
+    });
+
+    // Mark order as cancelled
+    const now = new Date();
+    const refundDate = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.orderId === orderId
+          ? {
+              ...o,
+              status: '주문취소',
+              isRefunded: true,
+              refundDate,
+              refundReason: reason
+            }
+          : o
+      )
+    );
+
+    showToast(
+      `주문 취소 및 환불 완료: B2B 기업 지원금(${orderToCancel.totalCompanySubsidy.toLocaleString()}원)과 월 1권 신청 한도가 즉시 복원되었습니다.`
+    );
+    return true;
+  };
+
+  return (
+    <ShopContext.Provider
+      value={{
+        activePage,
+        setActivePage,
+        myPageTab,
+        setMyPageTab,
+        books: MOCK_BOOKS,
+        selectedBookForDetail,
+        setSelectedBookForDetail,
+        cart,
+        cartTab,
+        setCartTab,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        removeSelectedFromCart,
+        toggleItemSelection,
+        toggleAllSelection,
+        selectedGiftId,
+        setSelectedGiftId,
+        cartStats,
+        addresses,
+        selectedAddress,
+        setSelectedAddress,
+        addAddress,
+        isAddressModalOpen,
+        setIsAddressModalOpen,
+        addressModalTab,
+        setAddressModalTab,
+        subsidyLedger,
+        calculateBookSubsidy,
+        orders,
+        currentOrder,
+        setCurrentOrder,
+        processPayment,
+        cancelOrder,
+        isReceiptModalOpen,
+        setIsReceiptModalOpen,
+        selectedOrderForReceipt,
+        setSelectedOrderForReceipt,
+        isEstimateModalOpen,
+        setIsEstimateModalOpen,
+        toastMessage,
+        showToast
+      }}
+    >
+      {children}
+    </ShopContext.Provider>
+  );
+};
+
+export const useShop = () => {
+  const context = useContext(ShopContext);
+  if (!context) {
+    throw new Error('useShop must be used within a ShopProvider');
+  }
+  return context;
+};

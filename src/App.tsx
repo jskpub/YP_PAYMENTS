@@ -1,0 +1,64 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { ShopProvider, useShop } from './context/ShopContext';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { DeliveryModal } from './components/DeliveryModal';
+import { ReceiptModal } from './components/ReceiptModal';
+import { EstimateModal } from './components/EstimateModal';
+import { BookExplorePage } from './pages/BookExplorePage';
+import { CartPage } from './pages/CartPage';
+import { GiftSelectPage } from './pages/GiftSelectPage';
+import { PaymentPage } from './pages/PaymentPage';
+import { OrderCompletePage } from './pages/OrderCompletePage';
+import { MyPage } from './pages/MyPage';
+import { CheckCircle2 } from 'lucide-react';
+
+const AppContent: React.FC = () => {
+  const { activePage, toastMessage } = useShop();
+
+  return (
+    <div className="min-h-screen flex flex-col bg-white text-[#181718] font-sans antialiased selection:bg-[#df0000] selection:text-white">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-70 bg-[#181718]/90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 duration-200">
+          <CheckCircle2 className="w-4 h-4 text-[#a3e635] flex-shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Global Header */}
+      <Header />
+
+      {/* Main Page Content */}
+      <main className="flex-1 w-full">
+        {activePage === 'explore' && <BookExplorePage />}
+        {activePage === 'cart' && <CartPage />}
+        {activePage === 'gift' && <GiftSelectPage />}
+        {activePage === 'payment' && <PaymentPage />}
+        {activePage === 'complete' && <OrderCompletePage />}
+        {activePage === 'mypage' && <MyPage />}
+      </main>
+
+      {/* Global Footer */}
+      <Footer />
+
+      {/* Modals */}
+      <DeliveryModal />
+      <ReceiptModal />
+      <EstimateModal />
+    </div>
+  );
+};
+
+export default function App() {
+  return (
+    <ShopProvider>
+      <AppContent />
+    </ShopProvider>
+  );
+}
