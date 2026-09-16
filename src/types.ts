@@ -26,6 +26,16 @@ export interface Book {
   rating: number;
   reviewCount: number;
   badge?: string; // 소득공제, 베스트, 신간 등
+  // 프로토타입 상세 페이지 전용 필드
+  isbn?: string;
+  pageCount?: number;
+  dimensions?: string;
+  binding?: string;
+  categoryPath?: string;
+  tableOfContents?: string[];
+  recommendationText?: string;
+  publisherReview?: string;
+  authorIntro?: string;
 }
 
 export interface CartItem {

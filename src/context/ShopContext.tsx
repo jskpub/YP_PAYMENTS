@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Book, CartItem, Order, SubsidyLedger, Address, PageTab, BookFormat } from '../types';
 import { MOCK_BOOKS, INITIAL_ADDRESSES } from '../data/mockBooks';
-import { PROTOTYPE_RECOMMENDED_BOOKS } from '../data/prototypeRecommendedBooks';
+import { PROTOTYPE_RECOMMENDED_BOOKS } from '../data/prototypeBookAdapter';
 
 const CART_RESET_VERSION = 'empty-cart-2026-09-16';
 

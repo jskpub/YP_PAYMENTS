@@ -13,8 +13,8 @@ import { EstimateModal } from './components/EstimateModal';
 import { BookExplorePage } from './pages/BookExplorePage';
 import { HomePage } from './pages/HomePage';
 import { IntranetPortalPage } from './pages/IntranetPortalPage';
-import { RecommendedBooksPage } from './pages/RecommendedBooksPage';
-import { BookDetailPage } from './pages/BookDetailPage';
+import { PrototypeRecommendedBooksPage } from './pages/PrototypeRecommendedBooksPage';
+import { PrototypeBookDetailPage } from './pages/PrototypeBookDetailPage';
 import { CartPage } from './pages/CartPage';
 import { GiftSelectPage } from './pages/GiftSelectPage';
 import { PaymentPage } from './pages/PaymentPage';
@@ -44,12 +44,12 @@ const AppContent: React.FC = () => {
 
       {/* Main Page Content */}
       <main className='flex-1 w-full'>
-        {selectedBookForDetail && (activePage === 'explore' || activePage === 'recommended') ? (
-          <BookDetailPage />
+        {selectedBookForDetail && activePage === 'recommended' ? (
+          <PrototypeBookDetailPage />
         ) : (
           <>
             {activePage === 'home' && <HomePage />}
-            {activePage === 'recommended' && <RecommendedBooksPage />}
+            {activePage === 'recommended' && <PrototypeRecommendedBooksPage />}
             {activePage === 'explore' && <BookExplorePage />}
           </>
         )}
