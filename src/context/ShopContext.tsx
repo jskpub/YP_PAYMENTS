@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Book, CartItem, Order, SubsidyLedger, Address, PageTab, BookFormat } from '../types';
 import { MOCK_BOOKS, INITIAL_ADDRESSES } from '../data/mockBooks';
+import { PROTOTYPE_RECOMMENDED_BOOKS } from '../data/prototypeRecommendedBooks';
+
+const CART_RESET_VERSION = 'empty-cart-2026-09-16';
 
 interface ShopContextType {
   activePage: PageTab;
@@ -58,7 +61,11 @@ interface ShopContextType {
 
   // Subsidy & Ledger (B2B Rule Engine)
   subsidyLedger: SubsidyLedger;
-  calculateBookSubsidy: (book: Book, formatOrQty?: BookFormat | number, qtyParam?: number) => {
+  calculateBookSubsidy: (
+    book: Book,
+    formatOrQty?: BookFormat | number,
+    qtyParam?: number,
+  ) => {
     companySubsidy: number;
     employeePayment: number;
     ruleExplanation: string;
@@ -90,7 +97,7 @@ interface ShopContextType {
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activePage, setActivePage] = useState<PageTab>('cart');
+  const [activePage, setActivePage] = useState<PageTab>('intranet');
   const [myPageTab, setMyPageTab] = useState<'subsidy' | 'orders' | 'refund'>('subsidy');
   const [cartTab, setCartTab] = useState<'normal' | 'nowdream'>('normal');
   const [selectedBookForDetail, setSelectedBookForDetail] = useState<Book | null>(null);
@@ -100,25 +107,15 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [addressModalTab, setAddressModalTab] = useState<'list' | 'recent' | 'new'>('new');
   const sanitizeAddressItem = (a: Address): Address => {
-    const isKyoboOrOld =
-      a.roadAddress.includes('교보') ||
-      a.jibunAddress.includes('교보') ||
-      a.roadAddress.includes('종로 1') ||
-      a.roadAddress.includes('종로1가') ||
-      a.roadAddress.includes('강남대로 542 영풍빌딩 13층') ||
-      a.id === 'addr-01';
+    const isKyoboOrOld = a.roadAddress.includes('교보') || a.jibunAddress.includes('교보') || a.roadAddress.includes('종로 1') || a.roadAddress.includes('종로1가') || a.roadAddress.includes('강남대로 542 영풍빌딩 13층') || a.id === 'addr-01';
 
     const isOldPhone = a.phone1 && (a.phone1.includes('9243') || a.phone1.includes('6290'));
 
     return {
       ...a,
       phone1: isOldPhone ? '010-1345-2468' : a.phone1,
-      roadAddress: isKyoboOrOld
-        ? '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)'
-        : a.roadAddress,
-      jibunAddress: isKyoboOrOld
-        ? '서울특별시 종로구 서린동 33 영풍빌딩'
-        : a.jibunAddress
+      roadAddress: isKyoboOrOld ? '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)' : a.roadAddress,
+      jibunAddress: isKyoboOrOld ? '서울특별시 종로구 서린동 33 영풍빌딩' : a.jibunAddress,
     };
   };
 
@@ -130,7 +127,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const sanitized = parsed.map(sanitizeAddressItem);
         localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
         return sanitized;
-      } catch (e) { }
+      } catch (e) {}
     }
     return INITIAL_ADDRESSES.map(sanitizeAddressItem);
   });
@@ -167,7 +164,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       personalSubsidyAmount: 0,
       totalUsedSubsidy: 0,
       remainingSubsidy: 30000,
-      totalEmployeePaid: 0
+      totalEmployeePaid: 0,
     };
   });
 
@@ -177,14 +174,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Sanitize addresses before saving to localStorage and ensure state update if unsanitized entries exist
-    const needsCleanup = addresses.some(
-      (a) =>
-        a.roadAddress.includes('교보') ||
-        a.jibunAddress.includes('교보') ||
-        a.roadAddress.includes('종로 1') ||
-        a.roadAddress.includes('종로1가') ||
-        (a.phone1 && (a.phone1.includes('9243') || a.phone1.includes('6290')))
-    );
+    const needsCleanup = addresses.some((a) => a.roadAddress.includes('교보') || a.jibunAddress.includes('교보') || a.roadAddress.includes('종로 1') || a.roadAddress.includes('종로1가') || (a.phone1 && (a.phone1.includes('9243') || a.phone1.includes('6290'))));
     if (needsCleanup) {
       const sanitized = addresses.map(sanitizeAddressItem);
       setAddresses(sanitized);
@@ -218,7 +208,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         companySubsidy: 0,
         employeePayment: 0,
         ruleExplanation: '',
-        canApply: false
+        canApply: false,
       };
     }
 
@@ -235,12 +225,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return {
         companySubsidy,
         employeePayment,
-        ruleExplanation: isEbook
-          ? '추천도서는 종이도서만 100% 지원 가능합니다. (전자책 지원불가)'
-          : canApply
-            ? 'B2B 기업 추천도서 100% 전액 지원 (월 1권)'
-            : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
-        canApply
+        ruleExplanation: isEbook ? '추천도서는 종이도서만 100% 지원 가능합니다. (전자책 지원불가)' : canApply ? 'B2B 기업 추천도서 100% 전액 지원 (월 1권)' : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply,
       };
     } else if (book.bookType === 'personal') {
       // 개인도서: MIN(판매금액 * 50%, 10,000원) (월 1권 한도)
@@ -251,10 +237,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return {
         companySubsidy,
         employeePayment,
-        ruleExplanation: canApply
-          ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)`
-          : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
-        canApply
+        ruleExplanation: canApply ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)` : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        canApply,
       };
     } else {
       // 일반도서: B2B 지원금 미적용 (회사지원금 0원, 직원 전액부담)
@@ -262,7 +246,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         companySubsidy: 0,
         employeePayment: totalSelling,
         ruleExplanation: 'B2B 지원금 미적용 일반도서 (전액 본인부담)',
-        canApply: false
+        canApply: false,
       };
     }
   };
@@ -288,15 +272,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (freshBook.bookType === 'recommended') {
         // 추천도서: 100% 회사 지원 (1권만 지원)
         singleSubsidy = singlePrice;
-        note = item.quantity > 1
-          ? `B2B 추천도서 100% 지원 (1권 지원, ${item.quantity - 1}권 본인부담)`
-          : 'B2B 추천도서 100% 전액 지원 (직원부담 0원)';
+        note = item.quantity > 1 ? `B2B 추천도서 100% 지원 (1권 지원, ${item.quantity - 1}권 본인부담)` : 'B2B 추천도서 100% 전액 지원 (직원부담 0원)';
       } else {
         // 개인도서: MIN(판매금액 * 50%, 10,000원) (1권만 지원)
         singleSubsidy = Math.min(Math.floor(singlePrice * 0.5), 10000);
-        note = item.quantity > 1
-          ? `B2B 개인도서 50% 지원 (1권 최대 1만원 지원, ${item.quantity - 1}권 본인부담)`
-          : `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${singleSubsidy.toLocaleString()}원 차감)`;
+        note = item.quantity > 1 ? `B2B 개인도서 50% 지원 (1권 최대 1만원 지원, ${item.quantity - 1}권 본인부담)` : `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${singleSubsidy.toLocaleString()}원 차감)`;
       }
     } else {
       singleSubsidy = 0;
@@ -313,13 +293,19 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       subsidyNote: note,
       itemSellingPrice: totalSelling,
       itemCompanySubsidy: companySubsidy,
-      itemEmployeePayment: employeePayment
+      itemEmployeePayment: employeePayment,
     };
   };
 
   // Initial cart with 3 book types (1 copy each): Recommended (18,000 KRW), Personal (20,000 KRW), General (4,950 KRW)
   // All items default to isSubsidyApplied: false
   const [cart, setCart] = useState<CartItem[]>(() => {
+    if (localStorage.getItem('yp_cart_reset_version') !== CART_RESET_VERSION) {
+      localStorage.removeItem('yp_cart');
+      localStorage.setItem('yp_cart_reset_version', CART_RESET_VERSION);
+      return [];
+    }
+
     const saved = localStorage.getItem('yp_cart');
     if (saved) {
       try {
@@ -345,7 +331,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isSubsidyApplied: false,
       itemSellingPrice: recBook.sellingPrice,
       itemCompanySubsidy: 0,
-      itemEmployeePayment: recBook.sellingPrice
+      itemEmployeePayment: recBook.sellingPrice,
     });
 
     const item2: CartItem = recalculateCartItem({
@@ -359,7 +345,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isSubsidyApplied: false,
       itemSellingPrice: perBook.sellingPrice,
       itemCompanySubsidy: 0,
-      itemEmployeePayment: perBook.sellingPrice
+      itemEmployeePayment: perBook.sellingPrice,
     });
 
     const item3: CartItem = recalculateCartItem({
@@ -373,7 +359,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isSubsidyApplied: false,
       itemSellingPrice: genBook.sellingPrice,
       itemCompanySubsidy: 0,
-      itemEmployeePayment: genBook.sellingPrice
+      itemEmployeePayment: genBook.sellingPrice,
     });
 
     return [item1, item2, item3];
@@ -410,8 +396,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
             listPrice: pastBook.listPrice,
             sellingPrice: pastBook.sellingPrice,
             companySubsidy: pastBook.sellingPrice,
-            employeePayment: 0
-          }
+            employeePayment: 0,
+          },
         ],
         totalListPrice: 18000,
         totalSellingPrice: 16200,
@@ -425,8 +411,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deliveryMemo: '문 앞에 놓아주세요.',
         paymentMethod: 'B2B 회사 전액 지원 (0원 결제)',
         culturalDeduction: true,
-        status: '배송완료'
-      }
+        status: '배송완료',
+      },
     ];
   });
 
@@ -447,11 +433,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCart((prev) => {
       const existing = prev.find((i) => i.book.id === book.id && i.format === format);
       if (existing) {
-        return prev.map((i) =>
-          i.id === existing.id
-            ? recalculateCartItem({ ...i, quantity: i.quantity + quantity })
-            : i
-        );
+        return prev.map((i) => (i.id === existing.id ? recalculateCartItem({ ...i, quantity: i.quantity + quantity }) : i));
       }
       const newItem: CartItem = recalculateCartItem({
         id: `cart-${Date.now()}`,
@@ -464,7 +446,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isSubsidyApplied: false, // 기본적으로 미적용 상태로 추가
         itemSellingPrice: book.sellingPrice * quantity,
         itemCompanySubsidy: 0,
-        itemEmployeePayment: book.sellingPrice * quantity
+        itemEmployeePayment: book.sellingPrice * quantity,
       });
       return [...prev, newItem];
     });
@@ -478,9 +460,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateQuantity = (id: string, newQty: number) => {
     if (newQty < 1) return;
-    setCart((prev) =>
-      prev.map((i) => (i.id === id ? recalculateCartItem({ ...i, quantity: newQty }) : i))
-    );
+    setCart((prev) => prev.map((i) => (i.id === id ? recalculateCartItem({ ...i, quantity: newQty }) : i)));
   };
 
   const removeFromCart = (id: string) => {
@@ -494,9 +474,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const toggleItemSelection = (id: string) => {
-    setCart((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, selected: !i.selected } : i))
-    );
+    setCart((prev) => prev.map((i) => (i.id === id ? { ...i, selected: !i.selected } : i)));
   };
 
   const toggleAllSelection = (selected: boolean) => {
@@ -504,36 +482,24 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const applyCartSubsidy = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: true }) : item
-      )
-    );
+    setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: true }) : item)));
     showToast('회사 지원금이 정상 적용되었습니다.');
   };
 
   const removeCartSubsidy = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: false }) : item
-      )
-    );
+    setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: false }) : item)));
     showToast('지원금 적용이 취소되어 전액 본인부담으로 변경되었습니다.');
   };
 
   const updateItemFormat = (id: string, format: BookFormat) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? recalculateCartItem({ ...item, format }) : item
-      )
-    );
+    setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, format }) : item)));
   };
 
   // Addresses
   const addAddress = (newAddrData: Omit<Address, 'id'>) => {
     const newAddress: Address = {
       ...newAddrData,
-      id: `addr-${Date.now()}`
+      id: `addr-${Date.now()}`,
     };
     if (newAddress.isDefault) {
       setAddresses((prev) => [newAddress, ...prev.map((a) => ({ ...a, isDefault: false }))]);
@@ -572,15 +538,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     totalRewardPoints,
     freeShippingShortfall,
     freeShippingProgress,
-    selectedCount: selectedItems.length
+    selectedCount: selectedItems.length,
   };
 
   // Payment process - generates 1 unified Order ID managing company subsidy + employee payment
-  const processPayment = (
-    paymentMethod: string,
-    culturalDeduction: boolean,
-    deliveryMemo: string
-  ): Order => {
+  const processPayment = (paymentMethod: string, culturalDeduction: boolean, deliveryMemo: string): Order => {
     const orderId = `YP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.floor(10000 + Math.random() * 90000)}`;
     const now = new Date();
     const formattedDate = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -598,7 +560,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       companySubsidy: item.itemCompanySubsidy,
       employeePayment: item.itemEmployeePayment,
       isSubsidyApplied: item.isSubsidyApplied,
-      subsidyNote: item.subsidyNote
+      subsidyNote: item.subsidyNote,
     }));
 
     const newOrder: Order = {
@@ -622,7 +584,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       deliveryMemo: deliveryMemo || '문 앞에 놓아주세요.',
       paymentMethod,
       culturalDeduction,
-      status: '결제완료'
+      status: '결제완료',
     };
 
     // Update B2B Subsidy Ledger (Simultaneous DB update for corporate subsidy + monthly limits)
@@ -635,15 +597,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...prev,
         recommendedUsed: prev.recommendedUsed || hasRecommended,
         personalUsed: prev.personalUsed || hasPersonal,
-        recommendedBookTitle: hasRecommended
-          ? orderItems.find((i) => i.bookType === 'recommended')?.title
-          : prev.recommendedBookTitle,
-        personalBookTitle: hasPersonal
-          ? orderItems.find((i) => i.bookType === 'personal')?.title
-          : prev.personalBookTitle,
+        recommendedBookTitle: hasRecommended ? orderItems.find((i) => i.bookType === 'recommended')?.title : prev.recommendedBookTitle,
+        personalBookTitle: hasPersonal ? orderItems.find((i) => i.bookType === 'personal')?.title : prev.personalBookTitle,
         totalUsedSubsidy: prev.totalUsedSubsidy + addedSubsidy,
         remainingSubsidy: Math.max(0, prev.remainingSubsidy - addedSubsidy),
-        totalEmployeePaid: prev.totalEmployeePaid + totalEmployeePayment
+        totalEmployeePaid: prev.totalEmployeePaid + totalEmployeePayment,
       };
     });
 
@@ -674,7 +632,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         personalUsed: hasPersonal ? false : prev.personalUsed,
         totalUsedSubsidy: Math.max(0, prev.totalUsedSubsidy - restoredSubsidy),
         remainingSubsidy: Math.min(prev.monthlyLimit, prev.remainingSubsidy + restoredSubsidy),
-        totalEmployeePaid: Math.max(0, prev.totalEmployeePaid - orderToCancel.totalEmployeePayment)
+        totalEmployeePaid: Math.max(0, prev.totalEmployeePaid - orderToCancel.totalEmployeePayment),
       };
     });
 
@@ -686,19 +644,17 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       prev.map((o) =>
         o.orderId === orderId
           ? {
-            ...o,
-            status: '주문취소',
-            isRefunded: true,
-            refundDate,
-            refundReason: reason
-          }
-          : o
-      )
+              ...o,
+              status: '주문취소',
+              isRefunded: true,
+              refundDate,
+              refundReason: reason,
+            }
+          : o,
+      ),
     );
 
-    showToast(
-      `주문 취소 및 환불 완료: B2B 기업 지원금(${orderToCancel.totalCompanySubsidy.toLocaleString()}원)과 월 1권 신청 한도가 즉시 복원되었습니다.`
-    );
+    showToast(`주문 취소 및 환불 완료: B2B 기업 지원금(${orderToCancel.totalCompanySubsidy.toLocaleString()}원)과 월 1권 신청 한도가 즉시 복원되었습니다.`);
     return true;
   };
 
@@ -709,7 +665,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActivePage,
         myPageTab,
         setMyPageTab,
-        books: MOCK_BOOKS,
+        books: [...MOCK_BOOKS, ...PROTOTYPE_RECOMMENDED_BOOKS],
         selectedBookForDetail,
         setSelectedBookForDetail,
         cart,
@@ -749,7 +705,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isEstimateModalOpen,
         setIsEstimateModalOpen,
         toastMessage,
-        showToast
+        showToast,
       }}
     >
       {children}

@@ -11,22 +11,30 @@ import { DeliveryModal } from './components/DeliveryModal';
 import { ReceiptModal } from './components/ReceiptModal';
 import { EstimateModal } from './components/EstimateModal';
 import { BookExplorePage } from './pages/BookExplorePage';
+import { HomePage } from './pages/HomePage';
+import { IntranetPortalPage } from './pages/IntranetPortalPage';
+import { RecommendedBooksPage } from './pages/RecommendedBooksPage';
+import { BookDetailPage } from './pages/BookDetailPage';
 import { CartPage } from './pages/CartPage';
 import { GiftSelectPage } from './pages/GiftSelectPage';
 import { PaymentPage } from './pages/PaymentPage';
 import { OrderCompletePage } from './pages/OrderCompletePage';
-import { MyPage } from './pages/MyPage';
+import EmployeeMyPage from './pages/EmployeeMyPage';
 import { CheckCircle2 } from 'lucide-react';
 
 const AppContent: React.FC = () => {
-  const { activePage, toastMessage } = useShop();
+  const { activePage, toastMessage, selectedBookForDetail } = useShop();
+
+  if (activePage === 'intranet') {
+    return <IntranetPortalPage />;
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#181718] antialiased selection:bg-[#df0000] selection:text-white">
+    <div className='min-h-screen flex flex-col bg-white text-[#181718] antialiased selection:bg-[#df0000] selection:text-white'>
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-70 bg-[#181718]/90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 duration-200">
-          <CheckCircle2 className="w-4 h-4 text-[#a3e635] flex-shrink-0" />
+        <div className='fixed top-5 left-1/2 -translate-x-1/2 z-70 bg-[#181718]/90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 duration-200'>
+          <CheckCircle2 className='w-4 h-4 text-[#a3e635] flex-shrink-0' />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -35,13 +43,19 @@ const AppContent: React.FC = () => {
       <Header />
 
       {/* Main Page Content */}
-      <main className="flex-1 w-full">
-        {activePage === 'explore' && <BookExplorePage />}
+      <main className='flex-1 w-full'>
+        {selectedBookForDetail && (activePage === 'explore' || activePage === 'recommended') ? <BookDetailPage /> : (
+          <>
+            {activePage === 'home' && <HomePage />}
+            {activePage === 'recommended' && <RecommendedBooksPage />}
+            {activePage === 'explore' && <BookExplorePage />}
+          </>
+        )}
         {activePage === 'cart' && <CartPage />}
         {activePage === 'gift' && <GiftSelectPage />}
         {activePage === 'payment' && <PaymentPage />}
         {activePage === 'complete' && <OrderCompletePage />}
-        {activePage === 'mypage' && <MyPage />}
+        {activePage === 'mypage' && <EmployeeMyPage />}
       </main>
 
       {/* Global Footer */}
