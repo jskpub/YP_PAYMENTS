@@ -2,6 +2,7 @@ import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { StepIndicator } from '../components/StepIndicator';
 import { CheckCircle2, Printer, ShoppingBag, ArrowRight, Truck, FileText, ChevronRight, Award, BookOpen, Smartphone, Check } from 'lucide-react';
+import { BookCoverImage } from '../components/BookCoverImage';
 
 export const OrderCompletePage: React.FC = () => {
   const {
@@ -124,10 +125,12 @@ export const OrderCompletePage: React.FC = () => {
             {order.items.map((item, idx) => (
               <div key={idx} className="py-3.5 flex items-center justify-between text-xs sm:text-sm">
                 <div className="flex items-center gap-3">
-                  <img
-                    src={item.coverImage}
-                    alt={item.title}
-                    className="w-14 h-20 object-contain rounded border border-[#edf0f1] flex-shrink-0"
+                  <BookCoverImage
+                    title={item.title}
+                    coverImage={item.coverImage}
+                    coverBackground={item.coverBackground}
+                    className="w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0"
+                    titleClassName="text-[8px]"
                   />
                   <div className="space-y-1">
                     <div className="flex items-center gap-1.5 flex-wrap">

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Book, CartItem, Order, SubsidyLedger, Address, PageTab, BookFormat } from '../types';
 import { MOCK_BOOKS, INITIAL_ADDRESSES } from '../data/mockBooks';
-import { PROTOTYPE_RECOMMENDED_BOOKS } from '../data/prototypeBookAdapter';
+import { PROTOTYPE_ALL_BOOKS } from '../data/prototypeBookAdapter';
 
 const CART_RESET_VERSION = 'empty-cart-2026-09-16';
 
@@ -28,7 +28,6 @@ interface ShopContextType {
   toggleAllSelection: (selected: boolean) => void;
   applyCartSubsidy: (id: string) => void;
   removeCartSubsidy: (id: string) => void;
-  updateItemFormat: (id: string, format: BookFormat) => void;
 
   // Free Gift
   selectedGiftId: string;
@@ -297,6 +296,26 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   };
 
+  // 지원금 월 1권 한도(지원금_rule.md §1.4)는 도서 유형(추천/개인)별로 각각 1권까지만 허용한다.
+  // 장바구니 토글은 라디오 그룹처럼 유형별 상호배타적으로 동작해야 하며, 이 함수는 그 불변식을
+  // 강제하는 단일 지점이다. 실제 서비스라면 결제 요청을 받는 서버가 동일한 검증을 다시 수행해야
+  // 하는데(복합결제_통합정리.md, 프론트 우회 방지), 이 프로토타입에는 서버가 없으므로 cart 상태가
+  // 바뀔 때마다(아래 useEffect)와 결제 진입 시점(processPayment)에 반복 호출해 같은 효과를 낸다.
+  const enforceSubsidyExclusivity = (items: CartItem[]): CartItem[] => {
+    const appliedTypes = new Set<CartItem['book']['bookType']>();
+    let changed = false;
+    const next = items.map((item) => {
+      if (!item.isSubsidyApplied) return item;
+      if (appliedTypes.has(item.book.bookType)) {
+        changed = true;
+        return recalculateCartItem({ ...item, isSubsidyApplied: false });
+      }
+      appliedTypes.add(item.book.bookType);
+      return item;
+    });
+    return changed ? next : items;
+  };
+
   // Initial cart with 3 book types (1 copy each): Recommended (18,000 KRW), Personal (20,000 KRW), General (4,950 KRW)
   // All items default to isSubsidyApplied: false
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -324,7 +343,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: 'cart-1',
       book: recBook,
       quantity: 1,
-      format: 'paper',
+      format: recBook.format,
       deliveryType: 'normal',
       estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
       selected: true,
@@ -338,11 +357,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: 'cart-2',
       book: perBook,
       quantity: 1,
-      format: 'paper',
+      format: perBook.format,
       deliveryType: 'normal',
       estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
       selected: true,
       isSubsidyApplied: false,
+
       itemSellingPrice: perBook.sellingPrice,
       itemCompanySubsidy: 0,
       itemEmployeePayment: perBook.sellingPrice,
@@ -352,7 +372,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: 'cart-3',
       book: genBook,
       quantity: 1,
-      format: 'paper',
+      format: genBook.format,
       deliveryType: 'normal',
       estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
       selected: true,
@@ -369,6 +389,14 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('yp_cart', JSON.stringify(cart));
   }, [cart]);
 
+  // 지원금 상호배타 자가 교정 — cart가 어떻게 바뀌든(추가/삭제/새로고침) 유형별로 지원금이
+  // 2건 이상 동시 적용된 상태가 되면 즉시 교정한다(최대 1건). 지원금 적용은 이제 항상 사용자가
+  // 결제 페이지에서 직접 켜는 것뿐이라 자동 적용 로직은 없다 — 아무것도 바뀌지 않으면 원래 배열
+  // 참조를 그대로 반환해 불필요한 재렌더를 막는다.
+  useEffect(() => {
+    setCart((prev) => enforceSubsidyExclusivity(prev));
+  }, [cart]);
+
   // Orders history
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('yp_orders');
@@ -381,9 +409,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         orderId: 'YP-20260812-49102',
         orderDate: '2026-08-12 14:23',
         employeeId: 'EMP-20240901',
-        employeeName: '김지선',
+        employeeName: '김민서',
         employeePhone: '010-1345-2468',
-        employeeEmail: 'clcclcu@naver.com',
+        employeeEmail: 'junkyo.jung@ypbooks.co.kr',
         items: [
           {
             bookId: pastBook.id,
@@ -443,7 +471,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deliveryType: 'normal',
         estimatedDeliveryDate: '9/16(수) 예정 (내일 출고)',
         selected: true,
-        isSubsidyApplied: false, // 기본적으로 미적용 상태로 추가
+        isSubsidyApplied: false, // 기본적으로 미적용 상태로 추가 — 추천/개인도서 모두 장바구니 토글로 사용자가 직접 적용한다.
         itemSellingPrice: book.sellingPrice * quantity,
         itemCompanySubsidy: 0,
         itemEmployeePayment: book.sellingPrice * quantity,
@@ -482,17 +510,33 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const applyCartSubsidy = (id: string) => {
-    setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: true }) : item)));
-    showToast('회사 지원금이 정상 적용되었습니다.');
+    const target = cart.find((item) => item.id === id);
+    if (!target) return;
+
+    // 같은 유형(추천/개인)은 월 1권 한도이므로 라디오 그룹처럼 동작해야 한다 — 새로 켜는 항목 외에
+    // 같은 유형에서 이미 켜져 있던 항목은 자동으로 끈다.
+    const previouslyApplied = cart.find((item) => item.id !== id && item.book.bookType === target.book.bookType && item.isSubsidyApplied);
+
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.id === id) return recalculateCartItem({ ...item, isSubsidyApplied: true });
+        if (item.book.bookType === target.book.bookType && item.isSubsidyApplied) {
+          return recalculateCartItem({ ...item, isSubsidyApplied: false });
+        }
+        return item;
+      }),
+    );
+
+    if (previouslyApplied) {
+      showToast(`지원금 적용을 『${previouslyApplied.book.title}』에서 『${target.book.title}』(으)로 변경했어요.`);
+    } else {
+      showToast('회사 지원금이 정상 적용되었습니다.');
+    }
   };
 
   const removeCartSubsidy = (id: string) => {
     setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, isSubsidyApplied: false }) : item)));
     showToast('지원금 적용이 취소되어 전액 본인부담으로 변경되었습니다.');
-  };
-
-  const updateItemFormat = (id: string, format: BookFormat) => {
-    setCart((prev) => prev.map((item) => (item.id === id ? recalculateCartItem({ ...item, format }) : item)));
   };
 
   // Addresses
@@ -543,15 +587,25 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Payment process - generates 1 unified Order ID managing company subsidy + employee payment
   const processPayment = (paymentMethod: string, culturalDeduction: boolean, deliveryMemo: string): Order => {
+    // 결제 진입 시 재검증 지점 — 실제 서비스라면 서버가 결제 요청을 받을 때 "유형별 지원금 적용이
+    // 1건 이하인지"를 다시 검사해야 한다(지원금_rule.md §1.4 월 1권 한도, 복합결제_통합정리.md 4장
+    // "프론트 우회로 여러 건이 넘어올 가능성 차단"). 서버가 없는 프로토타입이므로, 실제 결제 금액을
+    // 확정하는 이 시점에 다시 한 번 명시적으로 sanitize하여 화면 표시값을 그대로 믿지 않는다.
+    const verifiedItems = enforceSubsidyExclusivity(selectedItems);
+    const verifiedTotalCompanySubsidy = verifiedItems.reduce((acc, i) => acc + i.itemCompanySubsidy, 0);
+    const verifiedTotalEmployeePayment = verifiedItems.reduce((acc, i) => acc + i.itemEmployeePayment, 0);
+    const verifiedFinalPaidAmount = verifiedTotalEmployeePayment + shippingFee;
+
     const orderId = `YP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.floor(10000 + Math.random() * 90000)}`;
     const now = new Date();
     const formattedDate = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-    const orderItems = selectedItems.map((item) => ({
+    const orderItems = verifiedItems.map((item) => ({
       bookId: item.book.id,
       title: item.book.title,
       author: item.book.author,
       coverImage: item.book.coverImage,
+      coverBackground: item.book.coverBackground,
       format: item.format,
       bookType: item.book.bookType,
       quantity: item.quantity,
@@ -567,17 +621,17 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       orderId,
       orderDate: formattedDate,
       employeeId: 'EMP-20240901',
-      employeeName: selectedAddress.recipient || '김지선',
+      employeeName: selectedAddress.recipient || '김민서',
       employeePhone: selectedAddress.phone1 || '010-1345-2468',
-      employeeEmail: 'clcclcu@naver.com',
+      employeeEmail: 'junkyo.jung@ypbooks.co.kr',
       items: orderItems,
       totalListPrice,
       totalSellingPrice,
       totalDiscount: totalProductDiscount,
-      totalCompanySubsidy,
-      totalEmployeePayment,
+      totalCompanySubsidy: verifiedTotalCompanySubsidy,
+      totalEmployeePayment: verifiedTotalEmployeePayment,
       shippingFee,
-      finalPaidAmount: finalPaymentAmount,
+      finalPaidAmount: verifiedFinalPaidAmount,
       pointsUsed: 0,
       earnedPoints: totalRewardPoints,
       deliveryAddress: selectedAddress,
@@ -589,19 +643,21 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Update B2B Subsidy Ledger (Simultaneous DB update for corporate subsidy + monthly limits)
     setSubsidyLedger((prev) => {
-      const hasRecommended = orderItems.some((i) => i.bookType === 'recommended');
-      const hasPersonal = orderItems.some((i) => i.bookType === 'personal');
-      const addedSubsidy = totalCompanySubsidy;
+      // 월 1권 한도는 "지원금이 실제로 적용된" 구매에만 소비된다 — 지원금 미적용으로 담긴
+      // 추천/개인도서(전액 본인부담)까지 한도를 소진시키면 안 된다.
+      const hasRecommended = orderItems.some((i) => i.bookType === 'recommended' && i.isSubsidyApplied);
+      const hasPersonal = orderItems.some((i) => i.bookType === 'personal' && i.isSubsidyApplied);
+      const addedSubsidy = verifiedTotalCompanySubsidy;
 
       return {
         ...prev,
         recommendedUsed: prev.recommendedUsed || hasRecommended,
         personalUsed: prev.personalUsed || hasPersonal,
-        recommendedBookTitle: hasRecommended ? orderItems.find((i) => i.bookType === 'recommended')?.title : prev.recommendedBookTitle,
-        personalBookTitle: hasPersonal ? orderItems.find((i) => i.bookType === 'personal')?.title : prev.personalBookTitle,
+        recommendedBookTitle: hasRecommended ? orderItems.find((i) => i.bookType === 'recommended' && i.isSubsidyApplied)?.title : prev.recommendedBookTitle,
+        personalBookTitle: hasPersonal ? orderItems.find((i) => i.bookType === 'personal' && i.isSubsidyApplied)?.title : prev.personalBookTitle,
         totalUsedSubsidy: prev.totalUsedSubsidy + addedSubsidy,
         remainingSubsidy: Math.max(0, prev.remainingSubsidy - addedSubsidy),
-        totalEmployeePaid: prev.totalEmployeePaid + totalEmployeePayment,
+        totalEmployeePaid: prev.totalEmployeePaid + verifiedTotalEmployeePayment,
       };
     });
 
@@ -622,8 +678,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Restore B2B Subsidy Ledger
     setSubsidyLedger((prev) => {
-      const hasRecommended = orderToCancel.items.some((i) => i.bookType === 'recommended');
-      const hasPersonal = orderToCancel.items.some((i) => i.bookType === 'personal');
+      // 취소 복원도 결제 시와 동일하게 "실제로 지원금이 적용됐던" 항목 기준으로만 월 1권 한도를 되돌린다.
+      const hasRecommended = orderToCancel.items.some((i) => i.bookType === 'recommended' && i.isSubsidyApplied);
+      const hasPersonal = orderToCancel.items.some((i) => i.bookType === 'personal' && i.isSubsidyApplied);
       const restoredSubsidy = orderToCancel.totalCompanySubsidy;
 
       return {
@@ -665,7 +722,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActivePage,
         myPageTab,
         setMyPageTab,
-        books: [...MOCK_BOOKS, ...PROTOTYPE_RECOMMENDED_BOOKS],
+        books: [...MOCK_BOOKS, ...PROTOTYPE_ALL_BOOKS],
         selectedBookForDetail,
         setSelectedBookForDetail,
         cart,
@@ -679,7 +736,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         toggleAllSelection,
         applyCartSubsidy,
         removeCartSubsidy,
-        updateItemFormat,
         selectedGiftId,
         setSelectedGiftId,
         cartStats,

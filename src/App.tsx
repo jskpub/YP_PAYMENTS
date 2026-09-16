@@ -12,9 +12,10 @@ import { ReceiptModal } from './components/ReceiptModal';
 import { EstimateModal } from './components/EstimateModal';
 import { BookExplorePage } from './pages/BookExplorePage';
 import { HomePage } from './pages/HomePage';
-import { IntranetPortalPage } from './pages/IntranetPortalPage';
+import { AuthPage } from './pages/AuthPage';
 import { PrototypeRecommendedBooksPage } from './pages/PrototypeRecommendedBooksPage';
 import { PrototypeBookDetailPage } from './pages/PrototypeBookDetailPage';
+import { BizMallGridPage } from './pages/BizMallGridPage';
 import { CartPage } from './pages/CartPage';
 import { GiftSelectPage } from './pages/GiftSelectPage';
 import { PaymentPage } from './pages/PaymentPage';
@@ -26,7 +27,7 @@ const AppContent: React.FC = () => {
   const { activePage, toastMessage, selectedBookForDetail } = useShop();
 
   if (activePage === 'intranet') {
-    return <IntranetPortalPage />;
+    return <AuthPage />;
   }
 
   return (
@@ -44,12 +45,14 @@ const AppContent: React.FC = () => {
 
       {/* Main Page Content */}
       <main className='flex-1 w-full'>
-        {selectedBookForDetail && activePage === 'recommended' ? (
+        {selectedBookForDetail && (activePage === 'recommended' || activePage === 'best' || activePage === 'new') ? (
           <PrototypeBookDetailPage />
         ) : (
           <>
             {activePage === 'home' && <HomePage />}
             {activePage === 'recommended' && <PrototypeRecommendedBooksPage />}
+            {activePage === 'best' && <BizMallGridPage menu='BEST' />}
+            {activePage === 'new' && <BizMallGridPage menu='NEW' />}
             {activePage === 'explore' && <BookExplorePage />}
           </>
         )}

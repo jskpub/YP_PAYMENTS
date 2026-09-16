@@ -5,7 +5,7 @@
 
 export type BookType = 'recommended' | 'personal' | 'general'; // 추천도서 | 개인도서 | 일반도서(지원금 미적용)
 export type BookFormat = 'paper' | 'ebook'; // 종이도서 | 전자도서
-export type PageTab = 'intranet' | 'home' | 'recommended' | 'explore' | 'cart' | 'gift' | 'payment' | 'complete' | 'mypage';
+export type PageTab = 'intranet' | 'home' | 'recommended' | 'best' | 'new' | 'explore' | 'cart' | 'gift' | 'payment' | 'complete' | 'mypage';
 
 export interface Book {
   id: string;
@@ -15,6 +15,7 @@ export interface Book {
   publisher: string;
   publishDate: string;
   coverImage: string;
+  coverBackground?: string; // coverImage가 없을 때(B2B프로토타입 도서 등) 표지 배경색 — 있으면 이미지 대신 색상+제목으로 통일해서 그린다
   listPrice: number; // 정가
   sellingPrice: number; // 판매가 (할인가)
   discountRate: number; // 할인율 (%)
@@ -74,6 +75,7 @@ export interface OrderItemRecord {
   title: string;
   author: string;
   coverImage: string;
+  coverBackground?: string;
   format: BookFormat;
   bookType: BookType;
   quantity: number;

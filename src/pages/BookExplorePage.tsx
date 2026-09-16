@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { Book, BookFormat } from '../types';
 import { Check, Info, ShoppingCart, CreditCard, Sparkles, BookOpen, Star, Award, ChevronRight } from 'lucide-react';
+import { BookCoverImage } from '../components/BookCoverImage';
 
 interface BookExplorePageProps {
   showAnnouncement?: boolean;
@@ -103,7 +104,7 @@ export const BookExplorePage: React.FC<BookExplorePageProps> = ({ showAnnounceme
 
                   {/* Book Cover */}
                   <div onClick={() => setSelectedBookForDetail(book)} className='cursor-pointer group relative flex justify-center py-2 bg-[#f6f6f6] rounded'>
-                    <img src={book.coverImage} alt={book.title} className='w-32 h-44 object-contain shadow-md rounded group-hover:scale-105 transition-transform' />
+                    <BookCoverImage title={book.title} coverImage={book.coverImage} coverBackground={book.coverBackground} className='w-32 h-44 shadow-md rounded group-hover:scale-105 transition-transform' titleClassName='text-sm' />
                     <div className='absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center text-white text-xs font-semibold'>도서 상세 보기</div>
                   </div>
 
@@ -173,7 +174,7 @@ export const BookExplorePage: React.FC<BookExplorePageProps> = ({ showAnnounceme
 
               <div className='p-6 space-y-4'>
                 <div className='flex gap-5'>
-                  <img src={activeQuickDetailBook.coverImage} alt={activeQuickDetailBook.title} className='w-32 h-44 object-contain shadow-md rounded' />
+                  <BookCoverImage title={activeQuickDetailBook.title} coverImage={activeQuickDetailBook.coverImage} coverBackground={activeQuickDetailBook.coverBackground} className='w-32 h-44 shadow-md rounded' titleClassName='text-sm' />
                   <div className='flex-1 space-y-1.5'>
                     <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${activeQuickDetailBook.bookType === 'recommended' ? 'bg-[#ffebeb] text-[#df0000]' : 'bg-[#edf0f1] text-[#1f976b]'}`}>
                       {activeQuickDetailBook.bookType === 'recommended' ? '추천도서 100% 지원' : '개인도서 50% 지원'}
@@ -217,7 +218,7 @@ export const BookExplorePage: React.FC<BookExplorePageProps> = ({ showAnnounceme
                 <div className='flex gap-2 pt-2'>
                   <button
                     onClick={() => {
-                      addToCart(activeQuickDetailBook, 'paper', 1, false);
+                      addToCart(activeQuickDetailBook, activeQuickDetailBook.format, 1, false);
                       setActiveQuickDetailBook(null);
                     }}
                     className='flex-1 py-3 border border-[#cbd2d4] bg-white text-[#181718] font-bold text-sm rounded hover:bg-[#f6f6f6]'
@@ -226,7 +227,7 @@ export const BookExplorePage: React.FC<BookExplorePageProps> = ({ showAnnounceme
                   </button>
                   <button
                     onClick={() => {
-                      addToCart(activeQuickDetailBook, 'paper', 1, true);
+                      addToCart(activeQuickDetailBook, activeQuickDetailBook.format, 1, true);
                       setActiveQuickDetailBook(null);
                     }}
                     className='flex-1 py-3 bg-[#df0000] text-white font-bold text-sm rounded hover:bg-[#ea2e2e]'

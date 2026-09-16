@@ -2,7 +2,7 @@ import { BenefitState, BenefitHistoryItem, BookItem, OrderItem, RefundHistoryIte
 
 export const initialBenefitState: BenefitState = {
   user: {
-    name: '정훈교',
+    name: '김민서',
     grade: '일반',
     employeeId: 'YP-20240912',
     isVerified: true,

@@ -8,8 +8,8 @@ interface BookCoverProps {
 }
 
 /**
- * 표지 이미지가 있으면 이미지를, 없으면 배경 위에 제목을 얹어 표지를 그린다.
- * 추천도서는 실제 표지 이미지 제공 전이라 후자로 표시된다.
+ * 배경색 위에 제목을 얹어 표지를 그린다. 도서마다 실제 표지 이미지 출처가 제각각이라
+ * (스톡 사진 등) 목록 전체의 톤을 통일하기 위해 coverImage 유무와 상관없이 항상 이 방식으로 그린다.
  */
 export const BookCover: React.FC<BookCoverProps> = ({
   book,
@@ -27,20 +27,11 @@ export const BookCover: React.FC<BookCoverProps> = ({
           'linear-gradient(to right, rgba(0,0,0,.30), rgba(255,255,255,.14) 60%, rgba(255,255,255,0))',
       }}
     />
-    {book.coverImage ? (
-      <img
-        src={book.coverImage}
-        alt={book.title}
-        referrerPolicy="no-referrer"
-        className="h-full w-full object-cover"
-      />
-    ) : (
-      <span
-        className={`break-keep px-4 text-center font-extrabold leading-snug text-white ${titleClassName}`}
-        style={{textShadow: '0 2px 6px rgba(0,0,0,.35)'}}
-      >
-        {book.title}
-      </span>
-    )}
+    <span
+      className={`break-keep px-4 text-center font-extrabold leading-snug text-white ${titleClassName}`}
+      style={{textShadow: '0 2px 6px rgba(0,0,0,.35)'}}
+    >
+      {book.title}
+    </span>
   </div>
 );

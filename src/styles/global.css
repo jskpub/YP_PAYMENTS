@@ -27,6 +27,38 @@
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
   --color-danger-soft: var(--color-danger-soft);
+
+  /* Tailwind의 font-sans 유틸을 웹표준 가이드 폰트(Pretendard GOV)로 고정.
+     src/prototype 소스가 className="font-sans"를 그대로 쓰기 때문에 여기서 한 번에 맞춘다. */
+  --font-sans: var(--font-family-base);
+
+  /* --------------------------------------------------------------------
+     B2B 프로토타입(src/prototype) 전용 색상 토큰.
+     원본 프로토타입은 자체 hex 팔레트(#a32116 등)를 썼지만, 여기서는 그
+     값을 쓰지 않고 ypbook.css/variables.css의 웹표준 가이드 토큰을 그대로
+     별칭(alias) 연결한다. → 로그인/추천도서/베스트/신상품/헤더/푸터 등
+     프로토타입에서 가져온 화면도 항상 yp_payments 기본 팔레트로 렌더링됨.
+     원본 hex 값은 참고용으로 src/prototype/prototype-original-theme.css 에
+     따로 정리해 두었다 (앱에는 로드되지 않음).
+     -------------------------------------------------------------------- */
+  --color-yp-red: var(--color-primary);           /* red09 #df0000 */
+  --color-yp-red-hover: var(--color-primary-hover); /* red08 #ea2e2e */
+  --color-yp-red-soft: var(--color-primary-soft);   /* red01 #ffebeb */
+
+  --color-yp-ink: var(--color-foreground);        /* wgrey09 #181718 */
+  --color-yp-gray-800: var(--wgrey08);            /* #363636 */
+  --color-yp-gray-700: var(--wgrey08);            /* #363636 */
+  --color-yp-gray-500: var(--wgrey07);            /* #595959 */
+  --color-yp-gray-400: var(--wgrey05);            /* #9c9c9c */
+  --color-yp-gray-300: var(--wgrey04);            /* #aeaeae */
+  --color-yp-gray-200: var(--wgrey02);            /* #dadada */
+  --color-yp-gray-100: var(--wgrey01);            /* #f6f6f6 */
+  --color-yp-gray-50: var(--wgrey01);             /* #f6f6f6 */
+
+  /* 고객사(삼성전자) 인트라넷 목업 전용 색상 — 영풍문고 브랜드 팔레트에는
+     속하지 않는 타사 UI 색이라 웹표준 가이드 토큰으로 별칭하지 않고 원본
+     그대로 둔다. */
+  --color-sec-blue: #0072ce;
 }
 
 /* Global Reset & Body Styles */

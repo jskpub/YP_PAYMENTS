@@ -202,7 +202,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
           <p className='font-semibold text-gray-400 text-[11px] px-2 mb-1'>고객센터 안내</p>
           <div className='px-2 text-[11px] text-gray-400'>
             <span>영풍문고 임직원 복지지원</span>
-            <span className='block font-mono text-gray-500'>1544-9020</span>
+            <span className='block  text-gray-500'>1544-9020</span>
           </div>
         </div>
       </nav>
