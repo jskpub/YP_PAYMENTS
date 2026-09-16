@@ -44,7 +44,9 @@ const AppContent: React.FC = () => {
 
       {/* Main Page Content */}
       <main className='flex-1 w-full'>
-        {selectedBookForDetail && (activePage === 'explore' || activePage === 'recommended') ? <BookDetailPage /> : (
+        {selectedBookForDetail && (activePage === 'explore' || activePage === 'recommended') ? (
+          <BookDetailPage />
+        ) : (
           <>
             {activePage === 'home' && <HomePage />}
             {activePage === 'recommended' && <RecommendedBooksPage />}

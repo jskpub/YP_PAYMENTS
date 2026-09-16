@@ -193,7 +193,7 @@ export const CartPage: React.FC = () => {
                   ></div>
                 </div>
                 <button
-                  onClick={() => setActivePage('explore')}
+                  onClick={() => setActivePage('recommended')}
                   className="px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] text-xs font-semibold text-[#595959] whitespace-nowrap transition-colors"
                 >
                   상품 더 담기
@@ -250,7 +250,7 @@ export const CartPage: React.FC = () => {
                   onClick={() => setActivePage('explore')}
                   className="px-6 py-2.5 bg-[#df0000] text-white rounded text-sm font-bold hover:bg-[#ea2e2e] transition-colors shadow-sm"
                 >
-                  추천/개인도서 둘러보기
+                  추천도서 둘러보기
                 </button>
               </div>
             ) : (
