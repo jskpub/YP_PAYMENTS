@@ -1,10 +1,10 @@
 import React from 'react';
-import {Check, Heart, Quote, Star} from 'lucide-react';
-import {BenefitState, Book, BookComment, CartLine} from '../types';
-import {PROGRAM, PURCHASE_COUNT_MIN, RECOMMENDED_BOOKS, findBook} from '../data/mockData';
-import {getRemainingCount} from '../cartRules';
-import {BookCover} from './BookCover';
-import {ChatRoom} from './ChatRoom';
+import { Check, Heart, Quote, Star } from 'lucide-react';
+import { BenefitState, Book, BookComment, CartLine } from '../types';
+import { PROGRAM, PURCHASE_COUNT_MIN, RECOMMENDED_BOOKS, findBook } from '../data/mockData';
+import { getRemainingCount } from '../cartRules';
+import { BookCover } from './BookCover';
+import { ChatRoom } from './ChatRoom';
 
 interface RecommendedBooksPageProps {
   benefit: BenefitState;
@@ -16,6 +16,7 @@ interface RecommendedBooksPageProps {
   onRemoveFromCart: (bookId: string) => void;
   onChatSubmit: (text: string) => void;
   onOpenBook: (bookId: string) => void;
+  onResetSubsidy?: () => void;
 }
 
 export const RecommendedBooksPage: React.FC<RecommendedBooksPageProps> = ({
@@ -28,6 +29,7 @@ export const RecommendedBooksPage: React.FC<RecommendedBooksPageProps> = ({
   onRemoveFromCart,
   onChatSubmit,
   onOpenBook,
+  onResetSubsidy,
 }) => {
   const cartIds = new Set(cart.map((line) => line.bookId));
 
@@ -130,9 +132,6 @@ export const RecommendedBooksPage: React.FC<RecommendedBooksPageProps> = ({
               한 달에 한 권, 회사가 전액 지원합니다.
             </p>
           </div>
-          <span className="rounded-full bg-yp-red-soft px-3 py-1.5 text-xs font-bold text-yp-red">
-            이번 달 남은 추천도서 {Math.max(0, remainingCount)}권
-          </span>
         </div>
 
         {/* 2열 목록형 */}

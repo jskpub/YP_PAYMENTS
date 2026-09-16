@@ -16,7 +16,7 @@ export const AuthPage: React.FC = () => {
 
   const enterBizMall = (employeeName?: string) => {
     if (employeeName) showToast(`${employeeName}님, 환영합니다`);
-    setActivePage('recommended');
+    setActivePage('home');
   };
 
   const handleLaunchSSO = () => {

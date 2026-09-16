@@ -5,9 +5,9 @@ import { toPrototypeBenefit } from '../data/prototypeBookAdapter';
 import { PROTOTYPE_ALL_BOOKS } from '../data/prototypeBookAdapter';
 import type { GnbMenu } from '../prototype/types';
 
-/** '베스트'/'신상품' 탭 공용 — B2B프로토타입의 BizMallHome 그리드를 activeMenu만 바꿔 재사용한다. */
-export const BizMallGridPage: React.FC<{ menu: Extract<GnbMenu, 'BEST' | 'NEW'> }> = ({ menu }) => {
-  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, subsidyLedger, showToast } = useShop();
+/** B2B 프로토타입 메인/도서 목록 그리드 — 추천/베스트/신상품/전체 및 검색 결과 공용 */
+export const BizMallGridPage: React.FC<{ menu?: GnbMenu }> = ({ menu = 'ALL' }) => {
+  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, subsidyLedger, searchQuery, showToast } = useShop();
   const benefit = toPrototypeBenefit(subsidyLedger.remainingSubsidy, subsidyLedger.recommendedUsed);
   const prototypeCart = cart.filter((item) => PROTOTYPE_ALL_BOOKS.some((book) => book.id === item.book.id)).map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
 
@@ -29,7 +29,7 @@ export const BizMallGridPage: React.FC<{ menu: Extract<GnbMenu, 'BEST' | 'NEW'> 
     <BizMallHome
       benefit={benefit}
       activeMenu={menu}
-      searchQuery=""
+      searchQuery={searchQuery || ''}
       cart={prototypeCart}
       onAddToCart={add}
       onRemoveFromCart={remove}

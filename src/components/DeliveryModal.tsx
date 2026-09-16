@@ -63,7 +63,7 @@ export const DeliveryModal: React.FC = () => {
       setRecipient('김민서');
       setPhonePrefix('010');
       setPhoneMid('1354');
-      setPhoneEnd('2468');
+      setPhoneEnd('5678');
     }
   };
 

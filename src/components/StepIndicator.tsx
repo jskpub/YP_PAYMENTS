@@ -12,9 +12,8 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
 
   const steps: { key: 'cart' | 'gift' | 'payment' | 'complete'; label: string; number: number }[] = [
     { key: 'cart', label: '장바구니', number: 1 },
-    { key: 'gift', label: '사은품 선택', number: 2 },
-    { key: 'payment', label: '결제하기', number: 3 },
-    { key: 'complete', label: '주문완료', number: 4 },
+    { key: 'payment', label: '결제하기', number: 2 },
+    { key: 'complete', label: '주문완료', number: 3 },
   ];
 
   return (

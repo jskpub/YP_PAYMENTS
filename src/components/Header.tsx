@@ -5,22 +5,23 @@ import { MOCK_ROSTER } from '../prototype/data/mockData';
 import { toPrototypeBenefit } from '../data/prototypeBookAdapter';
 import type { GnbMenu } from '../prototype/types';
 
-const MENU_TO_PAGE: Record<GnbMenu, 'recommended' | 'best' | 'new'> = {
-  ALL: 'recommended',
+const MENU_TO_PAGE: Record<GnbMenu, 'home' | 'recommended' | 'best' | 'new'> = {
+  ALL: 'home',
   RECOMMENDED: 'recommended',
   BEST: 'best',
   NEW: 'new',
 };
 
 const PAGE_TO_MENU: Partial<Record<string, GnbMenu>> = {
+  home: 'ALL',
+  explore: 'ALL',
   recommended: 'RECOMMENDED',
   best: 'BEST',
   new: 'NEW',
 };
 
 export const Header: React.FC = () => {
-  const { activePage, setActivePage, setSelectedBookForDetail, setMyPageTab, cart, subsidyLedger, showToast } = useShop();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { activePage, setActivePage, setSelectedBookForDetail, setMyPageTab, cart, subsidyLedger, searchQuery, setSearchQuery, showToast } = useShop();
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   const benefit = toPrototypeBenefit(subsidyLedger.remainingSubsidy, subsidyLedger.recommendedUsed);
 
@@ -57,14 +58,18 @@ export const Header: React.FC = () => {
       onMenuChange={(menu) => {
         // 상세 페이지가 열려 있는 상태로 다른 GNB 탭(추천/베스트/신상품)을 누르면, activePage만
         // 바뀌고 selectedBookForDetail이 남아있어 App.tsx의 상세뷰 조건을 계속 만족시키는 바람에
-        // 화면이 안 바뀌는 것처럼 보이는 문제가 있었다 — 탭 전환 시 항상 상세뷰를 닫는다.
+        // 화면이 안 바뀌는 것처럼 보이는 문제가 있었다 — 탭 전환 시 항상 상세뷰를 닫고 검색어도 리셋한다.
         setSelectedBookForDetail(null);
+        setSearchQuery('');
         setActivePage(MENU_TO_PAGE[menu]);
       }}
       cartCount={cartCount}
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
-      onSearchSubmit={() => setActivePage('explore')}
+      onSearchSubmit={() => {
+        setSelectedBookForDetail(null);
+        setActivePage('explore');
+      }}
       onPendingNav={handlePendingNav}
       onLogout={() => setActivePage('intranet')}
     />

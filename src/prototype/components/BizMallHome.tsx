@@ -83,8 +83,10 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({
     const matchesQuery =
       query.length === 0 ||
       book.title.toLowerCase().includes(query) ||
+      (book.subtitle && book.subtitle.toLowerCase().includes(query)) ||
       book.author.toLowerCase().includes(query) ||
-      book.categoryName.toLowerCase().includes(query);
+      book.categoryName.toLowerCase().includes(query) ||
+      (book.tags && book.tags.some((t) => t.toLowerCase().includes(query)));
 
     return matchesMenu && matchesQuery;
   });

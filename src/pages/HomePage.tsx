@@ -1,7 +1,7 @@
 import React from 'react';
 import { Award, BookOpen, Calendar, ChevronRight, Gift, MapPin, ShoppingCart, Tag, User } from 'lucide-react';
 import { useShop } from '../context/ShopContext';
-import { BookExplorePage } from './BookExplorePage';
+import { BizMallGridPage } from './BizMallGridPage';
 
 const quickMenus = [
   { label: '추천도서', icon: Award, page: 'recommended' as const },
@@ -86,7 +86,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <BookExplorePage showAnnouncement={false} />
+      <BizMallGridPage menu='ALL' />
     </div>
   );
 };

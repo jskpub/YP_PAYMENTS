@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ChevronDown, Search, User, Wallet} from 'lucide-react';
-import {BenefitState, GnbMenu} from '../types';
-import {POPULAR_KEYWORDS} from '../data/mockData';
-import {BizMallBrandLogo} from './BizMallBrandLogo';
+import React, { useEffect, useRef, useState } from 'react';
+import { ChevronDown, Search, User, Wallet } from 'lucide-react';
+import { BenefitState, GnbMenu } from '../types';
+import { POPULAR_KEYWORDS } from '../data/mockData';
+import { BizMallBrandLogo } from './BizMallBrandLogo';
 
 interface BizMallHeaderProps {
   employeeName: string;
@@ -18,10 +18,10 @@ interface BizMallHeaderProps {
   onLogout: () => void;
 }
 
-const GNB_ITEMS: {id: GnbMenu; label: string}[] = [
-  {id: 'RECOMMENDED', label: '추천 도서'},
-  {id: 'BEST', label: '베스트'},
-  {id: 'NEW', label: '신상품'},
+const GNB_ITEMS: { id: GnbMenu; label: string }[] = [
+  { id: 'RECOMMENDED', label: '추천 도서' },
+  { id: 'BEST', label: '베스트' },
+  { id: 'NEW', label: '신상품' },
 ];
 
 export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
@@ -148,15 +148,15 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
                     <div className="grid grid-cols-3 divide-x divide-yp-gray-200 bg-white text-center text-[11px] font-medium text-yp-gray-700">
                       <button
                         type="button"
-                        onClick={() => goPending('주문/배송 조회')}
+                        //   onClick={() => goPending('주문/배송 조회')}
                         className="cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red"
                       >
                         주문/배송
                       </button>
                       <button
                         type="button"
-                        onClick={() => goPending('취소/반품/교환')}
-                        className="cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red"
+                        //  onClick={() => goPending('취소/반품/교환')}
+                        className="cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red disabled:cursor-not-allowed"
                       >
                         취소/반품/교환
                       </button>
@@ -186,8 +186,8 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
             <span className="text-yp-gray-200">|</span>
             <button
               type="button"
-              onClick={() => onPendingNav('주문/배송 조회')}
-              className="cursor-pointer hover:text-yp-red"
+              // onClick={() => onPendingNav('주문/배송 조회')}
+              className="cursor-pointer hover:text-yp-red disabled:cursor-not-allowed"
             >
               주문/배송
             </button>
@@ -200,7 +200,9 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
 
       {/* 2. 로고 + 검색창 + 지원금 잔여 */}
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 py-4 md:flex-row md:items-center">
-        <BizMallBrandLogo />
+        <button type="button" onClick={() => onMenuChange('ALL')} className="cursor-pointer text-left">
+          <BizMallBrandLogo />
+        </button>
 
         <div className="mx-0 max-w-xl flex-1 md:mx-4">
           <form
@@ -283,11 +285,10 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
                 key={item.id}
                 type="button"
                 onClick={() => onMenuChange(item.id)}
-                className={`cursor-pointer px-3 py-3 transition-colors ${
-                  activeMenu === item.id
-                    ? 'border-b-2 border-yp-red font-bold text-yp-red'
-                    : 'hover:text-yp-red'
-                }`}
+                className={`cursor-pointer px-3 py-3 transition-colors ${activeMenu === item.id
+                  ? 'border-b-2 border-yp-red font-bold text-yp-red'
+                  : 'hover:text-yp-red'
+                  }`}
               >
                 {item.label}
               </button>

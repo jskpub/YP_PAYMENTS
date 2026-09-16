@@ -3,7 +3,20 @@ import { Book, CartItem, Order, SubsidyLedger, Address, PageTab, BookFormat } fr
 import { MOCK_BOOKS, INITIAL_ADDRESSES } from '../data/mockBooks';
 import { PROTOTYPE_ALL_BOOKS } from '../data/prototypeBookAdapter';
 
-const CART_RESET_VERSION = 'empty-cart-2026-09-16';
+const CART_RESET_VERSION = 'unapplied-cart-2026-09-17-v2';
+const SUBSIDY_RESET_VERSION = 'reset-subsidy-2026-09-17-v5';
+
+const DEFAULT_SUBSIDY_LEDGER: SubsidyLedger = {
+  month: '2026-09',
+  monthlyLimit: 30000,
+  recommendedUsed: false,
+  personalUsed: false,
+  recommendedSubsidyAmount: 0,
+  personalSubsidyAmount: 0,
+  totalUsedSubsidy: 0,
+  remainingSubsidy: 30000,
+  totalEmployeePaid: 0,
+};
 
 interface ShopContextType {
   activePage: PageTab;
@@ -60,6 +73,7 @@ interface ShopContextType {
 
   // Subsidy & Ledger (B2B Rule Engine)
   subsidyLedger: SubsidyLedger;
+  resetSubsidyLedger: () => void;
   calculateBookSubsidy: (
     book: Book,
     formatOrQty?: BookFormat | number,
@@ -88,6 +102,10 @@ interface ShopContextType {
   isEstimateModalOpen: boolean;
   setIsEstimateModalOpen: (open: boolean) => void;
 
+  // Search
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+
   // Notification Toast
   toastMessage: string | null;
   showToast: (msg: string) => void;
@@ -101,6 +119,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cartTab, setCartTab] = useState<'normal' | 'nowdream'>('normal');
   const [selectedBookForDetail, setSelectedBookForDetail] = useState<Book | null>(null);
   const [selectedGiftId, setSelectedGiftId] = useState<string>('g-01');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Address Modal
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -112,7 +131,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return {
       ...a,
-      phone1: isOldPhone ? '010-1345-2468' : a.phone1,
+      recipient: a.recipient && a.recipient.includes('김지선') ? '김민서' : a.recipient,
+      phone1: isOldPhone ? '010-1234-5678' : a.phone1,
       roadAddress: isKyoboOrOld ? '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)' : a.roadAddress,
       jibunAddress: isKyoboOrOld ? '서울특별시 종로구 서린동 33 영풍빌딩' : a.jibunAddress,
     };
@@ -123,12 +143,17 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         const parsed: Address[] = JSON.parse(saved);
-        const sanitized = parsed.map(sanitizeAddressItem);
-        localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
-        return sanitized;
-      } catch (e) {}
+        const filtered = parsed.filter((a) => !a.recipient?.includes('김지선'));
+        if (filtered.length > 0) {
+          const sanitized = filtered.map(sanitizeAddressItem);
+          localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
+          return sanitized;
+        }
+      } catch (e) { }
     }
-    return INITIAL_ADDRESSES.map(sanitizeAddressItem);
+    const sanitizedInit = INITIAL_ADDRESSES.map(sanitizeAddressItem);
+    localStorage.setItem('yp_addresses', JSON.stringify(sanitizedInit));
+    return sanitizedInit;
   });
 
   const [selectedAddress, setSelectedAddress] = useState<Address>(() => {
@@ -152,20 +177,25 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Subsidy Ledger (B2B Rule Engine State)
   const [subsidyLedger, setSubsidyLedger] = useState<SubsidyLedger>(() => {
+    if (localStorage.getItem('yp_subsidy_reset_version') !== SUBSIDY_RESET_VERSION) {
+      localStorage.removeItem('yp_b2b_subsidy');
+      localStorage.setItem('yp_subsidy_reset_version', SUBSIDY_RESET_VERSION);
+      return DEFAULT_SUBSIDY_LEDGER;
+    }
     const saved = localStorage.getItem('yp_b2b_subsidy');
-    if (saved) return JSON.parse(saved);
-    return {
-      month: '2026-09',
-      monthlyLimit: 30000,
-      recommendedUsed: false,
-      personalUsed: false,
-      recommendedSubsidyAmount: 0,
-      personalSubsidyAmount: 0,
-      totalUsedSubsidy: 0,
-      remainingSubsidy: 30000,
-      totalEmployeePaid: 0,
-    };
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) { }
+    }
+    return DEFAULT_SUBSIDY_LEDGER;
   });
+
+  const resetSubsidyLedger = () => {
+    setSubsidyLedger(DEFAULT_SUBSIDY_LEDGER);
+    localStorage.setItem('yp_b2b_subsidy', JSON.stringify(DEFAULT_SUBSIDY_LEDGER));
+    showToast('이번 달 기업 지원금 한도(추천/개인도서)가 초기화되었습니다.');
+  };
 
   useEffect(() => {
     localStorage.setItem('yp_b2b_subsidy', JSON.stringify(subsidyLedger));
@@ -236,7 +266,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return {
         companySubsidy,
         employeePayment,
-        ruleExplanation: canApply ? `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)` : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
+        ruleExplanation: canApply ? `개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)` : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
         canApply,
       };
     } else {
@@ -271,11 +301,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (freshBook.bookType === 'recommended') {
         // 추천도서: 100% 회사 지원 (1권만 지원)
         singleSubsidy = singlePrice;
-        note = item.quantity > 1 ? `B2B 추천도서 100% 지원 (1권 지원, ${item.quantity - 1}권 본인부담)` : 'B2B 추천도서 100% 전액 지원 (직원부담 0원)';
+        note = item.quantity > 1 ? `추천도서 100% 지원 (1권 지원)` : '추천도서 100% 전액 지원 (직원부담 0원)';
       } else {
         // 개인도서: MIN(판매금액 * 50%, 10,000원) (1권만 지원)
         singleSubsidy = Math.min(Math.floor(singlePrice * 0.5), 10000);
-        note = item.quantity > 1 ? `B2B 개인도서 50% 지원 (1권 최대 1만원 지원, ${item.quantity - 1}권 본인부담)` : `B2B 개인도서 50% 지원 (최대 10,000원 지원, -${singleSubsidy.toLocaleString()}원 차감)`;
+        note = item.quantity > 1 ? `개인도서 50% 지원 (1권 최대 1만원 지원)` : `개인도서 50% 지원 (최대 10,000원 지원)`;
       }
     } else {
       singleSubsidy = 0;
@@ -329,7 +359,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         const parsed: CartItem[] = JSON.parse(saved);
-        return parsed.map((item) => recalculateCartItem(item));
+        return parsed.map((item) => recalculateCartItem({ ...item, isSubsidyApplied: false }));
       } catch (e) {
         // fallback if parse fails
       }
@@ -410,7 +440,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         orderDate: '2026-08-12 14:23',
         employeeId: 'EMP-20240901',
         employeeName: '김민서',
-        employeePhone: '010-1345-2468',
+        employeePhone: '010-1234-5678',
         employeeEmail: 'junkyo.jung@ypbooks.co.kr',
         items: [
           {
@@ -622,7 +652,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       orderDate: formattedDate,
       employeeId: 'EMP-20240901',
       employeeName: selectedAddress.recipient || '김민서',
-      employeePhone: selectedAddress.phone1 || '010-1345-2468',
+      employeePhone: selectedAddress.phone1 || '010-1234-5678',
       employeeEmail: 'junkyo.jung@ypbooks.co.kr',
       items: orderItems,
       totalListPrice,
@@ -701,12 +731,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       prev.map((o) =>
         o.orderId === orderId
           ? {
-              ...o,
-              status: '주문취소',
-              isRefunded: true,
-              refundDate,
-              refundReason: reason,
-            }
+            ...o,
+            status: '주문취소',
+            isRefunded: true,
+            refundDate,
+            refundReason: reason,
+          }
           : o,
       ),
     );
@@ -722,7 +752,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActivePage,
         myPageTab,
         setMyPageTab,
-        books: [...MOCK_BOOKS, ...PROTOTYPE_ALL_BOOKS],
+        books: PROTOTYPE_ALL_BOOKS,
         selectedBookForDetail,
         setSelectedBookForDetail,
         cart,
@@ -748,6 +778,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addressModalTab,
         setAddressModalTab,
         subsidyLedger,
+        resetSubsidyLedger,
         calculateBookSubsidy,
         orders,
         currentOrder,
@@ -760,6 +791,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSelectedOrderForReceipt,
         isEstimateModalOpen,
         setIsEstimateModalOpen,
+        searchQuery,
+        setSearchQuery,
         toastMessage,
         showToast,
       }}

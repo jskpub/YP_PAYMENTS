@@ -86,13 +86,13 @@ export const OrderCompletePage: React.FC = () => {
               </div>
             </div>
             <div className="bg-[#e8f5ef] p-4 rounded-lg border border-[#a3d9bc]">
-              <span className="text-xs text-[#1f976b] font-semibold">회사 지원금 (B2B 예산 차감)</span>
+              <span className="text-xs text-[#1f976b] font-semibold">회사 지원금 (독서 지원금 차감)</span>
               <div className="text-lg font-bold text-[#1f976b] mt-1">
                 {order.totalCompanySubsidy.toLocaleString()}원
               </div>
             </div>
             <div className="bg-[#fffafa] p-4 rounded-lg border border-[#f9cdcd]">
-              <span className="text-xs text-[#df0000] font-semibold">직원 실결제금액 (PG 승인)</span>
+              <span className="text-xs text-[#df0000] font-semibold">직원 결제금액 (PG 승인)</span>
               <div className="text-lg font-black text-[#df0000] mt-1">
                 {order.finalPaidAmount.toLocaleString()}원
               </div>
@@ -116,77 +116,93 @@ export const OrderCompletePage: React.FC = () => {
         </div>
 
         {/* Ordered Books Items */}
-        <div className="bg-white rounded-xl border border-[#cbd2d4] p-6 space-y-3 shadow-sm">
-          <h2 className="text-base font-bold text-[#181718] border-b border-[#dadada] pb-3">
-            주문 상품 정보 ({order.items.length}종)
-          </h2>
+        <div className="bg-white rounded-xl border border-[#cbd2d4] overflow-hidden shadow-sm">
+          <div className="p-5 border-b border-[#dadada]">
+            <h2 className="text-base font-bold text-[#181718]">
+              주문 상품 정보 ({order.items.length}종)
+            </h2>
+          </div>
 
-          <div className="divide-y divide-[#edf0f1]">
-            {order.items.map((item, idx) => (
-              <div key={idx} className="py-3.5 flex items-center justify-between text-xs sm:text-sm">
-                <div className="flex items-center gap-3">
-                  <BookCoverImage
-                    title={item.title}
-                    coverImage={item.coverImage}
-                    coverBackground={item.coverBackground}
-                    className="w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0"
-                    titleClassName="text-[8px]"
-                  />
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span
-                        className={`text-[10px] px-1.5 py-0.5 rounded font-extrabold flex items-center gap-0.5 ${item.bookType === 'recommended'
-                          ? 'bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]'
-                          : item.bookType === 'personal'
-                            ? 'bg-[#e8f5ef] text-[#1f976b] border border-[#a3d9bc]'
-                            : 'bg-[#f6f6f6] text-[#555a5c] border border-[#cbd2d4]'
-                          }`}
-                      >
-                        <Award className="w-2.5 h-2.5" />
-                        {item.bookType === 'recommended'
-                          ? '추천도서 (100% 지원)'
-                          : item.bookType === 'personal'
-                            ? '개인도서 (50% 지원)'
-                            : '일반도서 (지원금 미적용)'}
-                      </span>
-                      <span className="text-[10px] bg-[#181718] text-white px-1.5 py-0.5 rounded font-medium flex items-center gap-0.5">
-                        {item.format === 'ebook' ? (
-                          <>
-                            <Smartphone className="w-2.5 h-2.5" /> 전자책
-                          </>
-                        ) : (
-                          <>
-                            <BookOpen className="w-2.5 h-2.5" /> 종이책
-                          </>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left">
+              <thead className="bg-[#f6f6f6] text-[#80888a] font-medium border-b border-[#edf0f1]">
+                <tr>
+                  <th className="p-3 pl-5">상품정보</th>
+                  <th className="p-3 text-right">판매가</th>
+                  <th className="p-3 text-center">수량</th>
+                  <th className="p-3 text-right">회사 지원금</th>
+                  <th className="p-3 text-right pr-5">직원 결제액</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#edf0f1]">
+                {order.items.map((item, idx) => {
+                  const unitPrice = item.quantity > 0 ? Math.round(item.sellingPrice / item.quantity) : item.sellingPrice;
+                  const unitListPrice = item.listPrice > 0 ? item.listPrice : Math.round(unitPrice / 0.9);
+                  const discountRate = unitListPrice > 0 ? Math.round((1 - unitPrice / unitListPrice) * 100) : 10;
+                  const isSubsidyApplied = item.isSubsidyApplied || item.companySubsidy > 0;
+
+                  return (
+                    <tr key={idx} className="hover:bg-[#fafafa]">
+                      <td className="p-3 pl-5 flex items-center gap-3">
+                        <BookCoverImage
+                          title={item.title}
+                          coverImage={item.coverImage}
+                          coverBackground={item.coverBackground}
+                          className="w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0"
+                          titleClassName="text-[8px]"
+                        />
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {item.bookType === 'recommended' && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded font-extrabold flex items-center gap-0.5 bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]">
+                                <Award className="w-2.5 h-2.5" />
+                                추천도서
+                              </span>
+                            )}
+
+                            <span className="text-[10px] bg-[#181718] text-white px-1.5 py-0.5 rounded font-medium flex items-center gap-0.5">
+                              {item.format === 'ebook' ? (
+                                <>
+                                  <Smartphone className="w-2.5 h-2.5" /> 전자책
+                                </>
+                              ) : (
+                                <>
+                                  <BookOpen className="w-2.5 h-2.5" /> 종이책
+                                </>
+                              )}
+                            </span>
+
+                            <span className="text-[10px] text-[#555a5c] bg-[#edf0f1] px-1.5 py-0.5 rounded">소득공제</span>
+                          </div>
+
+                          <div className="font-bold text-sm text-[#181718]">{item.title}</div>
+                        </div>
+                      </td>
+                      <td className="p-3 text-right align-top">
+                        <div>
+                          {discountRate > 0 && <span className="text-[#df0000] font-bold mr-1">{discountRate}%</span>}
+                          <span className="font-bold text-[#181718]">{item.sellingPrice.toLocaleString()}원</span>
+                        </div>
+                        {item.quantity >= 2 && (
+                          <div className="text-[11px] text-[#80888a] font-normal mt-0.5">(1권당 {unitPrice.toLocaleString()}원)</div>
                         )}
-                      </span>
-                    </div>
-
-                    <div className="font-bold text-sm text-[#181718]">{item.title}</div>
-
-                    <div className="text-[11px] text-[#80888a]">
-                      수량: {item.quantity}권
-                      {item.isSubsidyApplied && (
-                        <span className="text-[#1f976b] font-medium ml-2">
-                          ✓ {item.subsidyNote}
-                        </span>
-                      )}
-                      {!item.isSubsidyApplied && (
-                        <span className="text-[#80888a] ml-2">
-                          (지원금 미적용 주문)
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-right text-xs space-y-0.5">
-                  <div className="font-bold text-[#181718] text-sm">{item.sellingPrice.toLocaleString()}원</div>
-                  <div className="text-[#1f976b] font-semibold">회사지원: -{item.companySubsidy.toLocaleString()}원</div>
-                  <div className="text-[#df0000] font-bold">직원실결제: {item.employeePayment.toLocaleString()}원</div>
-                </div>
-              </div>
-            ))}
+                      </td>
+                      <td className="p-3 text-center font-medium">{item.quantity}</td>
+                      <td className="p-3 text-right font-semibold align-top space-y-1">
+                        {isSubsidyApplied && item.companySubsidy > 0 ? (
+                          <span className={`font-bold ${item.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>
+                            -{item.companySubsidy.toLocaleString()}원
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="p-3 text-right pr-5 font-bold align-top text-[#181718]">
+                        {item.employeePayment.toLocaleString()}원
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
 

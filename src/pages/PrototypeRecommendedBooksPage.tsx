@@ -6,7 +6,7 @@ import { toPrototypeBenefit } from '../data/prototypeBookAdapter';
 import type { BookComment as PrototypeBookComment, CartLine as PrototypeCartLine } from '../prototype/types';
 
 export const PrototypeRecommendedBooksPage: React.FC = () => {
-  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, subsidyLedger } = useShop();
+  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, subsidyLedger, resetSubsidyLedger } = useShop();
   const [chat, setChat] = useState<PrototypeBookComment[]>(INITIAL_CHAT);
   const prototypeCart: PrototypeCartLine[] = cart.filter((item) => RECOMMENDED_BOOKS.some((book) => book.id === item.book.id)).map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
   const benefit = toPrototypeBenefit(subsidyLedger.remainingSubsidy, subsidyLedger.recommendedUsed);
@@ -36,6 +36,7 @@ export const PrototypeRecommendedBooksPage: React.FC = () => {
       onRemoveFromCart={remove}
       onChatSubmit={(text) => setChat((previous) => [{ author: '임직원', text, createdAt: new Date().toISOString().slice(0, 10) }, ...previous])}
       onOpenBook={openBook}
+      onResetSubsidy={resetSubsidyLedger}
     />
   );
 };

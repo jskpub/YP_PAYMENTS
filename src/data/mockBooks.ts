@@ -31,6 +31,7 @@ function createBookCover(bg: string, title: string, author: string, accentColor:
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
+
 export const MOCK_BOOKS: Book[] = [
   {
     id: 'b-01',
@@ -95,7 +96,7 @@ export const MOCK_BOOKS: Book[] = [
   {
     id: 'b-04',
     title: '82년생 김지영',
-    subtitle: '조남주 장편소설 (B2B 추천도서)',
+    subtitle: '조남주 장편소설 (추천도서)',
     author: '조남주',
     publisher: '민음사',
     publishDate: '2026-06-10',
@@ -243,7 +244,7 @@ export const INITIAL_ADDRESSES: Address[] = [
     id: 'addr-01',
     title: '자택 (기본배송지)',
     recipient: '김민서',
-    phone1: '010-1345-2468',
+    phone1: '010-1234-5678',
     phone2: '02-542-0611',
     postalCode: '03154',
     roadAddress: '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)',
@@ -256,7 +257,7 @@ export const INITIAL_ADDRESSES: Address[] = [
     id: 'addr-02',
     title: '회사 (영풍빌딩)',
     recipient: '김민서 대리',
-    phone1: '010-1345-2468',
+    phone1: '010-1234-5678',
     postalCode: '06110',
     roadAddress: '서울특별시 강남구 강남대로 542 (논현동, 영풍빌딩)',
     jibunAddress: '서울특별시 강남구 논현동 142-3',

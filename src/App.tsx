@@ -5,12 +5,12 @@
 
 import React from 'react';
 import { ShopProvider, useShop } from './context/ShopContext';
+import { NavigationControlBar } from './prototype/components/NavigationControlBar';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { DeliveryModal } from './components/DeliveryModal';
 import { ReceiptModal } from './components/ReceiptModal';
 import { EstimateModal } from './components/EstimateModal';
-import { BookExplorePage } from './pages/BookExplorePage';
 import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
 import { PrototypeRecommendedBooksPage } from './pages/PrototypeRecommendedBooksPage';
@@ -40,20 +40,23 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
+      {/* Global Top Control Bar */}
+      <NavigationControlBar />
+
       {/* Global Header */}
       <Header />
 
       {/* Main Page Content */}
       <main className='flex-1 w-full'>
-        {selectedBookForDetail && (activePage === 'recommended' || activePage === 'best' || activePage === 'new') ? (
+        {selectedBookForDetail && (activePage === 'recommended' || activePage === 'best' || activePage === 'new' || activePage === 'explore' || activePage === 'home') ? (
           <PrototypeBookDetailPage />
         ) : (
           <>
-            {activePage === 'home' && <HomePage />}
+            {activePage === 'home' && <BizMallGridPage menu='ALL' />}
             {activePage === 'recommended' && <PrototypeRecommendedBooksPage />}
             {activePage === 'best' && <BizMallGridPage menu='BEST' />}
             {activePage === 'new' && <BizMallGridPage menu='NEW' />}
-            {activePage === 'explore' && <BookExplorePage />}
+            {activePage === 'explore' && <BizMallGridPage menu='ALL' />}
           </>
         )}
         {activePage === 'cart' && <CartPage />}

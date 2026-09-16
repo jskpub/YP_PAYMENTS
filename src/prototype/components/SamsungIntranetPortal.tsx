@@ -65,11 +65,10 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
             <div>
               <button
                 onClick={() => setActiveMenu('LEAVE')}
-                className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-all ${
-                  activeMenu === 'LEAVE'
-                    ? 'bg-sec-blue text-white shadow-sm font-semibold'
-                    : 'text-slate-600 hover:bg-slate-50'
-                }`}
+                className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-all ${activeMenu === 'LEAVE'
+                  ? 'bg-sec-blue text-white shadow-sm font-semibold'
+                  : 'text-slate-600 hover:bg-slate-50'
+                  }`}
               >
                 <Calendar className="w-4 h-4 shrink-0" />
                 <span>휴가 관리</span>
@@ -93,11 +92,10 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
             {/* 2. 출장 관리 */}
             <button
               onClick={() => setActiveMenu('TRIP')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${
-                activeMenu === 'TRIP'
-                  ? 'bg-sec-blue text-white shadow-sm font-semibold'
-                  : 'text-slate-600 hover:bg-slate-50'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${activeMenu === 'TRIP'
+                ? 'bg-sec-blue text-white shadow-sm font-semibold'
+                : 'text-slate-600 hover:bg-slate-50'
+                }`}
             >
               <Plane className="w-4 h-4 shrink-0" />
               <span>출장 관리</span>
@@ -106,11 +104,10 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
             {/* 3. 시간 외 관리 */}
             <button
               onClick={() => setActiveMenu('OVERTIME')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${
-                activeMenu === 'OVERTIME'
-                  ? 'bg-sec-blue text-white shadow-sm font-semibold'
-                  : 'text-slate-600 hover:bg-slate-50'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${activeMenu === 'OVERTIME'
+                ? 'bg-sec-blue text-white shadow-sm font-semibold'
+                : 'text-slate-600 hover:bg-slate-50'
+                }`}
             >
               <Clock className="w-4 h-4 shrink-0" />
               <span>시간 외 관리</span>
@@ -119,11 +116,10 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
             {/* 4. 근태 관리 */}
             <button
               onClick={() => setActiveMenu('ATTENDANCE')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${
-                activeMenu === 'ATTENDANCE'
-                  ? 'bg-sec-blue text-white shadow-sm font-semibold'
-                  : 'text-slate-600 hover:bg-slate-50'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-medium transition-colors ${activeMenu === 'ATTENDANCE'
+                ? 'bg-sec-blue text-white shadow-sm font-semibold'
+                : 'text-slate-600 hover:bg-slate-50'
+                }`}
             >
               <FileText className="w-4 h-4 shrink-0" />
               <span>근태 관리</span>
@@ -172,7 +168,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
               </div>
               <button
                 onClick={onLaunchSSO}
-                className="w-full text-left p-3 rounded-xl bg-gradient-to-r from-red-50 to-rose-50/60 border border-red-200/90 hover:border-yp-red hover:shadow-xs transition-all group flex items-center justify-between"
+                className="w-full text-left p-3 rounded-xl bg-gradient-to-r from-red-50 to-rose-50/60 border border-red-200/90 hover:border-yp-red hover:shadow-xs transition-all group flex items-center justify-between cursor-pointer !rounded-md"
               >
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-yp-red text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
@@ -210,7 +206,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
           <div className="bg-sec-blue text-white rounded-2xl px-6 py-3.5 flex items-center justify-between shadow-xs">
             {/* Search Icon */}
             <div className="flex items-center">
-              <button 
+              <button
                 type="button"
                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white"
                 aria-label="통합 검색"
@@ -221,7 +217,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
 
             {/* Right: Calendar, Bell (5), Profile */}
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 type="button"
                 className="text-white/90 hover:text-white transition-colors"
                 aria-label="사내 일정"
@@ -230,7 +226,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
               </button>
 
               <div className="relative">
-                <button 
+                <button
                   type="button"
                   className="text-white/90 hover:text-white transition-colors"
                   aria-label="알림 (5개 미확인)"
@@ -277,11 +273,10 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1 rounded-md transition-all ${
-                        activeTab === tab
-                          ? 'bg-[#1E293B] text-white font-semibold shadow-xs'
-                          : 'hover:text-slate-900'
-                      }`}
+                      className={`px-3 py-1 rounded-md transition-all ${activeTab === tab
+                        ? 'bg-[#1E293B] text-white font-semibold shadow-xs'
+                        : 'hover:text-slate-900'
+                        }`}
                     >
                       {tab}
                     </button>
@@ -310,7 +305,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
             <div className="border border-slate-200 rounded-xl overflow-hidden">
               {/* Date Header: < 2021.08.01 ~ 2021.08.07 > */}
               <div className="p-2.5 bg-slate-50/70 border-b border-slate-200 flex items-center gap-2 text-xs text-slate-600 font-medium">
-                <button 
+                <button
                   type="button"
                   className="p-1 hover:bg-slate-200 rounded text-slate-500"
                   aria-label="이전 주"
@@ -318,7 +313,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
                 <span>2021.08.01 ~ 2021.08.07</span>
-                <button 
+                <button
                   type="button"
                   className="p-1 hover:bg-slate-200 rounded text-slate-500"
                   aria-label="다음 주"
@@ -596,7 +591,7 @@ export const SamsungIntranetPortal: React.FC<SamsungIntranetPortalProps> = ({
                   { title: '정보보안 및 개인정보보호 교육', date: '2021.08.11' },
                   { title: '직장 내 괴롭힘 예방 교육', date: '2021.08.18' },
                 ].map((item, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="flex items-center gap-3 p-2 rounded-xl bg-slate-50/70 hover:bg-slate-50 transition-colors"
                   >

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BizMallBrandLogo} from './BizMallBrandLogo';
+import { BizMallBrandLogo } from './BizMallBrandLogo';
 
 export const BizMallFooter: React.FC = () => (
   <footer className="border-t border-yp-gray-200 bg-white px-4 py-8 text-xs text-yp-gray-500">
@@ -19,7 +19,7 @@ export const BizMallFooter: React.FC = () => (
         </div>
       </div>
 
-      <div className="flex flex-col items-start justify-between gap-2 text-[11px] text-yp-gray-400 sm:flex-row sm:items-center">
+      <div className="flex flex-col items-start justify-between gap-2 text-[12px] text-yp-gray-400 sm:flex-row sm:items-center">
         <p>
           (주)영풍문고 B2B 법인사업본부 | 서울특별시 종로구 청계천로 41 영풍빌딩 | 사업자등록번호:
           101-81-37597

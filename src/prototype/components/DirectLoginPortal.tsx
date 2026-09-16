@@ -60,9 +60,9 @@ export const DirectLoginPortal: React.FC<DirectLoginPortalProps> = ({ onLoginSuc
       <div className='w-full md:w-[48%] lg:w-[50%] bg-[#363333] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between min-h-[320px] md:min-h-screen relative'>
         {/* Top Left: Brand Logo + B2B Red Badge */}
         <div className='flex items-center gap-2.5'>
-          <div className='w-8 h-8 rounded-full bg-yp-red text-white flex flex-col items-center justify-center font-black shadow-xs shrink-0 tracking-tighter'>
-            <span className='text-[10px] leading-none -mb-0.5 font-black'>YP</span>
-            <span className='text-[6px] tracking-wider uppercase font-extrabold opacity-95'>BOOKS</span>
+          <div className='w-8 h-8 rounded-full bg-yp-red text-white flex flex-col items-center justify-center font-black shadow-xs shrink-0 tracking-tighter overflow-hidden rounded-full'>
+
+            <img src="https://cdn.ypbooks.co.kr/front_web/assets/img/temp/yp_md_default.png" alt="" />
           </div>
           <span className='font-black text-xl tracking-tight text-white'>영풍문고</span>
           <span className='bg-yp-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded tracking-wide'>비즈몰</span>

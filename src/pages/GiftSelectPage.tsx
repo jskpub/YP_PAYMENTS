@@ -19,7 +19,7 @@ export const GiftSelectPage: React.FC = () => {
   return (
     <div className="w-full bg-white py-8 min-h-screen text-[#3d3c3f]">
       <div className="max-w-[1280px] mx-auto px-4 space-y-6">
-        
+
         {/* Step Indicator Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#dadada] pb-5 gap-4">
           <div>
@@ -58,13 +58,12 @@ export const GiftSelectPage: React.FC = () => {
                     setSelectedGiftId(gift.id);
                   }
                 }}
-                className={`border rounded-xl p-5 flex flex-col justify-between transition-all cursor-pointer relative ${
-                  isSelected
+                className={`border rounded-xl p-5 flex flex-col justify-between transition-all cursor-pointer relative ${isSelected
                     ? 'border-[#df0000] ring-2 ring-[#df0000] bg-[#fffafa]'
                     : isEligible
-                    ? 'border-[#cbd2d4] hover:border-[#80888a] bg-white'
-                    : 'border-[#edf0f1] bg-[#f6f6f6] opacity-60 cursor-not-allowed'
-                }`}
+                      ? 'border-[#cbd2d4] hover:border-[#80888a] bg-white'
+                      : 'border-[#edf0f1] bg-[#f6f6f6] opacity-60 cursor-not-allowed'
+                  }`}
               >
                 {/* Active Checkmark Badge */}
                 {isSelected && (
@@ -107,13 +106,12 @@ export const GiftSelectPage: React.FC = () => {
                   <button
                     type="button"
                     disabled={!isEligible}
-                    className={`w-full py-2.5 rounded text-xs font-bold transition-colors ${
-                      isSelected
+                    className={`w-full py-2.5 rounded text-xs font-bold transition-colors ${isSelected
                         ? 'bg-[#df0000] text-white'
                         : isEligible
-                        ? 'bg-[#f6f6f6] text-[#181718] hover:bg-[#edf0f1]'
-                        : 'bg-[#edf0f1] text-[#9c9c9c]'
-                    }`}
+                          ? 'bg-[#f6f6f6] text-[#181718] hover:bg-[#edf0f1]'
+                          : 'bg-[#edf0f1] text-[#9c9c9c]'
+                      }`}
                   >
                     {isSelected ? '선택 완료' : isEligible ? '이 사은품 선택' : '금액 부족'}
                   </button>
