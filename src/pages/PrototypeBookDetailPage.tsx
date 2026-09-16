@@ -29,9 +29,7 @@ export const PrototypeBookDetailPage: React.FC = () => {
   const [chat] = useState<PrototypeBookComment[]>(INITIAL_CHAT);
   const bookId = selectedBookForDetail?.id || RECOMMENDED_BOOKS[0].id;
   const book = findBook(bookId) || RECOMMENDED_BOOKS[0];
-  const prototypeCart: PrototypeCartLine[] = cart
-    .filter((item) => RECOMMENDED_BOOKS.some((recommendedBook) => recommendedBook.id === item.book.id))
-    .map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
+  const prototypeCart: PrototypeCartLine[] = cart.filter((item) => RECOMMENDED_BOOKS.some((recommendedBook) => recommendedBook.id === item.book.id)).map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
   const benefit = toBenefit(subsidyLedger.remainingSubsidy, subsidyLedger.recommendedUsed);
 
   const findCurrentBook = (targetId: string) => books.find((currentBook) => currentBook.id === targetId);

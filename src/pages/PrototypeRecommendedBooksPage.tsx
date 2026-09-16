@@ -27,9 +27,7 @@ const toBenefit = (remainingSubsidy: number, recommendedUsed: boolean): Prototyp
 export const PrototypeRecommendedBooksPage: React.FC = () => {
   const { books, cart, addToCart, removeFromCart, setActivePage, setSelectedBookForDetail, subsidyLedger } = useShop();
   const [chat, setChat] = useState<PrototypeBookComment[]>(INITIAL_CHAT);
-  const prototypeCart: PrototypeCartLine[] = cart
-    .filter((item) => RECOMMENDED_BOOKS.some((book) => book.id === item.book.id))
-    .map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
+  const prototypeCart: PrototypeCartLine[] = cart.filter((item) => RECOMMENDED_BOOKS.some((book) => book.id === item.book.id)).map((item) => ({ bookId: item.book.id, quantity: item.quantity }));
   const benefit = toBenefit(subsidyLedger.remainingSubsidy, subsidyLedger.recommendedUsed);
 
   const findCurrentBook = (bookId: string) => books.find((book) => book.id === bookId);
@@ -54,7 +52,7 @@ export const PrototypeRecommendedBooksPage: React.FC = () => {
       benefit={benefit}
       cart={prototypeCart}
       chat={chat}
-      authorLabel="임직원"
+      authorLabel='임직원'
       onAddToCart={(bookId) => add(bookId)}
       onBuyNow={(bookId) => add(bookId, true)}
       onRemoveFromCart={remove}
