@@ -81,8 +81,6 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -97,7 +95,7 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
                 <span className='w-2.5 h-2.5 rounded-full bg-emerald-500'></span>
                 <h3 className='font-bold text-gray-900 text-sm'>추천 도서 지원금</h3>
               </div>
-              <span className='bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full'>100% 전액 무료 지원</span>
+              {/* <span className='bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full'>100% 전액 무료 지원</span> */}
             </div>
             <p className='text-xs text-gray-500 mb-4'>사내 권장도서 목록 전용 (금액 차감 없는 전액 무료 지원)</p>
 
@@ -131,7 +129,7 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
                 <span className='w-2.5 h-2.5 rounded-full bg-[#D7001E]'></span>
                 <h3 className='font-bold text-gray-900 text-sm'>개인 도서 지원금</h3>
               </div>
-              <span className='bg-red-100 text-[#D7001E] text-xs font-bold px-2 py-0.5 rounded-full'>50% 지원 (누적 총 1만원 한도)</span>
+              {/* <span className='bg-red-100 text-[#D7001E] text-xs font-bold px-2 py-0.5 rounded-full'>50% 지원 (누적 총 1만원 한도)</span> */}
             </div>
             <p className='text-xs text-gray-500 mb-4'>자유 도서 구매 시 50% 지원 (반기 총 한도 10,000원까지 차감)</p>
 
@@ -238,7 +236,6 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
           </table>
         </div>
       </div>
-
     </div>
   );
 };
