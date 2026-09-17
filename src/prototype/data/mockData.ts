@@ -122,7 +122,7 @@ const priced = (originalPrice: number, salePrice = Math.floor((originalPrice * 0
   pointReward: Math.floor(salePrice * 0.05),
 });
 
-const COVER = [
+export const COVER = [
   'linear-gradient(150deg,#7a4b3a,#4a2b20)',
   'linear-gradient(150deg,#3f5f78,#22394a)',
   'linear-gradient(150deg,#6a4a6e,#3a2740)',
@@ -131,6 +131,8 @@ const COVER = [
   'linear-gradient(150deg,#5a5f7a,#2f3346)',
   'linear-gradient(150deg,#77404a,#421f26)',
   'linear-gradient(150deg,#3e6b6b,#1f3c3c)',
+  'linear-gradient(150deg,#6b5b3e,#332a1c)',
+  'linear-gradient(150deg,#4a5568,#232833)',
 ];
 
 /**
@@ -380,6 +382,61 @@ const RECOMMENDED_BASE: BookBase[] = [
         createdAt: '2026-09-06',
       },
     ],
+  },
+  {
+    id: 'rec-b09',
+    title: '쓰기의 감각',
+    subtitle: '누구나 글을 쓸 수 있는 사람이 된다',
+    author: '앤 라모트',
+    publisher: '웅진지식하우스',
+    publishDate: '2018년 07월 13일',
+    coverBackground: COVER[8],
+    ...priced(16000, 14400),
+    category: 'ESSAY',
+    categoryName: '인문 > 글쓰기',
+    rating: 4.6,
+    reviewsCount: 289,
+    isBestseller: false,
+    isNewRelease: false,
+    supportType: 'recommended',
+    isbn: '9788901234567',
+    tags: ['#글쓰기', '#보고서', '#커뮤니케이션', '#에세이', '#자기계발'],
+    targetLabel: '글이 막막한 분께',
+    curationReason: '보고서든 기획서든 결국 글이라, 부서 구분 없이 요청이 많았던 책입니다.',
+    recommender: null,
+    recommenderNote: null,
+    purchaseCount: 11,
+    comments: [
+      {
+        author: '기획팀 임직원',
+        text: '문장 강박이 좀 풀렸어요. 초고는 원래 엉망이어도 된다는 말이 위안이 됐습니다.',
+        createdAt: '2026-09-14',
+      },
+    ],
+  },
+  {
+    id: 'rec-b10',
+    title: '언어의 온도',
+    author: '이기주',
+    publisher: '말글터',
+    publishDate: '2016년 08월 31일',
+    coverBackground: COVER[9],
+    ...priced(13000, 11700),
+    category: 'ESSAY',
+    categoryName: '에세이 > 한국에세이',
+    rating: 4.4,
+    reviewsCount: 1542,
+    isBestseller: true,
+    isNewRelease: false,
+    supportType: 'recommended',
+    isbn: '9791195796959',
+    tags: ['#에세이', '#말과글', '#위로', '#베스트셀러', '#한국에세이'],
+    targetLabel: '말과 글이 필요한 분께',
+    curationReason: '가볍게 읽기 좋으면서도 여운이 남는 책이라 이달 목록에 더했습니다.',
+    recommender: null,
+    recommenderNote: null,
+    purchaseCount: 27,
+    comments: [],
   },
 ];
 

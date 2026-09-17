@@ -2,7 +2,7 @@ import React from 'react';
 import {Book} from '../types';
 
 interface BookCoverProps {
-  book: Book;
+  book: Pick<Book, 'title' | 'coverBackground'>;
   className?: string;
   titleClassName?: string;
 }
