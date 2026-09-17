@@ -460,6 +460,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: true,
     supportType: 'personal',
     isbn: '9791158395421',
+    tags: ['#생성형AI', '#LLM', '#파운데이션모델', '#AI엔지니어링', '#개발서적'],
   },
   {
     id: 'bk-002',
@@ -479,6 +480,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: false,
     supportType: 'personal',
     isbn: '9791156644392',
+    tags: ['#반도체', '#패키징', '#공정기술', '#하드웨어', '#전공서적'],
   },
   {
     id: 'bk-003',
@@ -498,6 +500,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: false,
     supportType: 'personal',
     isbn: '9791158391720',
+    tags: ['#소프트웨어아키텍처', '#분산시스템', '#데이터엔지니어링', '#백엔드', '#개발서적'],
   },
   {
     id: 'bk-004',
@@ -517,6 +520,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: false,
     supportType: 'personal',
     isbn: '9791157842209',
+    tags: ['#원칙', '#의사결정', '#리더십', '#조직관리', '#경제경영'],
   },
   {
     id: 'bk-005',
@@ -536,6 +540,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: true,
     supportType: 'personal',
     isbn: '9791193506554',
+    tags: ['#트렌드', '#2027전망', '#소비트렌드', '#경제경영', '#연간베스트'],
   },
   {
     id: 'bk-006',
@@ -555,6 +560,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: true,
     supportType: 'personal',
     isbn: '9788966262281',
+    tags: ['#애자일', '#협업', '#조직문화', '#개정판', '#자기계발'],
   },
   {
     id: 'bk-007',
@@ -574,6 +580,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: false,
     supportType: 'personal',
     isbn: '9788934972464',
+    tags: ['#행동경제학', '#심리학', '#의사결정', '#인지편향', '#인문'],
   },
   {
     id: 'bk-008',
@@ -593,6 +600,7 @@ const PERSONAL_BASE: BookBase[] = [
     isNewRelease: true,
     supportType: 'general',
     isbn: '9791167930552',
+    tags: ['#커리어', '#일잘러', '#업무태도', '#자기계발', '#직장인'],
   },
 ];
 

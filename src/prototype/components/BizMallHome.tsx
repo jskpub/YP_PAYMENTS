@@ -38,20 +38,7 @@ const QUICK_MENUS = [
   {label: '설정하기', icon: Settings},
 ];
 
-const SUPPORT_BADGE: Record<Book['supportType'], {label: string; className: string}> = {
-  recommended: {
-    label: '추천도서 · 100% 지원',
-    className: 'bg-yp-red text-white',
-  },
-  personal: {
-    label: '개인도서 · 50% 지원',
-    className: 'bg-emerald-600 text-white',
-  },
-  general: {
-    label: '일반도서 · 지원 미적용',
-    className: 'bg-yp-gray-100 text-yp-gray-500',
-  },
-};
+const RECOMMENDED_BADGE = {label: '추천도서', className: 'bg-yp-red text-white'};
 
 const SECTION_TITLE: Record<GnbMenu, string> = {
   ALL: '이달의 도서',
@@ -199,7 +186,6 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {books.map((book) => {
-              const badge = SUPPORT_BADGE[book.supportType];
               return (
                 <article
                   key={book.id}
@@ -215,11 +201,13 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({
                       >
                         <BookCover book={book} className="h-40 w-28 shadow-lg" />
                       </button>
-                      <span
-                        className={`absolute left-2.5 top-2.5 rounded px-2 py-0.5 text-[10px] font-bold ${badge.className}`}
-                      >
-                        {badge.label}
-                      </span>
+                      {book.supportType === 'recommended' && (
+                        <span
+                          className={`absolute left-2.5 top-2.5 rounded px-2 py-0.5 text-[10px] font-bold ${RECOMMENDED_BADGE.className}`}
+                        >
+                          {RECOMMENDED_BADGE.label}
+                        </span>
+                      )}
                       {book.isNewRelease && (
                         <span className="absolute right-2.5 top-2.5 rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-yp-ink">
                           신간

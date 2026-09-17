@@ -6,7 +6,7 @@ import { toPrototypeBenefit } from '../data/prototypeBookAdapter';
 import type { BookComment as PrototypeBookComment, CartLine as PrototypeCartLine } from '../prototype/types';
 
 export const PrototypeBookDetailPage: React.FC = () => {
-  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, selectedBookForDetail, subsidyLedger } = useShop();
+  const { books, cart, addToCart, removeFromCart, setSelectedBookForDetail, selectedBookForDetail, subsidyLedger, setActivePage } = useShop();
   const [chat] = useState<PrototypeBookComment[]>(INITIAL_CHAT);
   const bookId = selectedBookForDetail?.id || RECOMMENDED_BOOKS[0].id;
   const book = findBook(bookId) || RECOMMENDED_BOOKS[0];
@@ -26,10 +26,6 @@ export const PrototypeBookDetailPage: React.FC = () => {
     const item = cart.find((cartItem) => cartItem.book.id === targetId);
     if (item) removeFromCart(item.id);
   };
-  const openBook = (targetId: string) => {
-    const currentBook = findCurrentBook(targetId);
-    if (currentBook) setSelectedBookForDetail(currentBook);
-  };
 
   return (
     <PrototypeBookDetailPageView
@@ -39,8 +35,11 @@ export const PrototypeBookDetailPage: React.FC = () => {
       onAddToCart={add}
       onBuyNow={buy}
       onRemoveFromCart={remove}
-      onOpenBook={openBook}
       onBack={() => setSelectedBookForDetail(null)}
+      onGoToRecommended={() => {
+        setSelectedBookForDetail(null);
+        setActivePage('recommended');
+      }}
     />
   );
 };
