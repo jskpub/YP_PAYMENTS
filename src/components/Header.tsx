@@ -30,7 +30,6 @@ export const Header: React.FC = () => {
   const handlePendingNav = (label: string) => {
     if (label === '마이페이지') {
       setActivePage('mypage');
-      setMyPageTab('subsidy');
       return;
     }
     if (label === '장바구니') {

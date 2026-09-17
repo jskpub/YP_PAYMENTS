@@ -1,4 +1,4 @@
-import {COVER} from './mockData';
+import {COVER, PROGRAM} from './mockData';
 
 /** 지난달 추천도서 — 아카이브 목록에만 쓰이므로 상세 페이지용 필드는 두지 않는다. */
 export interface PastPick {
@@ -10,6 +10,7 @@ export interface PastPick {
 }
 
 export interface PastMonthPicks {
+  year: number;
   month: number;
   books: PastPick[];
 }
@@ -121,6 +122,7 @@ export const PAST_MONTHLY_PICKS: PastMonthPicks[] = Object.keys(SEEDS)
   .map(Number)
   .sort((a, b) => b - a)
   .map((month, monthIndex) => ({
+    year: PROGRAM.year,
     month,
     books: SEEDS[month].map(([title, author, targetLabel], index) => ({
       id: `past-${String(month).padStart(2, '0')}-${String(index + 1).padStart(2, '0')}`,

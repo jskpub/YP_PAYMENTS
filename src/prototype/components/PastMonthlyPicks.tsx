@@ -26,7 +26,9 @@ const MonthRow: React.FC<{ picks: PastMonthPicks }> = ({ picks }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-[22px] font-bold tracking-[-0.5px] text-yp-ink">{picks.month}월 추천도서</h2>
+      <h2 className="text-[22px] font-bold tracking-[-0.5px] text-yp-ink">
+        {picks.year}.{String(picks.month).padStart(2, '0')}
+      </h2>
 
       <div className="flex items-center gap-4">
         <button

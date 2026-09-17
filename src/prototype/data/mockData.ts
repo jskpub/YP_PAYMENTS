@@ -18,7 +18,7 @@ export const COMPANIES = [
 ];
 
 /** 이번 달 프로그램 */
-export const PROGRAM = {month: '2026년 9월', monthNumber: 9, deadline: '2026-09-30'};
+export const PROGRAM = {month: '2026년 9월', monthNumber: 9, year: 2026, deadline: '2026-09-30'};
 
 /** 구매자 수는 표본이 이 값 미만이면 숫자를 노출하지 않는다. */
 export const PURCHASE_COUNT_MIN = 10;

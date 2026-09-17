@@ -14,8 +14,8 @@ import { ActiveTab, BookItem, OrderItem } from '../employee/types';
 import { initialBenefitState, benefitHistories, initialWishlistBooks, initialCartBooks, initialOrders, refundHistories } from '../employee/mockData';
 
 export default function App() {
-  // 현재 활성 탭 (기본값: 첨부 파일의 메인인 '나의 지원금')
-  const [activeTab, setActiveTab] = useState<ActiveTab>('benefit');
+  // 현재 활성 탭 (기본값: 마이페이지 홈)
+  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
 
   // 핵심 상태 관리
   const [benefitState, setBenefitState] = useState(initialBenefitState);
