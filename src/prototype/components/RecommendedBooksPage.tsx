@@ -57,6 +57,7 @@ export const RecommendedBooksPage: React.FC<RecommendedBooksPageProps> = ({
         <h1 className="text-[52px] font-bold leading-none tracking-[-1.5px]">
           {PROGRAM.monthNumber}월 추천도서
         </h1>
+        <p className="text-sm text-white/70">영풍문고가 직접 선정하고 추천 이유를 전해드립니다</p>
       </header>
 
       <main className="mx-auto flex w-full max-w-[1000px] flex-col items-center gap-12 px-4 pb-[90px] pt-[72px]">
