@@ -6,24 +6,7 @@ import { MOCK_BOOKS } from '../data/mockBooks';
 import { BookCoverImage } from '../components/BookCoverImage';
 
 export const CartPage: React.FC = () => {
-  const {
-    cart,
-    cartTab,
-    setCartTab,
-    cartStats,
-    updateQuantity,
-    removeFromCart,
-    removeSelectedFromCart,
-    toggleItemSelection,
-    toggleAllSelection,
-    selectedAddress,
-    setIsAddressModalOpen,
-    setAddressModalTab,
-    setActivePage,
-    setIsEstimateModalOpen,
-    addToCart,
-    showToast,
-  } = useShop();
+  const { cart, cartTab, setCartTab, cartStats, updateQuantity, removeFromCart, removeSelectedFromCart, toggleItemSelection, toggleAllSelection, selectedAddress, setIsAddressModalOpen, setAddressModalTab, setActivePage, setIsEstimateModalOpen, addToCart, showToast } = useShop();
 
   const allSelected = cart.length > 0 && cart.every((i) => i.selected);
   const selectedItems = cart.filter((i) => i.selected);
@@ -44,9 +27,7 @@ export const CartPage: React.FC = () => {
         <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#dadada] pb-5 gap-4'>
           <div>
             <h1 className='text-2xl sm:text-3xl font-bold text-[#181718] tracking-tight'>장바구니</h1>
-            <p className='text-xs text-[#80888a] mt-1'>
-              선택하신 도서 목록과 수량을 확인해 주세요. (회사 지원금은 다음 단계인 결제 페이지에서 적용할 수 있습니다.)
-            </p>
+            <p className='text-xs text-[#80888a] mt-1'>선택하신 도서 목록과 수량을 확인해 주세요. (회사 지원금은 다음 단계인 결제 페이지에서 적용할 수 있습니다.)</p>
           </div>
           <StepIndicator currentStep='cart' />
         </div>
@@ -436,12 +417,12 @@ export const CartPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className='text-[11px] text-[#595959] border-t border-[#edf0f1] pt-2 space-y-1'>
+              {/* <div className='text-[11px] text-[#595959] border-t border-[#edf0f1] pt-2 space-y-1'>
                 <div className='flex justify-between'>
                   <span>기본 적립 포인트</span>
                   <span className='text-[#181718] font-semibold'>P {cartStats.totalRewardPoints.toLocaleString()}원</span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Action Button: 주문하기 */}
               <button type='button' onClick={handleOrderClick} className='w-full py-3.5 rounded bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors flex items-center justify-center gap-2 cur'>

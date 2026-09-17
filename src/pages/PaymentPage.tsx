@@ -91,11 +91,8 @@ export const PaymentPage: React.FC = () => {
           <div className='border border-[#fca5a5] bg-[#ffebeb] rounded-lg p-3.5 flex items-center justify-between text-xs text-[#181718] shadow-xs'>
             <div className='flex items-center gap-2.5'>
               <AlertCircle className='w-4 h-4 text-[#df0000] flex-shrink-0' />
-              <span className='font-semibold'>
-                이번 달 {subsidyLedger.recommendedUsed && subsidyLedger.personalUsed ? '추천도서·개인도서' : subsidyLedger.recommendedUsed ? '추천도서' : '개인도서'} 지원금(1권)을 이미 사용하셨어요. 다음 달 1일에 초기화돼요.
-              </span>
+              <span className='font-semibold'>이번 달 {subsidyLedger.recommendedUsed && subsidyLedger.personalUsed ? '추천도서·개인도서' : subsidyLedger.recommendedUsed ? '추천도서' : '개인도서'} 지원금(1권)을 이미 사용하셨어요. 다음 달 1일에 초기화돼요.</span>
             </div>
-
           </div>
         )}
 
@@ -108,11 +105,7 @@ export const PaymentPage: React.FC = () => {
                 <span className='font-bold text-[#1f976b]'>지원 가능한 도서가 있어요.</span> 아직 지원금을 적용하지 않았습니다.
               </div>
             </div>
-            <button
-              type='button'
-              onClick={handleApplyMissedSubsidy}
-              className='px-3 py-1 bg-[#1f976b] hover:bg-[#187e59] text-white font-bold rounded text-[11px] transition-colors shadow-2xs'
-            >
+            <button type='button' onClick={handleApplyMissedSubsidy} className='px-3 py-1 bg-[#1f976b] hover:bg-[#187e59] text-white font-bold rounded text-[11px] transition-colors shadow-2xs'>
               모두 적용하기
             </button>
           </div>
@@ -250,7 +243,6 @@ export const PaymentPage: React.FC = () => {
                 </span>
               </div>
 
-
               {/* 지원 기준 카드 그리드 */}
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs'>
                 {/* 추천도서 */}
@@ -294,9 +286,7 @@ export const PaymentPage: React.FC = () => {
                   </li>
                 </ul>
               </div>
-
             </div>
-
 
             {/* ※ 지원금 적용 방법 강조 안내 박스 */}
             <div className='bg-[#e8f5ef] border border-[#a3d9bc] rounded-lg p-3 text-xs sm:text-sm font-bold text-[#181718] flex items-start gap-2 shadow-2xs'>
@@ -364,19 +354,11 @@ export const PaymentPage: React.FC = () => {
                               <span className='text-[#df0000] font-bold mr-1'>{item.book.discountRate}%</span>
                               <span className='font-bold text-[#181718]'>{item.itemSellingPrice.toLocaleString()}원</span>
                             </div>
-                            {item.quantity >= 2 && (
-                              <div className='text-[11px] text-[#80888a] font-normal mt-0.5'>(1권당 {item.book.sellingPrice.toLocaleString()}원)</div>
-                            )}
+                            {item.quantity >= 2 && <div className='text-[11px] text-[#80888a] font-normal mt-0.5'>(1권당 {item.book.sellingPrice.toLocaleString()}원)</div>}
                           </td>
                           <td className='p-3 text-center font-medium'>{item.quantity}</td>
                           <td className='p-3 text-right font-semibold text-[#1f976b] align-top space-y-1.5'>
-                            <div>
-                              {item.isSubsidyApplied && item.itemCompanySubsidy > 0 ? (
-                                <span className={`font-bold ${item.book.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>
-                                  -{item.itemCompanySubsidy.toLocaleString()}원
-                                </span>
-                              ) : null}
-                            </div>
+                            <div>{item.isSubsidyApplied && item.itemCompanySubsidy > 0 ? <span className={`font-bold ${item.book.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.itemCompanySubsidy.toLocaleString()}원</span> : null}</div>
 
                             {/* 회사 지원금 적용 토글 버튼 및 상태 문구 */}
                             {item.book.bookType !== 'general' && (
@@ -389,18 +371,11 @@ export const PaymentPage: React.FC = () => {
                                   if (isExhausted) {
                                     return (
                                       <>
-                                        <button
-                                          type='button'
-                                          disabled
-                                          aria-pressed={false}
-                                          className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#f6f6f6] text-[#9c9c9c] border border-[#cbd2d4] cursor-not-allowed whitespace-nowrap shadow-2xs'
-                                        >
+                                        <button type='button' disabled aria-pressed={false} className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#f6f6f6] text-[#9c9c9c] border border-[#cbd2d4] cursor-not-allowed whitespace-nowrap shadow-2xs'>
                                           <Circle className='w-3 h-3 text-[#9c9c9c]' />
                                           적용 불가
                                         </button>
-                                        <span className='text-[10px] text-[#df0000] font-normal whitespace-nowrap'>
-                                          이번 달 {type === 'recommended' ? '추천도서' : '개인도서'} 1권 소진
-                                        </span>
+                                        <span className='text-[10px] text-[#df0000] font-normal whitespace-nowrap'>이번 달 {type === 'recommended' ? '추천도서' : '개인도서'} 1권 소진</span>
                                       </>
                                     );
                                   }
@@ -413,13 +388,13 @@ export const PaymentPage: React.FC = () => {
                                           type='button'
                                           aria-pressed={true}
                                           onClick={() => removeCartSubsidy(item.id)}
-                                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-white border transition-all active:scale-95 cursor-pointer whitespace-nowrap shadow-2xs ${type === 'personal' ? 'bg-[#1f976b] border-[#1f976b]' : 'bg-[#df0000] border-[#df0000]'
-                                            }`}
+                                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-white border transition-all active:scale-95 cursor-pointer whitespace-nowrap shadow-2xs ${
+                                            type === 'personal' ? 'bg-[#1f976b] border-[#1f976b]' : 'bg-[#df0000] border-[#df0000]'
+                                          }`}
                                         >
                                           <CheckCircle2 className='w-4 h-4' />
                                           지원금 적용
                                         </button>
-
                                       </>
                                     );
                                   }
@@ -432,7 +407,6 @@ export const PaymentPage: React.FC = () => {
                                       onClick={() => applyCartSubsidy(item.id)}
                                       className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-white text-[#555a5c] border border-[#cbd2d4] transition-all cursor-pointer whitespace-nowrap shadow-2xs'
                                     >
-
                                       지원금 적용
                                     </button>
                                   );
@@ -490,8 +464,6 @@ export const PaymentPage: React.FC = () => {
               )}
             </div>
 
-
-
             {/* 6. 결제수단 Accordion (직원 결제분 PG 선택) */}
             <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white'>
               <div onClick={() => toggleSection('paymentMethod')} className='px-5 py-4 flex items-center justify-between cursor-pointer bg-white hover:bg-[#f6f6f6] select-none border-b border-[#edf0f1]'>
@@ -542,8 +514,9 @@ export const PaymentPage: React.FC = () => {
                           key={item.id}
                           type='button'
                           onClick={() => setSelectedMethod(item.id)}
-                          className={`relative h-12 rounded border text-xs font-semibold flex items-center justify-center transition-all ${selectedMethod === item.id ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]' : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
-                            }`}
+                          className={`relative h-12 rounded border text-xs font-semibold flex items-center justify-center transition-all ${
+                            selectedMethod === item.id ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]' : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
+                          }`}
                         >
                           {item.badge && <span className={`absolute top-1 right-1 text-[9px] text-white px-1 rounded font-bold ${item.badgeColor}`}>{item.badge}</span>}
                           <span>{item.name}</span>
@@ -667,14 +640,14 @@ export const PaymentPage: React.FC = () => {
               </div>
 
               <div className='text-[11px] text-[#595959] border-t border-[#edf0f1] pt-2 space-y-1'>
-                <div className='flex justify-between'>
+                {/* <div className='flex justify-between'>
                   <span>기본 적립</span>
                   <span className='text-[#181718] font-semibold'>{cartStats.totalRewardPoints.toLocaleString()}원</span>
                 </div>
                 <div className='flex justify-between'>
                   <span>추가 적립</span>
                   <span>0원</span>
-                </div>
+                </div> */}
                 <div className='flex justify-between pt-1'>
                   <span>현금영수증</span>
                   <span className='text-[#80888a]'>개인 소득공제 신청</span>
