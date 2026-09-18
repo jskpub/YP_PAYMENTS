@@ -61,7 +61,10 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-yp-gray-200 bg-white">
+    <header
+      className="sticky z-30 w-full border-b border-yp-gray-200 bg-white"
+      style={{ top: 'var(--nav-bar-height, 0px)' }}
+    >
       {/* 1. 상단 유틸 영역 — 내 이름 / 장바구니 / 주문·배송 / 고객센터 */}
       <div className="border-b border-yp-gray-100">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs text-yp-gray-500">
