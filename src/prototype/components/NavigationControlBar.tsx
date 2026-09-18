@@ -8,10 +8,10 @@ interface NavigationControlBarProps {
   onNavigate?: (view: AppViewMode) => void;
 }
 
-export const NavigationControlBar: React.FC<NavigationControlBarProps> = ({
+export const NavigationControlBar = React.forwardRef<HTMLDivElement, NavigationControlBarProps>(({
   currentView,
   onNavigate,
-}) => {
+}, ref) => {
   const { activePage, setActivePage, resetSubsidyLedger } = useShop();
 
   // Determine active view mode based on props or ShopContext activePage
@@ -30,7 +30,7 @@ export const NavigationControlBar: React.FC<NavigationControlBarProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/95 backdrop-blur text-white py-1.5 px-4 sticky top-0 z-50 border-b border-slate-800 text-xs shadow-md">
+    <div ref={ref} className="bg-slate-900/95 backdrop-blur text-white py-1.5 px-4 sticky top-0 z-50 border-b border-slate-800 text-xs shadow-md">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
         {/* Title */}
         <div
@@ -96,4 +96,6 @@ export const NavigationControlBar: React.FC<NavigationControlBarProps> = ({
       </div>
     </div>
   );
-};
+});
+
+NavigationControlBar.displayName = 'NavigationControlBar';

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { ShopProvider, useShop } from './context/ShopContext';
 import { NavigationControlBar } from './prototype/components/NavigationControlBar';
 import { Header } from './components/Header';
@@ -25,13 +25,27 @@ import { CheckCircle2 } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const { activePage, toastMessage, selectedBookForDetail } = useShop();
+  const [navBarNode, setNavBarNode] = useState<HTMLDivElement | null>(null);
+  const [navBarHeight, setNavBarHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!navBarNode) return;
+    const updateHeight = () => setNavBarHeight(navBarNode.offsetHeight);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(navBarNode);
+    return () => observer.disconnect();
+  }, [navBarNode]);
 
   if (activePage === 'intranet') {
     return <AuthPage />;
   }
 
   return (
-    <div className='min-h-screen flex flex-col bg-white text-[#181718] antialiased selection:bg-[#df0000] selection:text-white'>
+    <div
+      className='min-h-screen flex flex-col bg-white text-[#181718] antialiased selection:bg-[#df0000] selection:text-white'
+      style={{ '--nav-bar-height': `${navBarHeight}px` } as React.CSSProperties}
+    >
       {/* Toast Notification */}
       {toastMessage && (
         <div className='fixed top-5 left-1/2 -translate-x-1/2 z-70 bg-[#181718]/90 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2.5 text-xs sm:text-sm font-medium animate-in fade-in slide-in-from-top-4 duration-200'>
@@ -41,7 +55,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Global Top Control Bar */}
-      <NavigationControlBar />
+      <NavigationControlBar ref={setNavBarNode} />
 
       {/* Global Header */}
       <Header />
