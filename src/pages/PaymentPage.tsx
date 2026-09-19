@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { StepIndicator } from '../components/StepIndicator';
-import { ChevronDown, ChevronUp, AlertCircle, CreditCard, Check, Building2, Lock, ExternalLink, HelpCircle, Award, BookOpen, Smartphone, Sparkles, CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ChevronUp, AlertCircle, CreditCard, Building2, Lock, ExternalLink, HelpCircle, Award, BookOpen, Smartphone, Sparkles, CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
 import { BookCoverImage } from '../components/BookCoverImage';
 
 const SUBSIDY_TYPES = ['recommended', 'personal'] as const;
@@ -36,6 +36,12 @@ export const PaymentPage: React.FC = () => {
 
   const [deliveryMemo, setDeliveryMemo] = useState('문 앞에 놓아주세요.');
   const [agreeTerms, setAgreeTerms] = useState(true);
+
+  // 주문자 연락처/이메일 (수정 가능)
+  const [ordererPhonePrefix, setOrdererPhonePrefix] = useState('010');
+  const [ordererPhoneMid, setOrdererPhoneMid] = useState('1234');
+  const [ordererPhoneEnd, setOrdererPhoneEnd] = useState('5678');
+  const [ordererEmail, setOrdererEmail] = useState('junkyo.jung@ypbooks.co.kr');
 
   // YP points usage
   const [usedPoints, setUsedPoints] = useState(0);
@@ -340,78 +346,56 @@ export const PaymentPage: React.FC = () => {
 
               {activeAccordion.shipping && (
                 <div className='p-5 space-y-4 text-xs sm:text-sm'>
-                  {/* 배송지 선택 라디오 */}
-                  <div className='grid grid-cols-[100px_1fr] items-center gap-2'>
-                    <span className='font-medium text-[#555a5c]'>배송지 선택*</span>
-                    <div className='flex items-center gap-4'>
-                      <label className='flex items-center gap-1.5 cursor-pointer'>
-                        <input type='radio' name='addr_type' checked={true} readOnly className='w-4 h-4 accent-[#df0000]' />
-                        <span className='text-[#181718] font-medium'>기본 배송지 ({selectedAddress.title})</span>
-                      </label>
+                  {/* 배송지 선택 라디오 + 배송지 목록 */}
+                  <div className='flex items-center gap-4'>
+                    <label className='flex items-center gap-1.5 cursor-pointer'>
+                      <input type='radio' name='addr_type' checked={true} readOnly className='w-4 h-4 accent-[#df0000]' />
+                      <span className='text-[#181718] font-medium'>기본 배송지</span>
+                    </label>
+                    <label
+                      className='flex items-center gap-1.5 cursor-pointer text-[#80888a]'
+                      onClick={() => {
+                        setAddressModalTab('new');
+                        setIsAddressModalOpen(true);
+                      }}
+                    >
+                      <input type='radio' name='addr_type' checked={false} readOnly className='w-4 h-4' />
+                      <span>신규 배송지</span>
+                    </label>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        setAddressModalTab('list');
+                        setIsAddressModalOpen(true);
+                      }}
+                      className='px-2.5 py-1 rounded border border-[#cbd2d4] bg-[#f6f6f6] hover:bg-[#edf0f1] text-xs font-semibold text-[#181718] transition-colors'
+                    >
+                      배송지 목록
+                    </button>
+                  </div>
+
+                  {/* 배송지 요약 카드 — 상세 필드는 팝업(배송지 정보 수정)에서 편집 */}
+                  <div className='p-4 bg-[#f6f6f6] border border-[#cbd2d4] rounded-lg space-y-1.5'>
+                    <div className='flex items-center justify-between gap-2'>
+                      <span className='font-bold text-sm text-[#181718]'>
+                        {selectedAddress.title} ({selectedAddress.recipient})
+                      </span>
                       <button
                         type='button'
                         onClick={() => {
-                          setAddressModalTab('list');
+                          setAddressModalTab('new');
                           setIsAddressModalOpen(true);
                         }}
-                        className='px-2.5 py-1 rounded border border-[#cbd2d4] bg-[#f6f6f6] hover:bg-[#edf0f1] text-xs font-semibold text-[#181718] transition-colors'
+                        className='px-2.5 py-1 rounded border border-[#cbd2d4] bg-white hover:bg-[#edf0f1] text-xs font-semibold text-[#181718] transition-colors whitespace-nowrap'
                       >
-                        배송지 목록
+                        배송지 정보 수정
                       </button>
                     </div>
-                  </div>
-
-                  {/* 배송 방법 */}
-                  <div className='grid grid-cols-[100px_1fr] items-center gap-2'>
-                    <span className='font-medium text-[#555a5c]'>배송 방법*</span>
-                    <div className='flex items-center gap-4'>
-                      <label className='flex items-center gap-1.5 cursor-pointer'>
-                        <input type='radio' name='ship_method' checked={true} readOnly className='w-4 h-4 accent-[#df0000]' />
-                        <span>국내 배송</span>
-                      </label>
+                    <div className='text-[#595959]'>{selectedAddress.phone1}</div>
+                    <div className='text-[#181718]'>
+                      ({selectedAddress.postalCode}) {selectedAddress.roadAddress} {selectedAddress.detailAddress}
                     </div>
-                  </div>
-
-                  {/* 수령인 */}
-                  <div className='grid grid-cols-[100px_1fr] items-center gap-2'>
-                    <span className='font-medium text-[#555a5c]'>수령인*</span>
-                    <div className='flex items-center gap-4'>
-                      <input type='text' readOnly value={selectedAddress.recipient} className='flex-1 max-w-sm h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm text-[#181718]' />
-                      <span className='text-xs text-[#1f976b] font-medium flex items-center gap-1'>
-                        <Check className='w-3.5 h-3.5' /> 주문자와 동일
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* 연락처1 */}
-                  <div className='grid grid-cols-[100px_1fr] items-center gap-2'>
-                    <span className='font-medium text-[#555a5c]'>연락처1*</span>
-                    <div className='flex items-center gap-2'>
-                      <input type='text' readOnly value={selectedAddress.phone1} className='w-44 h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm text-[#181718]' />
-                    </div>
-                  </div>
-
-                  {/* 배송지 주소 */}
-                  <div className='grid grid-cols-[100px_1fr] items-start gap-2'>
-                    <span className='font-medium text-[#555a5c] pt-2'>배송지 주소*</span>
-                    <div className='space-y-2 max-w-lg'>
-                      <div className='flex items-center gap-2'>
-                        <input type='text' readOnly value={selectedAddress.postalCode} className='w-24 h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm' />
-                        <button
-                          type='button'
-                          onClick={() => {
-                            setAddressModalTab('new');
-                            setIsAddressModalOpen(true);
-                          }}
-                          className='px-3 h-9 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] text-xs font-semibold text-[#181718]'
-                        >
-                          주소 변경/등록
-                        </button>
-                      </div>
-                      <input type='text' readOnly value={selectedAddress.roadAddress} className='w-full h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm' />
-                      <input type='text' readOnly value={selectedAddress.jibunAddress} className='w-full h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm text-[#595959]' />
-                      <input type='text' readOnly value={selectedAddress.detailAddress} className='w-full h-9 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm' />
-                    </div>
+                    <div className='text-[#80888a]'>{selectedAddress.jibunAddress}</div>
                   </div>
 
                   {/* 배송 메모 */}
@@ -577,17 +561,38 @@ export const PaymentPage: React.FC = () => {
                 <div>
                   <span className='text-[#555a5c] block mb-0.5'>연락처*</span>
                   <div className='flex items-center gap-1 text-xs'>
-                    <span className='px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]'>010</span>
+                    <select value={ordererPhonePrefix} onChange={(e) => setOrdererPhonePrefix(e.target.value)} className='px-1.5 py-1 bg-white rounded border border-[#cbd2d4] focus:outline-none focus:border-[#df0000]'>
+                      <option value='010'>010</option>
+                      <option value='011'>011</option>
+                      <option value='02'>02</option>
+                    </select>
                     <span>-</span>
-                    <span className='px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]'>1234</span>
+                    <input
+                      type='text'
+                      maxLength={4}
+                      value={ordererPhoneMid}
+                      onChange={(e) => setOrdererPhoneMid(e.target.value.replace(/[^0-9]/g, ''))}
+                      className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]'
+                    />
                     <span>-</span>
-                    <span className='px-2 py-1 bg-[#f6f6f6] rounded border border-[#cbd2d4]'>5678</span>
+                    <input
+                      type='text'
+                      maxLength={4}
+                      value={ordererPhoneEnd}
+                      onChange={(e) => setOrdererPhoneEnd(e.target.value.replace(/[^0-9]/g, ''))}
+                      className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]'
+                    />
                   </div>
                 </div>
 
                 <div>
                   <span className='text-[#555a5c] block mb-0.5'>이메일</span>
-                  <div className='p-1.5 bg-[#f6f6f6] rounded border border-[#cbd2d4] text-xs truncate'>junkyo.jung@ypbooks.co.kr</div>
+                  <input
+                    type='email'
+                    value={ordererEmail}
+                    onChange={(e) => setOrdererEmail(e.target.value)}
+                    className='w-full p-1.5 bg-white rounded border border-[#cbd2d4] text-xs focus:outline-none focus:border-[#df0000]'
+                  />
                 </div>
 
                 <div className='text-[12px] text-[#80888a] pt-1 leading-normal'>• 주문자 연락처로 주문 관련 알림톡이 발송되므로 정확한 주문자 정보를 입력해 주세요.</div>

@@ -1,11 +1,11 @@
-export type ActiveTab = 
-  | 'benefit'       // 나의 지원금
-  | 'wishlist'      // 위시리스트
-  | 'cart'          // 장바구니
-  | 'orders'        // 주문/배송 조회
-  | 'refund'        // 환불/반품
-  | 'member-info'   // 회원정보 관리
-  | 'dashboard';    // 마이페이지 홈
+export type ActiveTab =
+  | 'benefit' // 나의 지원금
+  | 'wishlist' // 위시리스트
+  | 'cart' // 장바구니
+  | 'orders' // 주문 조회
+  | 'refund' // 환불/반품
+  | 'member-info' // 회원정보 관리
+  | 'dashboard'; // 마이페이지 홈
 
 export interface BenefitState {
   user: {

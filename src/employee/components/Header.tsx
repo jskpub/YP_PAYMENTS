@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, benefit
             </button>
             <span className='text-gray-300'>|</span>
             <button type='button' onClick={() => setActiveTab('orders')} className='hover:text-[#D7001E] cursor-pointer'>
-              주문/배송
+              주문
             </button>
             <span className='text-gray-300'>|</span>
             <span className='text-gray-400 select-none'>고객센터</span>
@@ -126,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, benefit
               {cartCount > 0 && <span className='bg-[#D7001E] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold'>{cartCount}</span>}
             </button>
             <button type='button' onClick={() => setActiveTab('orders')} className={`py-3 px-3 transition-colors cursor-pointer ${activeTab === 'orders' ? 'text-[#D7001E] font-bold border-b-2 border-[#D7001E]' : 'hover:text-[#D7001E]'}`}>
-              주문/배송
+              주문
             </button>
             <button type='button' onClick={() => setActiveTab('wishlist')} className={`py-3 px-3 transition-colors cursor-pointer ${activeTab === 'wishlist' ? 'text-[#D7001E] font-bold border-b-2 border-[#D7001E]' : 'hover:text-[#D7001E]'}`}>
               위시리스트

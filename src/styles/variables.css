@@ -1,15 +1,19 @@
 /* ==========================================================================
-   Design System Tokens (variables.css)
-   - Brand Raw Colors (ypbook.css)
-   - Semantic Color Tokens
-   - Typography, Spacing, & Layout Tokens
+   variables.css
+   역할  : 디자인 토큰 전용 — 모든 CSS 변수(Custom Properties) 단독 정의
+   규칙  : 이 파일 외 어떤 파일에도 :root 토큰 선언 금지
+           Raw 컬러는 시맨틱 토큰에만 공급. 컴포넌트에서 직접 사용 금지
    ========================================================================== */
 
 :root {
-  /* --- Raw Brand Colors (ypbook.css Original) --- */
+  /* --------------------------------------------------------------------------
+     [1] Raw Brand Colors
+     ⚠️ 컴포넌트에서 직접 참조 금지. 반드시 시맨틱 토큰을 통해 사용
+  -------------------------------------------------------------------------- */
+
   --white: #ffffff;
 
-  /* warm grey — 주로 텍스트에 사용됨 */
+  /* Warm Grey */
   --wgrey01: #f6f6f6;
   --wgrey02: #dadada;
   --wgrey03: #c3c2c2;
@@ -20,7 +24,7 @@
   --wgrey08: #363636;
   --wgrey09: #181718;
 
-  /* cool grey — 주로 배경/보더에 사용됨 */
+  /* Cool Grey */
   --cgrey01: #edf0f1;
   --cgrey02: #cbd2d4;
   --cgrey03: #b5bec0;
@@ -31,7 +35,7 @@
   --cgrey08: #3c4142;
   --cgrey09: #1e2021;
 
-  /* red — 브랜드 강조 스케일 */
+  /* Red — 브랜드 강조 스케일 */
   --red01: #ffebeb;
   --red02: #f9cdcd;
   --red03: #f5baba;
@@ -40,69 +44,95 @@
   --red06: #f55d5d;
   --red07: #f14646;
   --red08: #ea2e2e;
-  --red09: #df0000;
+  --red09: #df0000; /* ← 영풍문고 브랜드 레드 (Primary) */
 
-  /* green */
+  /* Green */
   --green: #4aaf70;
   --green01: #1f976b;
 
-  /* etc */
+  /* 기타 */
   --warning: #ee293b;
   --nowdream: #be1d27;
 
-  /* --- Semantic Color Tokens --- */
-  --color-canvas: var(--white);        /* 기본 배경 */
-  --color-surface: var(--wgrey01);     /* 카드/섹션 약한 배경 */
+  /* --------------------------------------------------------------------------
+     [2] Semantic Color Tokens
+     용도 : 컴포넌트에서 직접 참조. Raw 컬러를 의미 있는 이름으로 매핑
+  -------------------------------------------------------------------------- */
+
+  /* 배경 레이어 */
+  --color-canvas: var(--white); /* 페이지 최하단 배경 */
+  --color-surface: var(--wgrey01); /* 카드/섹션 약한 배경 */
   --color-surface-alt: var(--cgrey01); /* AI 메시지, 추천 카드 배경 */
 
-  --color-foreground: var(--wgrey09);          /* 기본 텍스트 */
+  /* 텍스트 */
+  --color-foreground: var(--wgrey09); /* 기본 텍스트 */
   --color-foreground-secondary: var(--wgrey07); /* 보조 텍스트 */
-  --color-muted: var(--wgrey05);               /* 비활성 텍스트, placeholder */
+  --color-muted: var(--wgrey05); /* 비활성/placeholder */
 
-  --color-border: var(--cgrey02);        /* 기본 보더 */
+  /* 보더 */
+  --color-border: var(--cgrey02); /* 기본 보더 */
   --color-border-strong: var(--cgrey04); /* 강조 보더 */
 
-  --color-primary: var(--red09);       /* 주요 액션, 선택 상태, CTA */
+  /* 브랜드 포인트 */
+  --color-primary: var(--red09); /* 주요 액션, 선택 상태, CTA */
   --color-primary-hover: var(--red08); /* 호버/눌림 */
-  --color-primary-soft: var(--red01);  /* 연한 강조 배경 */
+  --color-primary-soft: var(--red01); /* 연한 강조 배경 */
 
+  /* 상태 컬러 */
   --color-success: var(--green01);
   --color-warning: var(--warning);
   --color-danger: var(--red09);
   --color-danger-soft: var(--red01);
 
-  /* --- Typography Tokens --- */
-  --font-family-base: 'Pretendard GOV', -apple-system, BlinkMacSystemFont,
-    'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, Roboto, sans-serif;
+  /* --------------------------------------------------------------------------
+     [3] Typography Tokens
+     기반 폰트: Pretendard GOV (로컬 woff), Apple SD Gothic Neo (fallback)
+  -------------------------------------------------------------------------- */
 
-  --font-size-h1: 2rem;           /* 32px */
-  --font-size-h2: 1.625rem;       /* 26px */
-  --font-size-h3: 1.375rem;       /* 22px */
-  --font-size-h4: 1.1875rem;      /* 19px */
-  --font-size-body-lg: 1.0625rem; /* 17px — 채팅 메시지, 본문 기본 */
-  --font-size-body-md: 0.9375rem; /* 15px — 버튼, 입력 필드 */
-  --font-size-body-sm: 0.8125rem; /* 13px — 헬퍼 텍스트, 칩 */
-  --font-size-caption: 0.75rem;   /* 12px — 최소 크기 */
+  --font-sans: 'Pretendard GOV', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, Roboto, sans-serif;
+  --font-family-base: var(--font-sans);
 
+  /* 헤딩 */
+  --font-size-h1: 2rem; /* 32px */
+  --font-size-h2: 1.625rem; /* 26px */
+  --font-size-h3: 1.375rem; /* 22px */
+  --font-size-h4: 1.1875rem; /* 19px */
+
+  /* 본문 */
+  --font-size-body-lg: 1.0625rem; /* 17px */
+  --font-size-body-md: 0.9375rem; /* 15px */
+  --font-size-body-sm: 0.8125rem; /* 13px */
+  --font-size-caption: 0.75rem; /* 12px */
+
+  /* 줄간격 & 자간 */
   --line-height-heading: 1.4;
   --line-height-body: 1.5;
   --letter-spacing-default: 0;
 
-  /* --- Spacing Tokens (8px base) --- */
-  --spacing-xs: 0.25rem;  /* 4px  */
-  --spacing-sm: 0.5rem;   /* 8px  */
-  --spacing-md: 1rem;     /* 16px */
-  --spacing-lg: 1.5rem;   /* 24px */
-  --spacing-xl: 2rem;     /* 32px */
-  --spacing-2xl: 3rem;    /* 48px */
-  --spacing-3xl: 4rem;    /* 64px */
+  /* --------------------------------------------------------------------------
+     [4] Spacing Tokens — 8px 기반 스케일
+  -------------------------------------------------------------------------- */
 
-  /* --- Layout Tokens --- */
+  --spacing-xs: 0.25rem; /*  4px */
+  --spacing-sm: 0.5rem; /*  8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 4rem; /* 64px */
+
+  /* --------------------------------------------------------------------------
+     [5] Layout Tokens — PC Desktop (min-width: 1280px) 기준
+  -------------------------------------------------------------------------- */
+
   --layout-wrap-min-width: 1280px;
   --layout-inner-max-width: 1280px;
   --layout-inner-padding: 20px;
 
-  /* --- Transition Tokens --- */
+  /* --------------------------------------------------------------------------
+     [6] Transition Tokens
+  -------------------------------------------------------------------------- */
+
   --transition-fast: 150ms ease-out;
   --transition-base: 250ms ease-out;
 }

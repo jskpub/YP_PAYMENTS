@@ -96,20 +96,20 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({ employeeName, bene
                       </div>
                     </div>
 
-                    <div className='flex items-center justify-between border-y border-yp-red-soft bg-yp-red-soft px-4 py-2 text-[12px]'>
+                    {/* <div className='flex items-center justify-between border-y border-yp-red-soft bg-yp-red-soft px-4 py-2 text-[12px]'>
                       <span className='font-bold text-yp-red'>이번 달 남은 지원금</span>
                       <button type='button' onClick={() => goPending('나의 지원금')} className='cursor-pointer font-bold text-yp-red hover:underline'>
                         개인도서 {benefit.personalBook.remainingAmount.toLocaleString()}원 ➔
                       </button>
-                    </div>
+                    </div> */}
 
-                    <div className='grid grid-cols-2 divide-x divide-yp-gray-200 bg-white text-center text-[12px] font-medium text-yp-gray-700'>
+                    {/* <div className='grid grid-cols-2 divide-x divide-yp-gray-200 bg-white text-center text-[12px] font-medium text-yp-gray-700'>
                       <button
                         type='button'
-                        //   onClick={() => goPending('주문/배송 조회')}
+                        //   onClick={() => goPending('주문 조회')}
                         className='cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red'
                       >
-                        주문/배송
+                        주문
                       </button>
                       <button
                         type='button'
@@ -118,7 +118,7 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({ employeeName, bene
                       >
                         취소/반품/교환
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               )}
@@ -133,10 +133,10 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({ employeeName, bene
             <span className='text-yp-gray-200'>|</span>
             <button
               type='button'
-              // onClick={() => onPendingNav('주문/배송 조회')}
+              // onClick={() => onPendingNav('주문 조회')}
               className='cursor-pointer hover:text-yp-red disabled:cursor-not-allowed'
             >
-              주문/배송
+              주문
             </button>
 
             <span className='text-yp-gray-200'>|</span>

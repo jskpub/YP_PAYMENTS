@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
       setActivePage('cart');
       return;
     }
-    if (label === '주문/배송 조회') {
+    if (label === '주문 조회') {
       setActivePage('mypage');
       setMyPageTab('orders');
       return;

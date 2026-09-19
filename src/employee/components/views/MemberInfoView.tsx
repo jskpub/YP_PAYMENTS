@@ -156,7 +156,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
             </div>
             <label className='flex items-center gap-2 text-gray-600 cursor-pointer'>
               <input type='checkbox' checked={formData.smsConsent} onChange={(e) => setFormData({ ...formData, smsConsent: e.target.checked })} className='accent-[#D7001E] w-3.5 h-3.5' />
-              <span>주문/배송 알림톡 및 특가 소식 SMS 수신 동의 (필수 주문 정보는 수신동의 여부와 무관하게 발송)</span>
+              <span>주문 알림톡 및 특가 소식 SMS 수신 동의 (필수 주문 정보는 수신동의 여부와 무관하게 발송)</span>
             </label>
           </div>
         </div>

@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
             <ul className='space-y-1.5 text-gray-500 text-[12px]'>
               <li className='hover:text-gray-800 cursor-pointer'>도서검색</li>
               <li className='hover:text-gray-800 cursor-pointer'>회원등급 혜택</li>
-              <li className='hover:text-gray-800 cursor-pointer'>주문/배송</li>
+              <li className='hover:text-gray-800 cursor-pointer'>주문</li>
               <li className='hover:text-gray-800 cursor-pointer'>취소/교환/반품</li>
               <li className='hover:text-gray-800 cursor-pointer'>적립금 사용</li>
               <li className='hover:text-gray-800 cursor-pointer'>교환권 사용</li>

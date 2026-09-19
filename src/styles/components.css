@@ -1,0 +1,284 @@
+/* ==========================================================================
+   components.css
+   역할  : 컴포넌트 클래스 전용
+   규칙  : :root 선언 금지 / @font-face 선언 금지
+           레이아웃 클래스 금지 (style.css에서 관리)
+           반드시 variables.css 토큰 참조
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   [1] Buttons
+-------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body-md);
+  font-weight: 600;
+  height: 44px;
+  padding: 0 var(--spacing-md);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+/* Primary */
+.btn--primary {
+  background-color: var(--color-primary);
+  color: var(--white);
+  border-radius: 12px;
+}
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+
+/* Secondary */
+.btn--secondary {
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+  border-color: var(--color-border);
+}
+.btn--secondary:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+  background-color: var(--white);
+}
+
+/* Tertiary */
+.btn--tertiary {
+  background-color: transparent;
+  color: var(--color-primary);
+  padding: 0;
+  height: auto;
+}
+.btn--tertiary:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+/* 비활성 */
+.btn:disabled,
+.btn--disabled {
+  background-color: var(--wgrey01);
+  color: var(--color-muted);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+/* 대형 */
+.btn--lg {
+  height: 52px;
+  padding: 0 var(--spacing-lg);
+  font-size: var(--font-size-body-lg);
+  border-radius: 12px;
+}
+
+/* 소형 */
+.btn--sm {
+  height: 32px;
+  padding: 0 var(--spacing-sm);
+  font-size: var(--font-size-body-sm);
+  border-radius: 6px;
+}
+
+/* 브랜드 버튼 유틸리티 */
+.yp-primary-btn {
+  background-color: var(--color-primary);
+  color: var(--white);
+  border-radius: 12px;
+  transition: background-color var(--transition-fast);
+}
+.yp-primary-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.yp-sub-btn {
+  border: 1px solid var(--wgrey02);
+  background-color: var(--white);
+  color: var(--wgrey08);
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+.yp-sub-btn:hover {
+  border-color: var(--wgrey05);
+  color: var(--wgrey09);
+}
+
+/* --------------------------------------------------------------------------
+   [2] Form Inputs
+-------------------------------------------------------------------------- */
+
+.input,
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='tel'],
+select,
+textarea {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--white);
+  font-size: var(--font-size-body-md);
+  color: var(--color-foreground);
+  transition: border-color var(--transition-fast);
+}
+
+textarea {
+  height: auto;
+  padding: 12px;
+}
+
+/* 포커스 */
+.input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border: 2px solid var(--color-primary);
+  outline: none;
+}
+
+/* 에러 */
+.input.error,
+input.error {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-soft);
+}
+
+/* 비활성 */
+.input:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background-color: var(--wgrey01);
+  border-color: var(--cgrey02);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   [3] Radio Group
+-------------------------------------------------------------------------- */
+
+.radio[aria-checked='true'] .radio__dot {
+  border-color: var(--color-primary);
+}
+
+.radio[aria-checked='true'] .radio__dot::after {
+  background: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   [4] Chips / Pill
+-------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-sm) 12px;
+  background: var(--color-surface-alt);
+  color: var(--color-foreground-secondary);
+  border-radius: 999px;
+  font-size: var(--font-size-body-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chip[aria-pressed='true'],
+.chip.active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   [5] Book Card
+-------------------------------------------------------------------------- */
+
+.book-card {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--white);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.book-card[aria-pressed='true'],
+.book-card.selected {
+  border: 2px solid var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   [6] Card (일반)
+-------------------------------------------------------------------------- */
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--white);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+/* --------------------------------------------------------------------------
+   [7] Modal
+-------------------------------------------------------------------------- */
+
+.modal {
+  border-radius: 18px;
+  background: var(--white);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   [8] Chat Messages
+-------------------------------------------------------------------------- */
+
+.msg--ai {
+  background: var(--color-surface-alt);
+  color: var(--color-foreground);
+  align-self: flex-start;
+  border-radius: 8px;
+  padding: var(--spacing-sm) 12px;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
+.msg--user {
+  background: var(--color-primary);
+  color: var(--white);
+  align-self: flex-end;
+  border-radius: 8px;
+  padding: var(--spacing-sm) 12px;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
+/* --------------------------------------------------------------------------
+   [9] Match Gauge
+-------------------------------------------------------------------------- */
+
+.match-gauge {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--cgrey01);
+  overflow: hidden;
+  width: 100%;
+}
+
+.match-gauge__fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width var(--transition-base);
+}

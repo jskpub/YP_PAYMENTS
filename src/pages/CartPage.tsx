@@ -49,10 +49,10 @@ export const CartPage: React.FC = () => {
                         <span className='text-[#df0000] font-extrabold'>{cartStats.freeShippingShortfall.toLocaleString()}원</span> 더 담으면 <span className='font-extrabold text-[#181718]'>무료 배송</span>
                       </>
                     ) : (
-                      <span className='text-[#1f976b] font-extrabold'>무료 배송 기준(30,000원)을 달성했습니다!</span>
+                      <span className='text-[#1f976b] font-extrabold'>무료 배송 기준(10,000원)을 달성했습니다!</span>
                     )}
                   </div>
-                  <div className='text-xs text-[#80888a] mt-0.5'>30,000원 이상 결제 시 기본 배송비 무료 (미만 시 2,500원)</div>
+                  <div className='text-xs text-[#80888a] mt-0.5'>10,000원 이상 결제 시 기본 배송비 무료 (미만 시 2,500원)</div>
                 </div>
               </div>
 
@@ -84,7 +84,7 @@ export const CartPage: React.FC = () => {
 
               <div className='text-xs text-[#80888a] flex items-center gap-1'>
                 <span>서울/수도권 인근 월~토 12시까지 주문 시 당일배송</span>
-                <HelpCircle className='w-3.5 h-3.5 text-[#9c9c9c]' />
+                {/* <HelpCircle className='w-3.5 h-3.5 text-[#9c9c9c]' />서울/수도권 인근 월~토 12시까지 주문 시 당일배송 */}
               </div>
             </div>
 
@@ -262,8 +262,14 @@ export const CartPage: React.FC = () => {
                 <h4 className='font-bold text-[#181718] mb-1'>일반배송상품(택배수령) 안내사항</h4>
                 <ul className='list-disc list-inside space-y-0.5'>
                   <li>재고 여부에 따라 품절/지연될 수 있으며, 이 경우 별도로 안내드립니다.</li>
-                  <li>당일배송은 서울 및 수도권 인근지역에서 12:00까지 주문 시 가능합니다.</li>
-                  <li>직장, 기관 등의 배송지는 당일배송이 어려울 수 있으며, 학교 배송지는 당일배송이 불가합니다.</li>
+                  <li>
+                    당일배송은 서울 및 수도권 인근지역에서 12:00 까지 주문 시 가능합니다.
+                    <ul className='list-item list-inside space-y-0.5 pl-5 font-bold'>
+                      <li>- 네이버페이, 지마켓, 옥션, 쿠팡 등의 제휴사 주문은 연동시간에 따라 당일배송이 어려울 수 있습니다.</li>
+                      <li>- 직장, 기관 등의 배송지는 당일배송이 어려울 수 있으며, 학교 배송지는 당일배송이 불가합니다.</li>
+                    </ul>
+                  </li>
+                  <li>배송지가 동일하더라도 여러건으로 진행된 주문이 각각의 배송료가 부과됩니다.</li>
                 </ul>
               </div>
             </div>
@@ -302,7 +308,7 @@ export const CartPage: React.FC = () => {
             <div className='border border-[#cbd2d4] rounded-lg p-4 bg-white space-y-3'>
               <div className='flex items-center justify-between'>
                 <span className='font-bold text-sm text-[#181718]'>배송지</span>
-                <button
+                {/* <button
                   type='button'
                   onClick={() => {
                     setAddressModalTab('new');
@@ -311,7 +317,7 @@ export const CartPage: React.FC = () => {
                   className='text-xs text-[#80888a] hover:text-[#181718]'
                 >
                   해외로 배송 &gt;
-                </button>
+                </button> */}
               </div>
 
               {/* Selected destination selector */}
@@ -330,7 +336,7 @@ export const CartPage: React.FC = () => {
                 <p className='text-[#181718] font-medium'>• 내일 출고 가능</p>
                 <p>• 상품별 배송 예상일이 다른 경우, 가장 늦은 상품에 맞춰 함께 배송됩니다.</p>
               </div>
-
+              {/*
               <button
                 type='button'
                 onClick={() => {
@@ -340,7 +346,7 @@ export const CartPage: React.FC = () => {
                 className='text-xs text-[#df0000] hover:underline font-semibold block pt-1'
               >
                 배송지 등록 / 변경
-              </button>
+              </button> */}
             </div>
 
             {/* Order Summary Card */}
@@ -369,9 +375,10 @@ export const CartPage: React.FC = () => {
 
                 <div className='flex justify-between text-[#595959] items-center'>
                   <span className='flex items-center gap-1'>
-                    배송비 <HelpCircle className='w-3 h-3 text-[#9c9c9c]' />
+                    배송비
+                    {/* <HelpCircle className='w-3 h-3 text-[#9c9c9c]' /> */}
                   </span>
-                  <span>{cartStats.shippingFee === 0 ? '무료 (3만원 이상)' : `${cartStats.shippingFee.toLocaleString()}원`}</span>
+                  <span>{cartStats.shippingFee === 0 ? '무료 (1만원 이상)' : `${cartStats.shippingFee.toLocaleString()}원`}</span>
                 </div>
               </div>
 

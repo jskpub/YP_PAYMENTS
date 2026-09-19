@@ -211,7 +211,7 @@ export const DeliveryModal: React.FC = () => {
           {addressModalTab === 'new' && (
             <form onSubmit={handleSubmitNewAddress} className='space-y-3.5'>
               {/* 배송 방식 선택 */}
-              <div className='flex items-center gap-6 pb-1'>
+              {/* <div className='flex items-center gap-6 pb-1'>
                 <label className='flex items-center gap-2 cursor-pointer text-sm font-medium'>
                   <input type='radio' name='deliveryMethod' checked={deliveryType === 'domestic'} onChange={() => setDeliveryType('domestic')} className='w-4 h-4 accent-[#df0000]' />
                   <span>국내 배송</span>
@@ -220,7 +220,7 @@ export const DeliveryModal: React.FC = () => {
                   <input type='radio' name='deliveryMethod' checked={deliveryType === 'overseas'} onChange={() => setDeliveryType('overseas')} className='w-4 h-4 accent-[#df0000]' />
                   <span>해외배송(FedEx)</span>
                 </label>
-              </div>
+              </div> */}
 
               {/* 배송지명 */}
               <div className='grid grid-cols-[90px_1fr] sm:grid-cols-[100px_1fr] items-center gap-2'>
@@ -317,13 +317,6 @@ export const DeliveryModal: React.FC = () => {
               {/* Warning Notice Box (from delivery_new.png) */}
               <div className='bg-[#fffafa] border border-[#f9cdcd] rounded p-3.5 text-xs space-y-1 text-[#555a5c] leading-relaxed'>
                 <p className='text-[#df0000]'>• 당일배송 주문시는 반드시 주소를 재입력해주시기 바랍니다.</p>
-                <p>
-                  • 사서함 주소지(<span className='text-[#df0000]'>군부대, 교도소, 일부도서지역 등</span>)로 주문하실 경우 주문완료 후 <span className='text-[#df0000] font-semibold'>고객센터(1544-9020)</span> 또는 <span className='text-[#df0000] font-semibold'>1:1 상담</span>으로 반드시 연락주시기
-                  바랍니다.
-                </p>
-                <p>
-                  • <span className='text-[#df0000]'>학교</span>는 당일배송이 불가하며, <span className='text-[#df0000]'>직장</span>으로 배송받으시는 경우 토요일 배송 예정 시 수령이 불가능할 수 있습니다.
-                </p>
               </div>
 
               {/* Footer Actions */}

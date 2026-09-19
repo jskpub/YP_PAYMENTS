@@ -54,7 +54,7 @@ interface ShopContextType {
     shippingFee: number;
     finalPaymentAmount: number;
     totalRewardPoints: number;
-    freeShippingShortfall: number; // 30,000원 기준 부족분
+    freeShippingShortfall: number; // 10,000원 기준 부족분
     freeShippingProgress: number; // 0 to 100
     selectedCount: number;
   };
@@ -586,7 +586,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const totalEmployeePayment = selectedItems.reduce((acc, i) => acc + i.itemEmployeePayment, 0);
 
   // Free shipping policy: free over 10,000 won or 30,000 won (matches cart.png: 5,500원 도서 시 2,500원 배송비)
-  const FREE_SHIPPING_THRESHOLD = 30000;
+  const FREE_SHIPPING_THRESHOLD = 10000;
   const shippingFee = selectedItems.length === 0 || totalSellingPrice >= FREE_SHIPPING_THRESHOLD ? 0 : 2500;
   const freeShippingShortfall = Math.max(0, FREE_SHIPPING_THRESHOLD - totalSellingPrice);
   const freeShippingProgress = Math.min(100, Math.round((totalSellingPrice / FREE_SHIPPING_THRESHOLD) * 100));

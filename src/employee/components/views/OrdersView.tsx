@@ -128,13 +128,13 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
         <ChevronRight size={12} />
         <span className='text-gray-600'>내 주문 관리</span>
         <ChevronRight size={12} />
-        <span className='text-[#D7001E] font-bold'>주문/배송 조회</span>
+        <span className='text-[#D7001E] font-bold'>주문 조회</span>
       </div>
 
       {/* 헤더 */}
       <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200 pb-3'>
         <div>
-          <h1 className='text-2xl font-black text-gray-900 tracking-tight'>주문/배송 조회</h1>
+          <h1 className='text-2xl font-black text-gray-900 tracking-tight'>주문 조회</h1>
           <p className='text-xs text-gray-500 mt-1'>최근 주문하신 상품의 배송 상태 및 복합 지원금 결제 내역을 확인하실 수 있습니다.</p>
         </div>
         <div className='flex items-center gap-2'>
@@ -358,11 +358,11 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
         )}
       </div>
 
-      {/* 주문/배송 및 반품 안내 박스 */}
+      {/* 주문 및 반품 안내 박스 */}
       <div className='bg-[#FBFBFB] border border-gray-200 rounded-xl p-4 text-xs text-gray-600 space-y-2'>
         <h4 className='font-bold text-gray-900 flex items-center gap-1.5'>
           <Info size={14} className='text-[#D7001E]' />
-          <span>임직원 주문/배송 및 지원금 복원 정책 안내</span>
+          <span>임직원 주문 및 지원금 복원 정책 안내</span>
         </h4>
         <ul className='space-y-1 list-disc pl-4 text-[12px] text-gray-500 leading-relaxed'>
           <li>상품준비중 단계까지는 마이페이지에서 [주문취소]가 즉시 가능하며 결제금액 승인취소와 함께 지원금이 복원됩니다.</li>
