@@ -51,7 +51,7 @@ export const DirectLoginPortal: React.FC<DirectLoginPortalProps> = ({ onLoginSuc
     <div className='min-h-screen w-full flex flex-col md:flex-row font-sans antialiased bg-white select-none'>
       {/* Quick shortcut to Intranet at top right if needed for testing */}
       {onGoToIntranetSSO && (
-        <button onClick={onGoToIntranetSSO} className='fixed top-4 right-4 z-20 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-md transition-colors border border-slate-200 shadow-xs'>
+        <button onClick={onGoToIntranetSSO} className='fixed top-4 right-4 z-20 text-[12px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-md transition-colors border border-slate-200 shadow-xs'>
           사내 인트라넷 화면으로 이동 ↗
         </button>
       )}
@@ -61,8 +61,7 @@ export const DirectLoginPortal: React.FC<DirectLoginPortalProps> = ({ onLoginSuc
         {/* Top Left: Brand Logo + B2B Red Badge */}
         <div className='flex items-center gap-2.5'>
           <div className='w-8 h-8 rounded-full bg-yp-red text-white flex flex-col items-center justify-center font-black shadow-xs shrink-0 tracking-tighter overflow-hidden rounded-full'>
-
-            <img src="https://cdn.ypbooks.co.kr/front_web/assets/img/temp/yp_md_default.png" alt="" />
+            <img src='https://cdn.ypbooks.co.kr/front_web/assets/img/temp/yp_md_default.png' alt='' />
           </div>
           <span className='font-black text-xl tracking-tight text-white'>영풍문고</span>
           <span className='bg-yp-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded tracking-wide'>비즈몰</span>
@@ -78,7 +77,7 @@ export const DirectLoginPortal: React.FC<DirectLoginPortalProps> = ({ onLoginSuc
         </div>
 
         {/* Bottom Left Note */}
-        <div className='text-[11px] text-slate-400 font-normal'>대한전자 · 삼성전자 · LG전자 외 120여 개 기업이 함께합니다</div>
+        <div className='text-[12px] text-slate-400 font-normal'>대한전자 · 삼성전자 · LG전자 외 120여 개 기업이 함께합니다</div>
       </div>
 
       {/* Right Column: White Login Form */}
@@ -135,8 +134,8 @@ export const DirectLoginPortal: React.FC<DirectLoginPortalProps> = ({ onLoginSuc
 
           {/* Bottom Help */}
           <div className='pt-2 text-center space-y-4'>
-            <p className='text-[11px] text-slate-400'>사번을 잊으셨나요? IT 관리자에게 문의하세요.</p>
-            <p className='text-[11px] text-slate-400'>© 영풍문고 · 임직원 전용 시스템</p>
+            <p className='text-[12px] text-slate-400'>사번을 잊으셨나요? IT 관리자에게 문의하세요.</p>
+            <p className='text-[12px] text-slate-400'>© 영풍문고 · 임직원 전용 시스템</p>
           </div>
         </div>
       </div>

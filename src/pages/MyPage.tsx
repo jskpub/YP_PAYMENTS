@@ -23,11 +23,11 @@ export const MyPage: React.FC = () => {
 
           <div className='flex items-center gap-4 border-t md:border-t-0 md:border-l border-[#edf0f1] pt-3 md:pt-0 md:pl-6 w-full md:w-auto'>
             <div className='text-center px-3'>
-              <span className='text-[11px] text-[#80888a] block'>잔여 독서지원금</span>
+              <span className='text-[12px] text-[#80888a] block'>잔여 독서지원금</span>
               <span className='text-lg font-bold text-[#1f976b]'>{subsidyLedger.remainingSubsidy.toLocaleString()}원</span>
             </div>
             <div className='text-center px-3 border-l border-[#edf0f1]'>
-              <span className='text-[11px] text-[#80888a] block'>누적 주문수</span>
+              <span className='text-[12px] text-[#80888a] block'>누적 주문수</span>
               <span className='text-lg font-bold text-[#181718]'>{orders.length}건</span>
             </div>
           </div>

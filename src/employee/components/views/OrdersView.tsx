@@ -173,7 +173,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
           </div>
         </div>
 
-        <div className='flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-gray-100 gap-2'>
+        <div className='flex flex-col sm:flex-row items-center justify-between text-[12px] text-gray-400 pt-2 border-t border-gray-100 gap-2'>
           <span>• 배송상태는 택배사 배송망 연동 시점에 따라 실제와 약간의 오차가 있을 수 있습니다.</span>
           <div className='flex items-center gap-3 text-gray-600'>
             <span>
@@ -294,7 +294,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
                           >
                             {isCancelled ? '취소완료' : item.status}
                           </span>
-                          {!isCancelled && order.statusDescription && item.status === '상품준비중' && <p className='text-[11px] text-emerald-600 font-medium mt-0.5'>✓ 내일 도착 예정</p>}
+                          {!isCancelled && order.statusDescription && item.status === '상품준비중' && <p className='text-[12px] text-emerald-600 font-medium mt-0.5'>✓ 내일 도착 예정</p>}
                           {!isCancelled && order.deliveryTracker && item.status === '배송완료' && (
                             <p className='text-[10px] text-gray-400  mt-0.5'>
                               {order.deliveryTracker.carrier} {order.deliveryTracker.trackingNumber}
@@ -304,23 +304,23 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
 
                         <div className='flex items-center gap-1.5 w-full sm:justify-end'>
                           {!isCancelled && (
-                            <button type='button' onClick={() => alert(`배송조회: ${item.title}\n상태: ${item.status}\n배송지: ${order.shippingAddress}`)} className='py-1 px-2 text-[11px] border border-gray-300 rounded hover:bg-gray-50 text-gray-700 cursor-pointer'>
+                            <button type='button' onClick={() => alert(`배송조회: ${item.title}\n상태: ${item.status}\n배송지: ${order.shippingAddress}`)} className='py-1 px-2 text-[12px] border border-gray-300 rounded hover:bg-gray-50 text-gray-700 cursor-pointer'>
                               배송조회
                             </button>
                           )}
 
                           {isCancelled ? (
-                            <span className='text-[11px] text-gray-400 font-medium py-1'>지원금 복원 완료</span>
+                            <span className='text-[12px] text-gray-400 font-medium py-1'>지원금 복원 완료</span>
                           ) : item.status === '배송완료' ? (
-                            <button type='button' onClick={() => alert('리뷰 작성 시 300P 적립!')} className='py-1 px-2 text-[11px] font-bold text-white bg-[#D7001E] rounded hover:bg-red-700 cursor-pointer'>
+                            <button type='button' onClick={() => alert('리뷰 작성 시 300P 적립!')} className='py-1 px-2 text-[12px] font-bold text-white bg-[#D7001E] rounded hover:bg-red-700 cursor-pointer'>
                               리뷰작성 +300P
                             </button>
                           ) : (
                             <>
-                              <button type='button' onClick={() => alert('배송지 변경 화면입니다.')} className='py-1 px-2 text-[11px] border border-gray-300 rounded hover:bg-gray-50 text-gray-700 cursor-pointer'>
+                              <button type='button' onClick={() => alert('배송지 변경 화면입니다.')} className='py-1 px-2 text-[12px] border border-gray-300 rounded hover:bg-gray-50 text-gray-700 cursor-pointer'>
                                 배송지 변경
                               </button>
-                              <button type='button' onClick={() => handleCancelOrder(order.orderNumber)} className='py-1 px-2 text-[11px] text-red-600 font-bold border border-red-200 bg-red-50/50 rounded hover:bg-red-100 cursor-pointer transition-colors'>
+                              <button type='button' onClick={() => handleCancelOrder(order.orderNumber)} className='py-1 px-2 text-[12px] text-red-600 font-bold border border-red-200 bg-red-50/50 rounded hover:bg-red-100 cursor-pointer transition-colors'>
                                 주문취소
                               </button>
                             </>
@@ -364,7 +364,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, setOrders, benef
           <Info size={14} className='text-[#D7001E]' />
           <span>임직원 주문/배송 및 지원금 복원 정책 안내</span>
         </h4>
-        <ul className='space-y-1 list-disc pl-4 text-[11px] text-gray-500 leading-relaxed'>
+        <ul className='space-y-1 list-disc pl-4 text-[12px] text-gray-500 leading-relaxed'>
           <li>상품준비중 단계까지는 마이페이지에서 [주문취소]가 즉시 가능하며 결제금액 승인취소와 함께 지원금이 복원됩니다.</li>
           <li>
             <strong className='text-emerald-800'>★ 주문 취소 시 지원금 자동 환원:</strong> 임직원 도서 지원금이 적용된 주문을 취소할 경우, <strong>사내 권장도서 100% 지원 권수(1권)와 개인도서 지원금 잔여 한도가 실시간으로 즉시 복원</strong>되어 다음 주문에 바로 사용하실 수 있습니다.

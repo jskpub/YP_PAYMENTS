@@ -57,7 +57,7 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({ benefit, activeMenu, s
     <div className='flex-1'>
       {/* 임시 화면 안내 — 홈 구성은 영풍문고 측과 협의 예정 */}
       <div className='border-b border-amber-200 bg-amber-50'>
-        <div className='mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 text-[11px] font-medium text-amber-900'>
+        <div className='mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 text-[12px] font-medium text-amber-900'>
           <Info className='h-3.5 w-3.5 shrink-0' />
           <span>비즈몰 홈 화면 구성은 아직 확정 전입니다. 현재는 로그인 이후 진입점을 확인하기 위한 임시 화면입니다.</span>
         </div>
@@ -67,7 +67,7 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({ benefit, activeMenu, s
       <section className='bg-yp-ink text-white'>
         <div className='mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-10 md:flex-row md:items-center'>
           <div className='max-w-xl space-y-3'>
-            <span className='inline-flex items-center gap-2 rounded-full bg-yp-red px-3 py-1 text-[11px] font-bold'>임직원 도서 복지 프로그램</span>
+            <span className='inline-flex items-center gap-2 rounded-full bg-yp-red px-3 py-1 text-[12px] font-bold'>임직원 도서 복지 프로그램</span>
             <h1 className='text-2xl font-black leading-tight tracking-tight sm:text-3xl'>읽고 싶은 책, 회사가 함께 삽니다</h1>
             <p className='text-sm leading-relaxed text-white/80'>추천 도서는 회사가 전액 지원하고, 직접 고른 개인 도서는 절반을 지원합니다. 지원 한도는 매월 1일 새로 시작됩니다.</p>
           </div>
@@ -96,7 +96,7 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({ benefit, activeMenu, s
               />
             </div>
 
-            <p className='pt-1 text-[11px] text-white/60'>{benefit.resetDescription} · 미사용분은 다음 달로 이월되지 않습니다</p>
+            <p className='pt-1 text-[12px] text-white/60'>{benefit.resetDescription} · 미사용분은 다음 달로 이월되지 않습니다</p>
           </div>
         </div>
       </section>
@@ -110,7 +110,7 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({ benefit, activeMenu, s
                 <span className='flex h-12 w-12 items-center justify-center rounded-full border border-yp-gray-200 bg-white transition-all group-hover:border-yp-red'>
                   <Icon className='h-5 w-5 text-yp-gray-500 transition-colors group-hover:text-yp-red' />
                 </span>
-                <span className='whitespace-nowrap text-[11px] font-medium text-yp-gray-700 group-hover:text-yp-red'>{label}</span>
+                <span className='whitespace-nowrap text-[12px] font-medium text-yp-gray-700 group-hover:text-yp-red'>{label}</span>
               </button>
             ))}
           </div>
@@ -159,7 +159,7 @@ export const BizMallHome: React.FC<BizMallHomeProps> = ({ benefit, activeMenu, s
                       </p>
 
                       <div className='border-t border-yp-gray-100 pt-2'>
-                        <span className='mr-1.5 text-[11px] text-yp-gray-400 line-through'>{book.originalPrice.toLocaleString()}원</span>
+                        <span className='mr-1.5 text-[12px] text-yp-gray-400 line-through'>{book.originalPrice.toLocaleString()}원</span>
                         <span className='text-base font-extrabold text-yp-red'>{book.salePrice.toLocaleString()}원</span>
                         <span className='ml-1 rounded bg-yp-red-soft px-1 text-xs font-bold text-yp-red'>{book.discountRate}%</span>
                       </div>

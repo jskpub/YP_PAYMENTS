@@ -85,9 +85,9 @@ export const BookDetailPage: React.FC<BookDetailPageProps> = ({ book, benefit, c
           {/* 기본 정보 */}
           <div className='flex flex-col gap-4'>
             <div className='flex flex-wrap gap-1.5'>
-              {isRecommended && <span className='rounded bg-yp-red px-2.5 py-1 text-[11px] font-bold text-white'>이달의 추천도서</span>}
-              {book.recommender && <span className='rounded bg-yp-gray-800 px-2.5 py-1 text-[11px] font-bold text-white'>{book.recommender.type} 픽</span>}
-              <span className='rounded border border-yp-gray-200 px-2.5 py-1 text-[11px] font-semibold text-yp-gray-700'>무료배송</span>
+              {isRecommended && <span className='rounded bg-yp-red px-2.5 py-1 text-[12px] font-bold text-white'>이달의 추천도서</span>}
+              {book.recommender && <span className='rounded bg-yp-gray-800 px-2.5 py-1 text-[12px] font-bold text-white'>{book.recommender.type} 픽</span>}
+              <span className='rounded border border-yp-gray-200 px-2.5 py-1 text-[12px] font-semibold text-yp-gray-700'>무료배송</span>
             </div>
 
             <h1 className='break-keep text-3xl font-bold leading-tight tracking-tight text-yp-ink'>
@@ -147,12 +147,12 @@ export const BookDetailPage: React.FC<BookDetailPageProps> = ({ book, benefit, c
               </div>
 
               {quantity > price.subsidizedCount && price.subsidizedCount > 0 && (
-                <p className='rounded-lg bg-amber-50 p-3 text-[11px] leading-relaxed text-amber-900'>
+                <p className='rounded-lg bg-amber-50 p-3 text-[12px] leading-relaxed text-amber-900'>
                   지원은 이번 달 {price.subsidizedCount}권까지만 적용됩니다. 나머지 {quantity - price.subsidizedCount}권은 직원 부담입니다.
                 </p>
               )}
 
-              {!verdict.allowed && !isInCart && <p className='rounded-lg bg-yp-gray-50 p-3 text-[11px] leading-relaxed text-yp-gray-500'>{'reason' in verdict ? verdict.reason : ''}</p>}
+              {!verdict.allowed && !isInCart && <p className='rounded-lg bg-yp-gray-50 p-3 text-[12px] leading-relaxed text-yp-gray-500'>{'reason' in verdict ? verdict.reason : ''}</p>}
 
               {isInCart ? (
                 <button type='button' onClick={() => onRemoveFromCart(book.id)} className='w-full cursor-pointer rounded-lg border-2 border-yp-red py-3.5 text-sm font-bold text-yp-red hover:bg-yp-red-soft'>

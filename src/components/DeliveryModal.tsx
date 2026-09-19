@@ -153,7 +153,7 @@ export const DeliveryModal: React.FC = () => {
                     <div>
                       <div className='flex items-center gap-2'>
                         <span className='font-bold text-base text-[#181718]'>{addr.title}</span>
-                        {addr.isDefault && <span className='text-[11px] bg-[#df0000] text-white px-2 py-0.5 rounded font-medium'>기본배송지</span>}
+                        {addr.isDefault && <span className='text-[12px] bg-[#df0000] text-white px-2 py-0.5 rounded font-medium'>기본배송지</span>}
                       </div>
                       <div className='text-sm font-medium text-[#595959] mt-1'>
                         수령인: {addr.recipient} | {addr.phone1}

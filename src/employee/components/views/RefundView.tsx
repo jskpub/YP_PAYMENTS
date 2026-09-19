@@ -175,7 +175,7 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
 
                   {/* 금액 산정 영수증 (시안 7 우측 명세) */}
                   <div className='bg-white border border-gray-200 rounded-lg p-4 space-y-2.5'>
-                    <div className='flex justify-between text-gray-500 text-[11px] pb-1 border-b border-gray-100'>
+                    <div className='flex justify-between text-gray-500 text-[12px] pb-1 border-b border-gray-100'>
                       <span>결제 수단: 카카오페이 간편결제</span>
                     </div>
 
@@ -260,13 +260,13 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
                     </td>
                     <td className='py-3 px-4 text-left'>
                       <p className='font-bold text-gray-900'>『프로덕트 매니지먼트의 모든 것』</p>
-                      <p className='text-[11px] text-gray-500'>인사이트 | 1권 (주문번호: YP20260904-0193)</p>
+                      <p className='text-[12px] text-gray-500'>인사이트 | 1권 (주문번호: YP20260904-0193)</p>
                     </td>
                     <td className='py-3 px-3 text-gray-600'>{reason === 'change_mind' ? '단순 변심' : '도서 하자/파본'}</td>
                     <td className='py-3 px-3 text-right font-bold text-gray-900'>
                       {estimatedRefundAmount.toLocaleString()}원<span className='block text-[10px] text-emerald-700 font-normal'>지원금 +5,000원 복원 완료</span>
                     </td>
-                    <td className='py-3 px-3 whitespace-nowrap text-amber-700 font-semibold text-[11px]'>수거 진행중</td>
+                    <td className='py-3 px-3 whitespace-nowrap text-amber-700 font-semibold text-[12px]'>수거 진행중</td>
                     <td className='py-3 px-2'>
                       <button type='button' className='px-2 py-1 text-[10px] border border-gray-300 rounded hover:bg-gray-50'>
                         상세
@@ -286,19 +286,19 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
                     </td>
                     <td className='py-3 px-4 text-left'>
                       <p className='font-bold text-gray-900'>{item.bookTitle}</p>
-                      <p className='text-[11px] text-gray-500'>{item.authorAndPublisher}</p>
+                      <p className='text-[12px] text-gray-500'>{item.authorAndPublisher}</p>
                     </td>
-                    <td className='py-3 px-3 text-gray-600 text-[11px] max-w-xs'>{item.reason}</td>
+                    <td className='py-3 px-3 text-gray-600 text-[12px] max-w-xs'>{item.reason}</td>
                     <td className='py-3 px-3 text-right whitespace-nowrap'>
                       <p className='font-bold text-gray-900 text-sm'>{item.refundAmount.toLocaleString()}원</p>
                       <p className='text-[10px] text-emerald-700 font-medium'>{item.benefitRestored}</p>
                     </td>
                     <td className='py-3 px-3 whitespace-nowrap'>
-                      <span className='font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[11px]'>{item.status}</span>
+                      <span className='font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[12px]'>{item.status}</span>
                       <p className='text-[10px] text-gray-400 mt-0.5'>{item.processedDate}</p>
                     </td>
                     <td className='py-3 px-2 whitespace-nowrap'>
-                      <button type='button' onClick={() => alert(`[${item.receiptNumber}] ${item.type} 영수증/전표 출력 화면입니다.`)} className='px-2 py-1 text-[11px] border border-gray-300 rounded hover:bg-gray-100 text-gray-700 cursor-pointer'>
+                      <button type='button' onClick={() => alert(`[${item.receiptNumber}] ${item.type} 영수증/전표 출력 화면입니다.`)} className='px-2 py-1 text-[12px] border border-gray-300 rounded hover:bg-gray-100 text-gray-700 cursor-pointer'>
                         {item.type === '반품환불' ? '환불 영수증' : '취소 전표'}
                       </button>
                     </td>
@@ -321,7 +321,7 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
           <div className='space-y-3'>
             <div>
               <h5 className='font-bold text-gray-900'>1. 반품 및 환불 신청 가능 기간</h5>
-              <ul className='text-gray-600 pl-3 list-disc space-y-1 mt-1 text-[11px]'>
+              <ul className='text-gray-600 pl-3 list-disc space-y-1 mt-1 text-[12px]'>
                 <li>
                   <strong>출고 전/배송 준비 중:</strong> 고객센터 문의 없이 마이페이지에서 즉시 [주문취소] 가능하며 결제금액이 100% 즉시 환불됩니다.
                 </li>
@@ -336,7 +336,7 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
 
             <div>
               <h5 className='font-bold text-gray-900'>3. 반품 배송비 기준 안내</h5>
-              <ul className='text-gray-600 pl-3 list-disc space-y-1 mt-1 text-[11px]'>
+              <ul className='text-gray-600 pl-3 list-disc space-y-1 mt-1 text-[12px]'>
                 <li>
                   <strong>고객 단순 변심 및 주문 착오:</strong> 왕복 배송비 5,000원(편도 2,500원)이 최종 환불금에서 차감됩니다.
                 </li>
@@ -353,7 +353,7 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
           <div className='space-y-3'>
             <div className='bg-red-50/50 p-3 rounded-lg border border-red-100'>
               <h5 className='font-bold text-[#D7001E]'>2. ★ 임직원 도서 지원금 및 혜택 반환 정책</h5>
-              <ul className='text-gray-700 pl-3 list-disc space-y-1 mt-1 text-[11px]'>
+              <ul className='text-gray-700 pl-3 list-disc space-y-1 mt-1 text-[12px]'>
                 <li>
                   <strong>추천도서 (100% 지원):</strong> 반품 승인 완료 즉시 당월 지원 횟수(권수) 및 한도가 100% 원상 복구됩니다.
                 </li>
@@ -366,13 +366,13 @@ export const RefundView: React.FC<RefundViewProps> = ({ refundHistories, benefit
 
             <div>
               <h5 className='font-bold text-gray-900'>4. 결제 수단별 환불 소요 기간</h5>
-              <p className='text-gray-600 text-[11px] mt-1'>신용/체크카드: 3~5 영업일 / 간편결제(카카오/네이버페이): 당일 또는 익영업일 즉시 복원 / 무통장: 1영업일 이내 계좌 입금</p>
+              <p className='text-gray-600 text-[12px] mt-1'>신용/체크카드: 3~5 영업일 / 간편결제(카카오/네이버페이): 당일 또는 익영업일 즉시 복원 / 무통장: 1영업일 이내 계좌 입금</p>
             </div>
           </div>
         </div>
 
         {/* 불가 사유 */}
-        <div className='bg-amber-50/70 border border-amber-200 rounded-lg p-3 text-[11px] text-amber-950 space-y-1'>
+        <div className='bg-amber-50/70 border border-amber-200 rounded-lg p-3 text-[12px] text-amber-950 space-y-1'>
           <p className='font-bold flex items-center gap-1 text-amber-900'>
             <AlertCircle size={13} />
             <span>⚠️ 반품 / 환불이 불가능한 경우 (유의사항)</span>

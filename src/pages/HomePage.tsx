@@ -25,7 +25,7 @@ export const HomePage: React.FC = () => {
       <section className='bg-[#181718] text-white'>
         <div className='max-w-[1280px] mx-auto px-4 py-10 md:py-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8'>
           <div className='max-w-2xl space-y-3'>
-            <span className='inline-flex items-center gap-2 bg-[#df0000] rounded-full px-3 py-1 text-[11px] font-bold'>임직원 도서 복지 프로그램</span>
+            <span className='inline-flex items-center gap-2 bg-[#df0000] rounded-full px-3 py-1 text-[12px] font-bold'>임직원 도서 복지 프로그램</span>
             <h1 className='text-2xl sm:text-3xl font-black leading-tight'>읽고 싶은 책, 회사가 함께 삽니다</h1>
             <p className='text-sm leading-relaxed text-white/75'>
               추천도서는 회사가 전액 지원하고, 직접 고른 개인도서는 50%를 지원합니다.
@@ -64,7 +64,7 @@ export const HomePage: React.FC = () => {
               <span className='flex h-11 w-11 items-center justify-center rounded-full border border-[#cbd2d4] bg-white group-hover:border-[#df0000]'>
                 <Icon className='h-5 w-5 text-[#80888a] group-hover:text-[#df0000]' />
               </span>
-              <span className='text-[11px] font-semibold text-[#595959] group-hover:text-[#df0000]'>{label}</span>
+              <span className='text-[12px] font-semibold text-[#595959] group-hover:text-[#df0000]'>{label}</span>
             </button>
           ))}
         </div>

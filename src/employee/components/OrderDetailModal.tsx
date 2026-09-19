@@ -20,7 +20,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ isOpen, onCl
             <Package size={18} />
             <div>
               <h3 className='font-bold text-base'>주문 및 지원금 적용 상세</h3>
-              <p className='text-[11px] text-gray-300 '>주문번호: {order.orderNumber}</p>
+              <p className='text-[12px] text-gray-300 '>주문번호: {order.orderNumber}</p>
             </div>
           </div>
           <button type='button' onClick={onClose} className='p-1 hover:bg-gray-800 rounded-full cursor-pointer'>
@@ -33,7 +33,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ isOpen, onCl
           {/* 상태 배너 */}
           <div className='bg-red-50 border border-red-100 p-3 rounded-lg flex items-center justify-between'>
             <span className='font-bold text-[#D7001E]'>주문상태: {order.status}</span>
-            <span className='text-gray-500 text-[11px]'>{order.orderDate} 결제완료</span>
+            <span className='text-gray-500 text-[12px]'>{order.orderDate} 결제완료</span>
           </div>
 
           {/* 도서 품목 리스트 */}
@@ -48,14 +48,14 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ isOpen, onCl
                       <span className='text-[10px] text-emerald-700 font-semibold'>{item.supportLabel}</span>
                     </div>
                     <p className='font-bold text-gray-900'>{item.title}</p>
-                    <p className='text-gray-500 text-[11px]'>
+                    <p className='text-gray-500 text-[12px]'>
                       {item.author} 저 · 수량 {item.quantity}권
                     </p>
                   </div>
                   <div className='text-right shrink-0'>
                     <p className='font-bold text-gray-900'>{item.salePrice.toLocaleString()}원</p>
-                    {item.benefitAmount > 0 && <p className='text-[11px] text-[#D7001E] font-medium'>지원금 -{item.benefitAmount.toLocaleString()}원</p>}
-                    <p className='text-[11px] font-semibold text-gray-700'>실결제: {item.selfPay.toLocaleString()}원</p>
+                    {item.benefitAmount > 0 && <p className='text-[12px] text-[#D7001E] font-medium'>지원금 -{item.benefitAmount.toLocaleString()}원</p>}
+                    <p className='text-[12px] font-semibold text-gray-700'>실결제: {item.selfPay.toLocaleString()}원</p>
                   </div>
                 </div>
               ))}
@@ -81,7 +81,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ isOpen, onCl
               <span>최종 본인 실 결제금액</span>
               <span className='text-lg text-[#D7001E] font-black'>{order.finalPaidAmount.toLocaleString()}원</span>
             </div>
-            <p className='text-[11px] text-gray-500 pt-1'>결제 수단: {order.paymentMethod}</p>
+            <p className='text-[12px] text-gray-500 pt-1'>결제 수단: {order.paymentMethod}</p>
           </div>
 
           {/* 배송지 정보 */}

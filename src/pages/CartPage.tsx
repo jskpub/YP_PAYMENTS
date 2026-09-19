@@ -143,7 +143,7 @@ export const CartPage: React.FC = () => {
                             )}
 
                             {/* 종이책 / 전자책 — 토글이 아니라 해당 도서의 실제 형태를 보여주는 정보성 뱃지 (하나만 표시) */}
-                            <span className={`text-[11px] px-2 py-0.5 rounded-lg border font-medium inline-flex items-center gap-1 ${isEbook ? 'bg-[#eef2ff] text-[#4338ca] border-[#c7d2fe]' : 'bg-[#f6f6f6] text-[#555a5c] border-[#cbd2d4]'}`}>
+                            <span className={`text-[12px] px-2 py-0.5 rounded-lg border font-medium inline-flex items-center gap-1 ${isEbook ? 'bg-[#eef2ff] text-[#4338ca] border-[#c7d2fe]' : 'bg-[#f6f6f6] text-[#555a5c] border-[#cbd2d4]'}`}>
                               {isEbook ? <Smartphone className='w-3 h-3' /> : <BookOpen className='w-3 h-3' />}
                               {isEbook ? '전자책' : '종이책'}
                             </span>
@@ -171,7 +171,7 @@ export const CartPage: React.FC = () => {
                       <div className='flex sm:flex-col items-center justify-between sm:justify-center gap-2 w-full text-center'>
                         <div>
                           <div className='font-bold text-base text-[#181718]'>{item.itemSellingPrice.toLocaleString()}원</div>
-                          {/* <div className='text-[11px] text-[#80888a]'>
+                          {/* <div className='text-[12px] text-[#80888a]'>
                             ({item.book.sellingPrice.toLocaleString()}원 × {item.quantity})
                           </div> */}
                         </div>
@@ -326,7 +326,7 @@ export const CartPage: React.FC = () => {
                 <ChevronDown className='w-4 h-4 text-[#80888a]' />
               </div>
 
-              <div className='text-[11px] text-[#80888a] space-y-1'>
+              <div className='text-[12px] text-[#80888a] space-y-1'>
                 <p className='text-[#181718] font-medium'>• 내일 출고 가능</p>
                 <p>• 상품별 배송 예상일이 다른 경우, 가장 늦은 상품에 맞춰 함께 배송됩니다.</p>
               </div>
@@ -380,7 +380,7 @@ export const CartPage: React.FC = () => {
                 <div className='flex justify-between items-baseline'>
                   <div>
                     <span className='font-bold text-sm text-[#181718] block'>결제 예정 금액</span>
-                    <span className='text-[11px] text-[#80888a]'>(지원금 미반영)</span>
+                    <span className='text-[12px] text-[#80888a]'>(지원금 미반영)</span>
                   </div>
                   <div className='text-right'>
                     <span className='text-2xl font-black text-[#df0000]'>{(cartStats.totalSellingPrice + cartStats.shippingFee).toLocaleString()}</span>
@@ -389,7 +389,7 @@ export const CartPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* <div className='text-[11px] text-[#595959] border-t border-[#edf0f1] pt-2 space-y-1'>
+              {/* <div className='text-[12px] text-[#595959] border-t border-[#edf0f1] pt-2 space-y-1'>
                 <div className='flex justify-between'>
                   <span>기본 적립 포인트</span>
                   <span className='text-[#181718] font-semibold'>P {cartStats.totalRewardPoints.toLocaleString()}원</span>
@@ -405,7 +405,7 @@ export const CartPage: React.FC = () => {
 
             {/* Naver Pay Button Box matching cart.png */}
             <div className='border border-[#cbd2d4] rounded-lg p-3 bg-white text-center space-y-2' style={{ display: 'none' }}>
-              <div className='text-[11px] text-[#595959]'>
+              <div className='text-[12px] text-[#595959]'>
                 <span className='font-bold text-[#03c75a]'>NAVER</span> 네이버ID로 간편구매
               </div>
               <button onClick={handleOrderClick} className='w-full py-2 rounded bg-[#03c75a] text-white font-bold text-xs flex items-center justify-center gap-1 shadow-xs hover:bg-[#02b350]'>

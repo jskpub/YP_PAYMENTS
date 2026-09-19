@@ -182,7 +182,7 @@ export const CartView: React.FC<CartViewProps> = ({ cartBooks, setCartBooks, ben
                         <div className='flex items-center gap-1.5 flex-wrap'>
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${book.supportType === 'recommended' ? 'bg-emerald-100 text-emerald-800' : book.supportType === 'personal' ? 'bg-red-100 text-[#D7001E]' : 'bg-gray-100 text-gray-700'}`}>{book.category}</span>
                           <span
-                            className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
+                            className={`text-[12px] font-semibold px-2 py-0.5 rounded-full border ${
                               book.supportType === 'recommended' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : book.supportType === 'personal' ? 'bg-red-50 text-[#D7001E] border-red-200' : 'bg-blue-50 text-blue-700 border-blue-200'
                             }`}
                           >
@@ -200,10 +200,10 @@ export const CartView: React.FC<CartViewProps> = ({ cartBooks, setCartBooks, ben
                           <span className='font-bold text-gray-900'>{book.salePrice.toLocaleString()}원</span>
                           <span className='text-[#D7001E] font-bold'>({book.discountRate}% 할인)</span>
                           <span className='text-gray-300'>|</span>
-                          <span className='text-blue-600 text-[11px]'>{book.pointReward}P 적립</span>
+                          <span className='text-blue-600 text-[12px]'>{book.pointReward}P 적립</span>
                         </div>
 
-                        <p className='text-[11px] text-emerald-600 font-medium pt-0.5'>✓ {book.shippingInfo}</p>
+                        <p className='text-[12px] text-emerald-600 font-medium pt-0.5'>✓ {book.shippingInfo}</p>
                       </div>
                     </div>
 
@@ -289,7 +289,7 @@ export const CartView: React.FC<CartViewProps> = ({ cartBooks, setCartBooks, ben
                   </span>
                   <span>-{totalBenefitDiscount.toLocaleString()}원</span>
                 </div>
-                <div className='text-[11px] text-gray-600 space-y-0.5 pl-3 border-l-2 border-red-200'>
+                <div className='text-[12px] text-gray-600 space-y-0.5 pl-3 border-l-2 border-red-200'>
                   <div className='flex justify-between'>
                     <span>• 추천도서 100% 전액지원:</span>
                     <span className='font-semibold text-emerald-700'>-{recommendedDiscount.toLocaleString()}원</span>
@@ -311,7 +311,7 @@ export const CartView: React.FC<CartViewProps> = ({ cartBooks, setCartBooks, ben
                 </div>
               </div>
 
-              <div className='flex justify-between items-center text-[11px] text-gray-500 pt-1'>
+              <div className='flex justify-between items-center text-[12px] text-gray-500 pt-1'>
                 <span>예상 적립 포인트</span>
                 <span className='font-semibold text-blue-600'>{totalPoints.toLocaleString()} P</span>
               </div>
@@ -342,7 +342,7 @@ export const CartView: React.FC<CartViewProps> = ({ cartBooks, setCartBooks, ben
             </div>
 
             {/* 장바구니 이용 안내 */}
-            <div className='bg-gray-50 rounded-lg p-3 text-[11px] text-gray-500 space-y-1 border border-gray-100'>
+            <div className='bg-gray-50 rounded-lg p-3 text-[12px] text-gray-500 space-y-1 border border-gray-100'>
               <p className='font-bold text-gray-700'>장바구니 이용 안내</p>
               <p>• 장바구니에 담긴 도서는 최대 30일간 보관됩니다.</p>
               <p>• 임직원 도서 지원금은 '주문서 작성/결제' 화면에서 실 결제 시 최종 적용됩니다.</p>

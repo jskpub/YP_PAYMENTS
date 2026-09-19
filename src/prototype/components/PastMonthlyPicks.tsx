@@ -25,47 +25,43 @@ const MonthRow: React.FC<{ picks: PastMonthPicks }> = ({ picks }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-[22px] font-bold tracking-[-0.5px] text-yp-ink">
+    <div className='flex flex-col gap-6'>
+      <h2 className='text-[22px] font-bold tracking-[-0.5px] text-yp-ink'>
         {picks.year}.{String(picks.month).padStart(2, '0')}
       </h2>
 
-      <div className="flex items-center gap-4">
+      <div className='flex items-center gap-4'>
         <button
-          type="button"
-          aria-label="이전 도서 보기"
+          type='button'
+          aria-label='이전 도서 보기'
           onClick={() => scrollByPage(-1)}
           disabled={scroll.left <= 0}
-          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-yp-gray-200 bg-white text-yp-ink transition-opacity disabled:cursor-default disabled:opacity-30"
+          className='flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-yp-gray-200 bg-white text-yp-ink transition-opacity disabled:cursor-default disabled:opacity-30'
         >
-          <ChevronLeft className="h-[18px] w-[18px]" />
+          <ChevronLeft className='h-[18px] w-[18px]' />
         </button>
 
-        <div
-          ref={trackRef}
-          onScroll={syncScroll}
-          className="flex flex-1 gap-5 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
+        <div ref={trackRef} onScroll={syncScroll} className='flex flex-1 gap-5 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
           {picks.books.map((book) => (
-            <div key={book.id} className="flex shrink-0 flex-col gap-2.5" style={{ width: CARD_WIDTH }}>
-              <BookCover book={book} className="h-[200px] w-full" titleClassName="text-[13px] leading-[1.35]" />
-              <p className="line-clamp-2 break-keep text-sm font-bold leading-snug text-yp-ink">{book.title}</p>
-              <div className="flex flex-col gap-1">
-                <p className="truncate text-xs text-yp-gray-500">{book.author}</p>
-                <p className="truncate text-[11px] text-yp-gray-400">{book.targetLabel}</p>
+            <div key={book.id} className='flex shrink-0 flex-col gap-2.5' style={{ width: CARD_WIDTH }}>
+              <BookCover book={book} className='h-[200px] w-full' titleClassName='text-[13px] leading-[1.35]' />
+              <p className='line-clamp-2 break-keep text-sm font-bold leading-snug text-yp-ink'>{book.title}</p>
+              <div className='flex flex-col gap-1'>
+                <p className='truncate text-xs text-yp-gray-500'>{book.author}</p>
+                <p className='truncate text-[12px] text-yp-gray-400'>{book.targetLabel}</p>
               </div>
             </div>
           ))}
         </div>
 
         <button
-          type="button"
-          aria-label="다음 도서 보기"
+          type='button'
+          aria-label='다음 도서 보기'
           onClick={() => scrollByPage(1)}
           disabled={scroll.left >= scroll.max - 1}
-          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-yp-gray-200 bg-white text-yp-ink transition-opacity disabled:cursor-default disabled:opacity-30"
+          className='flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-yp-gray-200 bg-white text-yp-ink transition-opacity disabled:cursor-default disabled:opacity-30'
         >
-          <ChevronRight className="h-[18px] w-[18px]" />
+          <ChevronRight className='h-[18px] w-[18px]' />
         </button>
       </div>
     </div>
@@ -77,17 +73,13 @@ export const PastMonthlyPicks: React.FC = () => {
   const hasMore = visibleMonths < PAST_MONTHLY_PICKS.length;
 
   return (
-    <section className="mt-16 flex w-full flex-col gap-14 border-t border-yp-gray-200 pt-16">
+    <section className='mt-16 flex w-full flex-col gap-14 border-t border-yp-gray-200 pt-16'>
       {PAST_MONTHLY_PICKS.slice(0, visibleMonths).map((picks) => (
         <MonthRow key={picks.month} picks={picks} />
       ))}
 
       {hasMore && (
-        <button
-          type="button"
-          onClick={() => setVisibleMonths((count) => count + MONTHS_PER_PAGE)}
-          className="mx-auto h-13 cursor-pointer rounded-lg border border-yp-gray-200 bg-white px-8 text-sm font-bold text-yp-ink transition-colors hover:bg-yp-gray-50"
-        >
+        <button type='button' onClick={() => setVisibleMonths((count) => count + MONTHS_PER_PAGE)} className='mx-auto h-13 cursor-pointer rounded-lg border border-yp-gray-200 bg-white px-8 text-sm font-bold text-yp-ink transition-colors hover:bg-yp-gray-50'>
           지난 추천도서 더보기
         </button>
       )}

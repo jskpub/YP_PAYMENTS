@@ -139,7 +139,7 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
             <option>인기순</option>
             <option>낮은 가격순</option>
           </select>
-          <span className='text-[11px] text-gray-400 hidden md:inline'>찜한 상품은 최대 200개까지 보관됩니다.</span>
+          <span className='text-[12px] text-gray-400 hidden md:inline'>찜한 상품은 최대 200개까지 보관됩니다.</span>
         </div>
       </div>
 
@@ -168,13 +168,13 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
                     <div className='flex items-center gap-1.5 flex-wrap'>
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${book.supportType === 'recommended' ? 'bg-emerald-100 text-emerald-800' : book.supportType === 'personal' ? 'bg-red-100 text-[#D7001E]' : 'bg-gray-100 text-gray-700'}`}>{book.category}</span>
                       <span
-                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
+                        className={`text-[12px] font-semibold px-2 py-0.5 rounded-full border ${
                           book.supportType === 'recommended' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : book.supportType === 'personal' ? 'bg-red-50 text-[#D7001E] border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
                         }`}
                       >
                         {book.supportBadge}
                       </span>
-                      <span className='text-[11px] text-emerald-600 font-medium'>{book.shippingInfo}</span>
+                      <span className='text-[12px] text-emerald-600 font-medium'>{book.shippingInfo}</span>
                     </div>
 
                     <h3 className='font-bold text-gray-900 text-sm hover:text-[#D7001E] transition-colors cursor-pointer'>{book.title}</h3>
@@ -190,10 +190,10 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
                       {/* 지원금 실 결제 예상 금액 계산 바 */}
                       {book.supportType === 'recommended' && <span className='bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded font-bold text-xs border border-emerald-200'>실 결제 예상: 0원 (임직원 지원금 {book.salePrice.toLocaleString()}원 전액차감)</span>}
                       {book.supportType === 'personal' && <span className='bg-red-50 text-[#D7001E] px-2 py-0.5 rounded font-bold text-xs border border-red-200'>실 결제 예상: {(book.salePrice - 5000).toLocaleString()}원 (잔여 지원금 5,000원 차감 적용 시)</span>}
-                      {book.supportType === 'general' && book.pointReward && <span className='text-blue-600 text-[11px]'>{book.pointReward}P 적립 (+5%)</span>}
+                      {book.supportType === 'general' && book.pointReward && <span className='text-blue-600 text-[12px]'>{book.pointReward}P 적립 (+5%)</span>}
                     </div>
 
-                    <div className='flex items-center gap-3 text-[11px] text-gray-400 pt-1'>
+                    <div className='flex items-center gap-3 text-[12px] text-gray-400 pt-1'>
                       <span className='flex items-center gap-1 text-red-500'>
                         <Heart size={11} fill='currentColor' /> {book.likesCount?.toLocaleString()}
                       </span>
@@ -205,9 +205,9 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
 
                 {/* 우측 액션 버튼 열 */}
                 <div className='w-full md:w-40 flex flex-row md:flex-col items-center gap-1.5 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-gray-100'>
-                  {book.supportType === 'recommended' && <span className='w-full text-center py-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded'>전액 지원 가능</span>}
-                  {book.supportType === 'personal' && <span className='w-full text-center py-1 text-[11px] font-bold text-[#D7001E] bg-red-50 border border-red-200 rounded'>지원금 5,000원 적용</span>}
-                  {book.supportType === 'general' && <span className='w-full text-center py-1 text-[11px] text-gray-500 bg-gray-50 border border-gray-200 rounded'>일반 배송도서</span>}
+                  {book.supportType === 'recommended' && <span className='w-full text-center py-1 text-[12px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded'>전액 지원 가능</span>}
+                  {book.supportType === 'personal' && <span className='w-full text-center py-1 text-[12px] font-bold text-[#D7001E] bg-red-50 border border-red-200 rounded'>지원금 5,000원 적용</span>}
+                  {book.supportType === 'general' && <span className='w-full text-center py-1 text-[12px] text-gray-500 bg-gray-50 border border-gray-200 rounded'>일반 배송도서</span>}
 
                   <button
                     type='button'
@@ -224,7 +224,7 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
                     바로구매
                   </button>
 
-                  <button type='button' onClick={() => handleDeleteBook(book.id)} className='text-[11px] text-gray-400 hover:text-red-500 flex items-center gap-0.5 mt-1 cursor-pointer'>
+                  <button type='button' onClick={() => handleDeleteBook(book.id)} className='text-[12px] text-gray-400 hover:text-red-500 flex items-center gap-0.5 mt-1 cursor-pointer'>
                     <Trash2 size={12} />
                     <span>삭제</span>
                   </button>
@@ -284,7 +284,7 @@ export const WishlistView: React.FC<WishlistViewProps> = ({ books, setBooks, onA
           <Info size={14} className='text-[#D7001E]' />
           <span>위시리스트 이용 및 지원금 결제 안내</span>
         </h4>
-        <ul className='space-y-1 list-disc pl-4 text-[11px] text-gray-500'>
+        <ul className='space-y-1 list-disc pl-4 text-[12px] text-gray-500'>
           <li>위시리스트(찜한 도서)는 최대 200권까지 보관 가능하며, 장기간 보관 시 출판사의 사정으로 가격 변동이나 품절/절판이 발생할 수 있습니다.</li>
           <li>
             <strong>임직원 도서 지원금:</strong> 추천도서(100% 무료 지원) 및 개인도서(권당 지원한도 5,000원)는 결제 단계에서 자동 적용되며, 잔여 지원금 한도 내에서 차감됩니다.

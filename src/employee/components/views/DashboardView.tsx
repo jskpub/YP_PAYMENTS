@@ -22,7 +22,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ benefitState, cart
       {/* 임직원 지원금 바로가기 하이라이트 배너 */}
       <div className='bg-gradient-to-r from-red-600 to-[#D7001E] text-white rounded-xl p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
         <div>
-          <span className='bg-white/20 text-white text-[11px] font-bold px-2 py-0.5 rounded-full mb-2 inline-block'>2026년 상반기 임직원 복지혜택</span>
+          <span className='bg-white/20 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mb-2 inline-block'>2026년 상반기 임직원 복지혜택</span>
           <h2 className='text-xl font-black tracking-tight'>도서 지원금 잔여 {benefitState.personalBook.remainingAmount.toLocaleString()}원 + 추천도서 100% 지원</h2>
           <p className='text-xs text-red-100 mt-1'>사내 권장도서 100선 1권 무료 지원 및 개인 자유도서 50% 차감 혜택을 이용해보세요.</p>
         </div>
@@ -104,7 +104,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ benefitState, cart
           <span className='text-gray-600'>기본 수령매장:</span>
           <span className='font-bold text-gray-900'>영풍문고 강남역점 (지하 1층)</span>
         </div>
-        <p className='text-[11px] text-gray-400'>• 기본 수령매장을 설정하시면 온라인에서 결제하고 매장에서 바로 책을 수령하는 빠른 나우드림 주문이 가능합니다.</p>
+        <p className='text-[12px] text-gray-400'>• 기본 수령매장을 설정하시면 온라인에서 결제하고 매장에서 바로 책을 수령하는 빠른 나우드림 주문이 가능합니다.</p>
       </div>
 
       {/* 내 서재 & 위시리스트 요약 (시안 2) */}
@@ -123,7 +123,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ benefitState, cart
               <span>기본 서재 (찜한 도서)</span>
               <span className='text-[#D7001E]'>{wishlistCount}권 보관중</span>
             </div>
-            <p className='text-gray-500 text-[11px]'>임직원 추천 도서 및 개인 지원금 적용 도서가 위시리스트에 저장되어 있습니다.</p>
+            <p className='text-gray-500 text-[12px]'>임직원 추천 도서 및 개인 지원금 적용 도서가 위시리스트에 저장되어 있습니다.</p>
             <button type='button' onClick={() => setActiveTab('wishlist')} className='text-[#D7001E] font-semibold hover:underline flex items-center gap-1 pt-1'>
               <span>위시리스트 바로가기</span>
               <ChevronRight size={13} />
@@ -135,7 +135,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ benefitState, cart
               <span>사내 권장도서 100선</span>
               <span className='text-emerald-700'>100% 무료 지원</span>
             </div>
-            <p className='text-gray-500 text-[11px]'>올해 상반기 지정된 사내 추천도서 목록을 둘러보고 무료로 신청하세요.</p>
+            <p className='text-gray-500 text-[12px]'>올해 상반기 지정된 사내 추천도서 목록을 둘러보고 무료로 신청하세요.</p>
             <button type='button' onClick={onOpenRecommendedModal} className='text-emerald-700 font-semibold hover:underline flex items-center gap-1 pt-1'>
               <span>권장도서 목록 보기</span>
               <ChevronRight size={13} />
@@ -160,8 +160,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ benefitState, cart
             <p className='font-bold text-gray-800 mt-0.5'>[협업 제안] [새싹 청년 취업 사관학교 강동 캠퍼스 AI PM 교육]</p>
           </div>
           <div className='flex items-center gap-2 shrink-0'>
-            <span className='bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[11px]'>답변완료</span>
-            <button type='button' onClick={() => alert('추가 문의하기 입력 창입니다.')} className='px-2 py-1 bg-white border border-gray-300 rounded text-[11px] text-gray-700 hover:bg-gray-100'>
+            <span className='bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[12px]'>답변완료</span>
+            <button type='button' onClick={() => alert('추가 문의하기 입력 창입니다.')} className='px-2 py-1 bg-white border border-gray-300 rounded text-[12px] text-gray-700 hover:bg-gray-100'>
               추가 문의하기
             </button>
           </div>

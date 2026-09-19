@@ -95,7 +95,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
                   삭제
                 </button>
               </div>
-              <p className='text-[11px] text-gray-400'>JPG, PNG 파일 (최대 5MB, 1:1 권장, 선택 항목)</p>
+              <p className='text-[12px] text-gray-400'>JPG, PNG 파일 (최대 5MB, 1:1 권장, 선택 항목)</p>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
                 <span>임직원 인증완료</span>
               </span>
             </div>
-            <p className='text-[11px] text-gray-500'>영풍문고 임직원 사번 및 고유 ID입니다. 정보 수정이 필요한 경우 인사과로 문의하세요.</p>
+            <p className='text-[12px] text-gray-500'>영풍문고 임직원 사번 및 고유 ID입니다. 정보 수정이 필요한 경우 인사과로 문의하세요.</p>
           </div>
         </div>
 
@@ -133,7 +133,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
           <div className='flex-1 space-y-2'>
             <div className='flex items-center gap-2'>
               <input type='email' required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className='w-72 p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#D7001E]' />
-              <span className='px-2.5 py-1 text-[11px] font-semibold text-gray-600 bg-gray-100 border border-gray-300 rounded'>인증완료</span>
+              <span className='px-2.5 py-1 text-[12px] font-semibold text-gray-600 bg-gray-100 border border-gray-300 rounded'>인증완료</span>
             </div>
             <label className='flex items-center gap-2 text-gray-600 cursor-pointer'>
               <input type='checkbox' checked={formData.emailConsent} onChange={(e) => setFormData({ ...formData, emailConsent: e.target.checked })} className='accent-[#D7001E] w-3.5 h-3.5' />
@@ -168,7 +168,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
             <input type='password' placeholder='현재 비밀번호를 입력해 주세요' className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#D7001E]' />
             <input type='password' placeholder='새 비밀번호 입력 (영문, 숫자, 특수문자 조합 8~16자리)' className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#D7001E]' />
             <input type='password' placeholder='새 비밀번호를 한번 더 입력해 주세요' className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#D7001E]' />
-            <p className='text-[11px] text-gray-400'>영문 대/소문자, 숫자, 특수문자(!@#$%^&* 등)를 조합하여 8~16자리로 안전하게 설정해 주세요.</p>
+            <p className='text-[12px] text-gray-400'>영문 대/소문자, 숫자, 특수문자(!@#$%^&* 등)를 조합하여 8~16자리로 안전하게 설정해 주세요.</p>
           </div>
         </div>
 
@@ -206,7 +206,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
                 </label>
               </div>
             </div>
-            <p className='text-[11px] text-gray-500'>등록된 생년월일을 기준으로 매년 생일 축하 할인 쿠폰이 자동 발급됩니다.</p>
+            <p className='text-[12px] text-gray-500'>등록된 생년월일을 기준으로 매년 생일 축하 할인 쿠폰이 자동 발급됩니다.</p>
           </div>
         </div>
 
@@ -241,7 +241,7 @@ export const MemberInfoView: React.FC<MemberInfoViewProps> = ({ benefitState, se
           </button>
         </div>
 
-        <div className='text-center pt-2 text-[11px] text-gray-400'>
+        <div className='text-center pt-2 text-[12px] text-gray-400'>
           영풍문고 서비스 탈퇴를 원하시나요?{' '}
           <button type='button' onClick={() => alert('회원탈퇴 문의 창입니다.')} className='text-gray-500 hover:underline cursor-pointer'>
             회원탈퇴 바로가기

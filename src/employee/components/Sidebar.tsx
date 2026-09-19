@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
             <span className='text-xs text-slate-300 font-normal'>({benefitState.user.grade})</span>
             <ChevronRight size={14} className='text-slate-400 group-hover:translate-x-0.5 transition-transform' />
           </button>
-          <span className='text-[11px] text-red-200 bg-red-900/40 px-2 py-0.5 rounded-full mt-1 border border-red-400/30'>사번 {benefitState.user.employeeId}</span>
+          <span className='text-[12px] text-red-200 bg-red-900/40 px-2 py-0.5 rounded-full mt-1 border border-red-400/30'>사번 {benefitState.user.employeeId}</span>
 
           <div className='grid grid-cols-2 gap-1.5 w-full mt-3 pt-3 border-t border-slate-600/60'>
             <button type='button' onClick={() => setActiveTab('member-info')} className='py-1 px-2 text-xs bg-slate-700/80 hover:bg-slate-700 rounded text-slate-200 text-center cursor-pointer transition-colors'>
@@ -44,19 +44,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
         {/* 미니 대시보드 통계 그리드 (구현된 메뉴는 클릭 시 탭 이동, 미구현 메뉴는 비활성화) */}
         <div className='grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-600/70 text-xs'>
           <button type='button' onClick={() => setActiveTab('orders')} className='bg-slate-800/60 p-2 rounded cursor-pointer hover:bg-slate-800 transition-colors text-left'>
-            <p className='text-[11px] text-slate-300'>진행중인 주문</p>
+            <p className='text-[12px] text-slate-300'>진행중인 주문</p>
             <p className='text-sm font-bold text-red-300'>{orderCount}건</p>
           </button>
           <div className='bg-slate-800/40 p-2 rounded select-none cursor-not-allowed opacity-75'>
-            <p className='text-[11px] text-slate-400'>계좌 잔액</p>
+            <p className='text-[12px] text-slate-400'>계좌 잔액</p>
             <p className='text-sm font-bold text-slate-300'>1,000원</p>
           </div>
           <div className='bg-slate-800/40 p-2 rounded select-none cursor-not-allowed opacity-75'>
-            <p className='text-[11px] text-slate-400'>보유 쿠폰</p>
+            <p className='text-[12px] text-slate-400'>보유 쿠폰</p>
             <p className='text-sm font-bold text-slate-300'>0장</p>
           </div>
           <button type='button' onClick={() => setActiveTab('cart')} className='bg-slate-800/60 p-2 rounded cursor-pointer hover:bg-slate-800 transition-colors text-left'>
-            <p className='text-[11px] text-slate-300'>장바구니</p>
+            <p className='text-[12px] text-slate-300'>장바구니</p>
             <p className='text-sm font-bold text-red-300'>{cartCount}개</p>
           </button>
         </div>
@@ -102,19 +102,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
               </button>
             </li>
             {/* 미구현 페이지: 링크 이동 비활성화 */}
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[12px]' title='준비 중인 서비스입니다.'>
               <span>적립금</span>
               <span>1,000원</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[12px]' title='준비 중인 서비스입니다.'>
               <span>예치금</span>
               <span>0원</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[12px]' title='준비 중인 서비스입니다.'>
               <span>e머니 / e캐시</span>
               <span>0원</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 flex justify-between items-center text-[12px]' title='준비 중인 서비스입니다.'>
               <span>교환권/쿠폰</span>
               <span>0장</span>
             </li>
@@ -126,13 +126,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
           <h2 className='font-bold text-gray-900 text-xs mb-1.5 px-2'>쇼핑 관리</h2>
           <ul className='space-y-1'>
             {/* 미구현 페이지: 링크 이동 비활성화 */}
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>배송지 관리</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>기본 수령매장 관리</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>환불계좌 관리</span>
             </li>
           </ul>
@@ -152,17 +152,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
                   <Heart size={13} className={activeTab === 'wishlist' ? 'text-[#D7001E]' : 'text-gray-500'} />
                   <span>위시리스트 (찜한 도서)</span>
                 </span>
-                <span className='text-[11px] font-bold text-red-600 bg-red-50 px-1.5 py-0.2 rounded-full border border-red-200'>{wishlistCount}</span>
+                <span className='text-[12px] font-bold text-red-600 bg-red-50 px-1.5 py-0.2 rounded-full border border-red-200'>{wishlistCount}</span>
               </button>
             </li>
             {/* 미구현 페이지: 링크 이동 비활성화 */}
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>내 서재 관리</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>최근 본 상품</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>내 관심분야</span>
             </li>
           </ul>
@@ -185,13 +185,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
               </button>
             </li>
             {/* 미구현 페이지: 링크 이동 비활성화 */}
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>영풍빠른결제 설정</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>비밀번호 변경</span>
             </li>
-            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[11px]' title='준비 중인 서비스입니다.'>
+            <li className='px-2 py-1.5 text-gray-400 select-none cursor-not-allowed opacity-60 text-[12px]' title='준비 중인 서비스입니다.'>
               <span>회원탈퇴</span>
             </li>
           </ul>
@@ -199,8 +199,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, benef
 
         {/* 고객센터 안내 (비활성화) */}
         <div className='py-2.5'>
-          <p className='font-semibold text-gray-400 text-[11px] px-2 mb-1'>고객센터 안내</p>
-          <div className='px-2 text-[11px] text-gray-400'>
+          <p className='font-semibold text-gray-400 text-[12px] px-2 mb-1'>고객센터 안내</p>
+          <div className='px-2 text-[12px] text-gray-400'>
             <span>영풍문고 임직원 복지지원</span>
             <span className='block  text-gray-500'>1544-9020</span>
           </div>

@@ -104,7 +104,7 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
                 <span className='text-gray-600'>2026 상반기 사용 상태</span>
                 <span className='font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200'>사용 완료 (1권 전액 지원 적용)</span>
               </div>
-              <div className='flex justify-between items-center pt-1 border-t border-emerald-100 text-[11px]'>
+              <div className='flex justify-between items-center pt-1 border-t border-emerald-100 text-[12px]'>
                 <span className='text-gray-500'>최근 지원 도서</span>
                 <span className='font-semibold text-gray-800 truncate max-w-[200px]'>{benefitState.recommendedBook.recentBookTitle}</span>
               </div>
@@ -142,7 +142,7 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
               <div className='w-full bg-gray-200 h-2 rounded-full overflow-hidden'>
                 <div className='bg-[#D7001E] h-full rounded-full transition-all' style={{ width: `${(benefitState.personalBook.usedAmount / benefitState.personalBook.totalLimit) * 100}%` }}></div>
               </div>
-              <div className='flex justify-between items-center text-[11px] text-gray-500 pt-1'>
+              <div className='flex justify-between items-center text-[12px] text-gray-500 pt-1'>
                 <span>누적 사용: {benefitState.personalBook.usedAmount.toLocaleString()}원 (1건 완료)</span>
                 <span>반기 총 한도: 10,000원</span>
               </div>
@@ -207,11 +207,11 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
                 <tr key={item.id} className='hover:bg-gray-50/80 transition-colors text-center'>
                   <td className='py-3 px-3 text-gray-500 whitespace-nowrap'>{item.date}</td>
                   <td className='py-3 px-3 whitespace-nowrap'>
-                    <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${item.type === '추천도서' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-[#D7001E]'}`}>{item.type}</span>
+                    <span className={`inline-block px-2 py-0.5 rounded text-[12px] font-bold ${item.type === '추천도서' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-[#D7001E]'}`}>{item.type}</span>
                   </td>
                   <td className='py-3 px-4 text-left'>
                     <p className='font-bold text-gray-900'>{item.bookTitle}</p>
-                    <div className='flex items-center gap-2 text-[11px] text-gray-500 mt-0.5'>
+                    <div className='flex items-center gap-2 text-[12px] text-gray-500 mt-0.5'>
                       <span>정가 {item.originalPrice.toLocaleString()}원</span>
                       <span>·</span>
                       <span className='text-emerald-600 font-medium'>{item.status}</span>
@@ -224,9 +224,9 @@ export const BenefitView: React.FC<BenefitViewProps> = ({ benefitState, history,
                     <span className={item.type === '추천도서' ? 'text-emerald-600' : 'text-[#D7001E]'}>{item.benefitAmount.toLocaleString()}원</span>
                   </td>
                   <td className='py-3 px-3 text-right whitespace-nowrap font-bold text-gray-900'>{item.selfPayAmount.toLocaleString()}원</td>
-                  <td className='py-3 px-3  text-[11px] text-gray-600 whitespace-nowrap'>{item.orderNumber}</td>
+                  <td className='py-3 px-3  text-[12px] text-gray-600 whitespace-nowrap'>{item.orderNumber}</td>
                   <td className='py-3 px-3 whitespace-nowrap'>
-                    <button type='button' onClick={() => onOpenOrderDetail(item.orderNumber)} className='px-2.5 py-1 text-[11px] font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer'>
+                    <button type='button' onClick={() => onOpenOrderDetail(item.orderNumber)} className='px-2.5 py-1 text-[12px] font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer'>
                       주문상세
                     </button>
                   </td>
