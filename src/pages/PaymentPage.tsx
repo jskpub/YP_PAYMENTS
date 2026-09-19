@@ -567,32 +567,15 @@ export const PaymentPage: React.FC = () => {
                       <option value='02'>02</option>
                     </select>
                     <span>-</span>
-                    <input
-                      type='text'
-                      maxLength={4}
-                      value={ordererPhoneMid}
-                      onChange={(e) => setOrdererPhoneMid(e.target.value.replace(/[^0-9]/g, ''))}
-                      className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]'
-                    />
+                    <input type='text' maxLength={4} value={ordererPhoneMid} onChange={(e) => setOrdererPhoneMid(e.target.value.replace(/[^0-9]/g, ''))} className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]' />
                     <span>-</span>
-                    <input
-                      type='text'
-                      maxLength={4}
-                      value={ordererPhoneEnd}
-                      onChange={(e) => setOrdererPhoneEnd(e.target.value.replace(/[^0-9]/g, ''))}
-                      className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]'
-                    />
+                    <input type='text' maxLength={4} value={ordererPhoneEnd} onChange={(e) => setOrdererPhoneEnd(e.target.value.replace(/[^0-9]/g, ''))} className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]' />
                   </div>
                 </div>
 
                 <div>
                   <span className='text-[#555a5c] block mb-0.5'>이메일</span>
-                  <input
-                    type='email'
-                    value={ordererEmail}
-                    onChange={(e) => setOrdererEmail(e.target.value)}
-                    className='w-full p-1.5 bg-white rounded border border-[#cbd2d4] text-xs focus:outline-none focus:border-[#df0000]'
-                  />
+                  <input type='email' value={ordererEmail} onChange={(e) => setOrdererEmail(e.target.value)} className='w-full p-1.5 bg-white rounded border border-[#cbd2d4] text-xs focus:outline-none focus:border-[#df0000]' />
                 </div>
 
                 <div className='text-[12px] text-[#80888a] pt-1 leading-normal'>• 주문자 연락처로 주문 관련 알림톡이 발송되므로 정확한 주문자 정보를 입력해 주세요.</div>
@@ -648,7 +631,7 @@ export const PaymentPage: React.FC = () => {
               </div>
 
               {/* Big Red Payment Button */}
-              <button type='submit' className='w-full py-3.5 rounded bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors'>
+              <button type='submit' className='w-full py-3.5 rounded-lg bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors '>
                 결제하기
               </button>
             </div>

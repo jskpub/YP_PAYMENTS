@@ -202,7 +202,7 @@ export const CartPage: React.FC = () => {
                                 updateQuantity(item.id, 1);
                               }
                             }}
-                            className='w-11 h-7 text-center text-xs font-bold focus:outline-none focus:bg-[#f0faf5] text-[#181718] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !border-none'
+                            className='w-12 h-7 text-center text-xs font-bold focus:outline-none focus:bg-[#f0faf5] text-[#181718] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !border-none'
                             aria-label='수량 직접 입력'
                           />
                           <button type='button' onClick={() => updateQuantity(item.id, item.quantity + 1)} className='w-7 h-7 flex items-center justify-center text-[#555a5c] hover:bg-[#f6f6f6] active:bg-[#edf0f1]' aria-label='수량 증가'>
@@ -404,7 +404,7 @@ export const CartPage: React.FC = () => {
               </div> */}
 
               {/* Action Button: 주문하기 */}
-              <button type='button' onClick={handleOrderClick} className='w-full py-3.5 rounded bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors flex items-center justify-center gap-2 cur'>
+              <button type='button' onClick={handleOrderClick} className='w-full py-3.5 rounded bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors flex items-center justify-center gap-2 cur rounded-lg'>
                 <span>주문하기</span>
                 <ChevronRight className='w-4 h-4' />
               </button>
