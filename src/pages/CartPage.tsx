@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { StepIndicator } from '../components/StepIndicator';
-import { Truck, Trash2, Bookmark, ChevronRight, HelpCircle, X, Plus, Minus, Check, ChevronDown, Info, CreditCard, ShoppingBag, Award, BookOpen, Smartphone, ShieldCheck, CheckCircle2, Circle } from 'lucide-react';
+import { Truck, Trash2, Bookmark, ChevronRight, ChevronDown, HelpCircle, X, Plus, Minus, Check, Info, CreditCard, ShoppingBag, Award, BookOpen, Smartphone, ShieldCheck, CheckCircle2, Circle } from 'lucide-react';
 import { MOCK_BOOKS } from '../data/mockBooks';
 import { BookCoverImage } from '../components/BookCoverImage';
+
+const MAX_QUANTITY = 10; // 1회 최대 구매 가능 수량
 
 export const CartPage: React.FC = () => {
   const { cart, cartStats, updateQuantity, removeFromCart, removeSelectedFromCart, toggleItemSelection, toggleAllSelection, selectedAddress, setIsAddressModalOpen, setAddressModalTab, setActivePage, addToCart, showToast } = useShop();
 
   const allSelected = cart.length > 0 && cart.every((i) => i.selected);
   const selectedItems = cart.filter((i) => i.selected);
+
+  // 안내사항 아코디언 — 필독 항목이라 기본 펼침, 독립적으로 접고 펼 수 있음
+  const [openNotices, setOpenNotices] = useState<Record<string, boolean>>({ b2b: true, delivery: true });
+  const toggleNotice = (key: string) => setOpenNotices((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleOrderClick = () => {
     if (selectedItems.length === 0) {
@@ -36,20 +42,28 @@ export const CartPage: React.FC = () => {
         <div className='grid grid-cols-1 lg:grid-cols-[1fr_310px] gap-8 items-start'>
           {/* LEFT COLUMN: Cart Items and Tables */}
           <div className='space-y-5'>
-            {/* Free Shipping Progress Bar (Matching cart.png) */}
+            {/* Free Shipping Progress Bar — 개선 항목 9 */}
             <div className='border border-[#f5baba] bg-[#fffafa] rounded-lg p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs'>
               <div className='flex items-center gap-3'>
                 <div className='w-10 h-10 rounded-full bg-[#f14646] flex items-center justify-center text-white shadow-xs flex-shrink-0'>
-                  <Truck className='w-5 h-5' />
+                  <Truck className='w-5 h-5' style={{ color: 'var(--white)' }} />
                 </div>
                 <div>
-                  <div className='text-sm font-bold text-[#181718]'>
+                  <div className='text-sm font-bold text-[#181718] flex items-center gap-1.5'>
                     {cartStats.freeShippingShortfall > 0 ? (
                       <>
-                        <span className='text-[#df0000] font-extrabold'>{cartStats.freeShippingShortfall.toLocaleString()}원</span> 더 담으면 <span className='font-extrabold text-[#181718]'>무료 배송</span>
+                        <span style={{ color: 'var(--color-primary)' }} className='font-extrabold'>
+                          {cartStats.freeShippingShortfall.toLocaleString()}원
+                        </span>{' '}
+                        더 담으면 <span className='font-extrabold text-[#181718]'>무료배송!</span>
                       </>
                     ) : (
-                      <span className='text-[#1f976b] font-extrabold'>무료 배송 기준(10,000원)을 달성했습니다!</span>
+                      <>
+                        <CheckCircle2 className='w-4 h-4' style={{ color: 'var(--color-success)' }} />
+                        <span style={{ color: 'var(--color-success)' }} className='font-extrabold'>
+                          무료배송 달성!
+                        </span>
+                      </>
                     )}
                   </div>
                   <div className='text-xs text-[#80888a] mt-0.5'>10,000원 이상 결제 시 기본 배송비 무료 (미만 시 2,500원)</div>
@@ -58,10 +72,17 @@ export const CartPage: React.FC = () => {
 
               {/* Progress bar and "상품 더 담기" button */}
               <div className='flex items-center gap-3 w-full sm:w-auto'>
-                <div className='flex-1 sm:w-48 bg-[#dadada] h-2.5 rounded-full overflow-hidden'>
-                  <div className='h-full bg-gradient-to-r from-[#f14646] to-[#ffb34b] rounded-full transition-all duration-300' style={{ width: `${cartStats.freeShippingProgress}%` }}></div>
+                <div
+                  className='progress-bar flex-1 sm:w-48'
+                  role='progressbar'
+                  aria-valuenow={cartStats.freeShippingProgress}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label='무료배송까지 남은 금액'
+                >
+                  <div className={`progress-bar__fill ${cartStats.freeShippingShortfall === 0 ? 'progress-bar__fill--success' : ''}`} style={{ width: `${cartStats.freeShippingProgress}%` }}></div>
                 </div>
-                <button onClick={() => setActivePage('recommended')} className='px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] text-xs font-semibold text-[#595959] whitespace-nowrap transition-colors'>
+                <button onClick={() => setActivePage('recommended')} className='btn btn--secondary btn--sm whitespace-nowrap'>
                   상품 더 담기
                 </button>
               </div>
@@ -70,12 +91,14 @@ export const CartPage: React.FC = () => {
             {/* Cart Table Controls */}
             <div className='flex items-center justify-between border-b border-[#dadada] pb-3 text-xs sm:text-sm'>
               <div className='flex items-center gap-3'>
-                <label className='flex items-center gap-2 cursor-pointer font-semibold text-[#181718]'>
-                  <input type='checkbox' checked={allSelected} onChange={(e) => toggleAllSelection(e.target.checked)} className='w-4 h-4 accent-[#df0000] cursor-pointer' />
+                <span className='flex items-center gap-2 cursor-pointer font-semibold text-[#181718]'>
+                  <button type='button' role='checkbox' aria-checked={allSelected} aria-label='전체 상품 선택' onClick={() => toggleAllSelection(!allSelected)} className='checkbox'>
+                    {allSelected && <Check className='w-3 h-3' style={{ color: 'var(--white)' }} />}
+                  </button>
                   <span>
                     전체 선택 ({selectedItems.length}/{cart.length})
                   </span>
-                </label>
+                </span>
                 <span className='text-[#dadada]'>|</span>
                 <button onClick={removeSelectedFromCart} className='text-[#80888a] hover:text-[#df0000] transition-colors'>
                   선택 상품 삭제
@@ -106,7 +129,7 @@ export const CartPage: React.FC = () => {
               <div className='border border-[#cbd2d4] rounded-lg p-16 text-center space-y-4'>
                 <ShoppingBag className='w-12 h-12 text-[#9da6a8] mx-auto' />
                 <p className='text-lg font-semibold text-[#80888a]'>장바구니에 담긴 상품이 없습니다.</p>
-                <button onClick={() => setActivePage('recommended')} className='px-6 py-2.5 bg-[#df0000] text-white rounded text-sm font-bold hover:bg-[#ea2e2e] transition-colors shadow-sm'>
+                <button onClick={() => setActivePage('recommended')} className='btn btn--primary'>
                   추천도서 둘러보기
                 </button>
               </div>
@@ -119,10 +142,19 @@ export const CartPage: React.FC = () => {
                   const isEbook = item.format === 'ebook';
 
                   return (
-                    <div key={item.id} className='p-4 sm:p-5 flex flex-col sm:grid sm:grid-cols-[1fr_150px_130px] gap-4 items-start sm:items-center relative'>
+                    <div key={item.id} data-selected={item.selected} className='cart-row p-4 sm:p-5 flex flex-col sm:grid sm:grid-cols-[1fr_150px_130px] gap-4 items-start sm:items-center relative'>
                       {/* Product details column */}
                       <div className='flex items-start gap-3 w-full'>
-                        <input type='checkbox' checked={item.selected} onChange={() => toggleItemSelection(item.id)} className='w-4 h-4 accent-[#df0000] mt-1 cursor-pointer flex-shrink-0' />
+                        <button
+                          type='button'
+                          role='checkbox'
+                          aria-checked={item.selected}
+                          aria-label={`${item.book.title} 선택`}
+                          onClick={() => toggleItemSelection(item.id)}
+                          className='checkbox mt-1'
+                        >
+                          {item.selected && <Check className='w-3 h-3' style={{ color: 'var(--white)' }} />}
+                        </button>
                         <BookCoverImage title={item.book.title} coverImage={item.book.coverImage} coverBackground={item.book.coverBackground} className='w-20 h-28 rounded shadow-xs border border-[#edf0f1] flex-shrink-0' titleClassName='text-[10px]' />
 
                         <div className='space-y-2 min-w-0 flex-1'>
@@ -176,38 +208,46 @@ export const CartPage: React.FC = () => {
                           </div> */}
                         </div>
 
-                        {/* Quantity Counter with Direct Editable Input */}
+                        {/* Quantity Counter with Direct Editable Input — 개선 항목 6 (44×44 터치 영역 + 최대수량 툴팁) */}
                         <div className='flex items-center border border-[#cbd2d4] rounded bg-white overflow-hidden'>
-                          <button type='button' onClick={() => updateQuantity(item.id, item.quantity - 1)} className='w-7 h-7 flex items-center justify-center text-[#555a5c] hover:bg-[#f6f6f6] active:bg-[#edf0f1]' aria-label='수량 감소'>
-                            <Minus className='w-3 h-3' />
+                          <button type='button' onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1} className='stepper-btn border-0' aria-label='수량 감소'>
+                            <Minus className='w-4 h-4' />
                           </button>
                           <input
                             type='number'
                             min='1'
+                            max={MAX_QUANTITY}
                             step='1'
                             value={item.quantity}
+                            aria-label='상품 수량'
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                               const rawVal = e.currentTarget.value;
                               if (rawVal === '') return;
 
                               const val = Number(rawVal);
                               if (Number.isInteger(val) && val >= 1) {
-                                updateQuantity(item.id, val);
+                                updateQuantity(item.id, Math.min(val, MAX_QUANTITY));
                               }
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                               const val = Number(e.currentTarget.value);
-                              // 입력창에서 벗어났을 때 비어있거나 1 미만이면 1로 복구
+                              // 입력창에서 벗어났을 때 비어있거나 범위를 벗어나면 유효 범위로 복구
                               if (!Number.isInteger(val) || val < 1) {
                                 updateQuantity(item.id, 1);
+                              } else if (val > MAX_QUANTITY) {
+                                updateQuantity(item.id, MAX_QUANTITY);
                               }
                             }}
-                            className='w-12 h-7 text-center text-xs font-bold focus:outline-none focus:bg-[#f0faf5] text-[#181718] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !border-none'
-                            aria-label='수량 직접 입력'
+                            className='w-12 h-9 text-center text-sm font-bold focus:outline-none focus:bg-[#f0faf5] text-[#181718] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !border-none'
                           />
-                          <button type='button' onClick={() => updateQuantity(item.id, item.quantity + 1)} className='w-7 h-7 flex items-center justify-center text-[#555a5c] hover:bg-[#f6f6f6] active:bg-[#edf0f1]' aria-label='수량 증가'>
-                            <Plus className='w-3 h-3' />
-                          </button>
+                          <div className='relative group'>
+                            <button type='button' onClick={() => updateQuantity(item.id, item.quantity + 1)} disabled={item.quantity >= MAX_QUANTITY} className='stepper-btn border-0' aria-label='수량 증가'>
+                              <Plus className='w-4 h-4' />
+                            </button>
+                            {item.quantity >= MAX_QUANTITY && (
+                              <div className='tooltip hidden group-hover:block group-focus-within:block bottom-full left-1/2 -translate-x-1/2 mb-1.5'>최대 구매 가능 수량입니다</div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -218,7 +258,7 @@ export const CartPage: React.FC = () => {
                       </div>
 
                       {/* Remove item button */}
-                      <button onClick={() => removeFromCart(item.id)} className='absolute top-3 right-3 text-[#9c9c9c] hover:text-[#df0000] p-1' aria-label='삭제'>
+                      <button onClick={() => removeFromCart(item.id)} className='absolute top-3 right-3 text-[#9c9c9c] hover:text-[#df0000] p-1' aria-label='상품 삭제'>
                         <X className='w-4 h-4' />
                       </button>
                     </div>
@@ -227,50 +267,61 @@ export const CartPage: React.FC = () => {
               </div>
             )}
 
-            {/* Bottom Actions Bar matching cart.png */}
+            {/* Bottom Actions Bar — 개선 항목 2 버튼 위계 적용 */}
             <div className='flex flex-wrap items-center justify-between gap-3 pt-2 text-xs'>
               <div className='flex items-center gap-2'>
-                <button onClick={removeSelectedFromCart} className='px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-medium text-[#595959]'>
+                <button onClick={removeSelectedFromCart} className='btn btn--secondary btn--sm'>
                   선택 삭제
                 </button>
               </div>
 
               <div className='flex items-center gap-2'>
-                <button onClick={() => setActivePage('explore')} className='px-4 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-semibold text-[#181718]'>
+                <button onClick={() => setActivePage('explore')} className='btn btn--secondary btn--sm'>
+                  <ShoppingBag className='w-4 h-4' style={{ color: 'var(--color-foreground)' }} />
                   쇼핑 계속하기
                 </button>
               </div>
             </div>
 
-            {/* Cart Notices from screenshot */}
-            <div className='border-t border-[#dadada] pt-5 space-y-4 text-xs text-[#80888a] leading-relaxed'>
-              <div>
-                <h4 className='font-bold text-[#181718] mb-1'>B2B 복합결제 및 주문 안내사항</h4>
-                <ul className='list-disc list-inside space-y-0.5'>
-                  <li>
-                    <strong>추천도서</strong>: 100% 회사 지원 (월 1권 한도, <strong>종이도서만 지원</strong>)
-                  </li>
-                  <li>
-                    <strong>개인도서</strong>: 50% 회사 지원 (최대 10,000원 한도, <strong>종이도서 또는 전자도서</strong>)
-                  </li>
-                  <li>지원금을 초과하는 금액은 신용카드, 카카오페이, 네이버페이 등 개인 결제수단으로 복합결제됩니다.</li>
-                  <li>회원 로그인 후 장바구니에 상품을 담으시면 30일간 자동 보관 됩니다.</li>
-                </ul>
+            {/* Cart Notices — 개선 항목 8 안내사항 아코디언 (필독 항목이라 기본 펼침) */}
+            <div className='border-t border-[#dadada] pt-5 space-y-3'>
+              <div className='border border-[#edf0f1] rounded-md overflow-hidden'>
+                <button type='button' role='button' aria-expanded={openNotices.b2b} onClick={() => toggleNotice('b2b')} className='accordion-header'>
+                  <span>B2B 복합결제 및 주문 안내사항</span>
+                  <ChevronDown className='accordion-header__icon w-[18px] h-[18px]' style={{ color: 'var(--color-foreground-secondary)' }} />
+                </button>
+                <div className='accordion-content' data-open={openNotices.b2b} aria-hidden={!openNotices.b2b}>
+                  <ul className='list-disc list-inside space-y-0.5'>
+                    <li>
+                      <strong>추천도서</strong>: 100% 회사 지원 (월 1권 한도, <strong>종이도서만 지원</strong>)
+                    </li>
+                    <li>
+                      <strong>개인도서</strong>: 50% 회사 지원 (최대 10,000원 한도, <strong>종이도서 또는 전자도서</strong>)
+                    </li>
+                    <li>지원금을 초과하는 금액은 신용카드, 카카오페이, 네이버페이 등 개인 결제수단으로 복합결제됩니다.</li>
+                    <li>회원 로그인 후 장바구니에 상품을 담으시면 30일간 자동 보관 됩니다.</li>
+                  </ul>
+                </div>
               </div>
 
-              <div>
-                <h4 className='font-bold text-[#181718] mb-1'>일반배송상품(택배수령) 안내사항</h4>
-                <ul className='list-disc list-inside space-y-0.5'>
-                  <li>재고 여부에 따라 품절/지연될 수 있으며, 이 경우 별도로 안내드립니다.</li>
-                  <li>
-                    당일배송은 서울 및 수도권 인근지역에서 12:00 까지 주문 시 가능합니다.
-                    <ul className='list-item list-inside space-y-0.5 pl-5 font-bold'>
-                      <li>- 네이버페이, 지마켓, 옥션, 쿠팡 등의 제휴사 주문은 연동시간에 따라 당일배송이 어려울 수 있습니다.</li>
-                      <li>- 직장, 기관 등의 배송지는 당일배송이 어려울 수 있으며, 학교 배송지는 당일배송이 불가합니다.</li>
-                    </ul>
-                  </li>
-                  <li>배송지가 동일하더라도 여러건으로 진행된 주문이 각각의 배송료가 부과됩니다.</li>
-                </ul>
+              <div className='border border-[#edf0f1] rounded-md overflow-hidden'>
+                <button type='button' role='button' aria-expanded={openNotices.delivery} onClick={() => toggleNotice('delivery')} className='accordion-header'>
+                  <span>일반배송상품(택배수령) 안내사항</span>
+                  <ChevronDown className='accordion-header__icon w-[18px] h-[18px]' style={{ color: 'var(--color-foreground-secondary)' }} />
+                </button>
+                <div className='accordion-content' data-open={openNotices.delivery} aria-hidden={!openNotices.delivery}>
+                  <ul className='list-disc list-inside space-y-0.5'>
+                    <li>재고 여부에 따라 품절/지연될 수 있으며, 이 경우 별도로 안내드립니다.</li>
+                    <li>
+                      당일배송은 서울 및 수도권 인근지역에서 12:00 까지 주문 시 가능합니다.
+                      <ul className='list-item list-inside space-y-0.5 pl-5 font-bold'>
+                        <li>- 네이버페이, 지마켓, 옥션, 쿠팡 등의 제휴사 주문은 연동시간에 따라 당일배송이 어려울 수 있습니다.</li>
+                        <li>- 직장, 기관 등의 배송지는 당일배송이 어려울 수 있으며, 학교 배송지는 당일배송이 불가합니다.</li>
+                      </ul>
+                    </li>
+                    <li>배송지가 동일하더라도 여러건으로 진행된 주문이 각각의 배송료가 부과됩니다.</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -403,10 +454,10 @@ export const CartPage: React.FC = () => {
                 </div>
               </div> */}
 
-              {/* Action Button: 주문하기 */}
-              <button type='button' onClick={handleOrderClick} className='w-full py-3.5 rounded bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors flex items-center justify-center gap-2 cur rounded-lg'>
+              {/* Action Button: 주문하기 — 화면당 유일한 Primary CTA */}
+              <button type='button' onClick={handleOrderClick} className='btn btn--primary btn--lg w-full gap-2'>
                 <span>주문하기</span>
-                <ChevronRight className='w-4 h-4' />
+                <ChevronRight className='w-4 h-4' style={{ color: 'var(--white)' }} />
               </button>
             </div>
 

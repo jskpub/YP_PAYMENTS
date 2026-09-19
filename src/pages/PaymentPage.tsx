@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useShop } from '../context/ShopContext';
 import { StepIndicator } from '../components/StepIndicator';
-import { ChevronDown, ChevronUp, AlertCircle, CreditCard, Building2, Lock, ExternalLink, HelpCircle, Award, BookOpen, Smartphone, Sparkles, CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ChevronUp, AlertCircle, CreditCard, Building2, Lock, ExternalLink, HelpCircle, Award, BookOpen, Smartphone, CheckCircle2, Circle, ShieldCheck, Wallet, PenLine } from 'lucide-react';
 import { BookCoverImage } from '../components/BookCoverImage';
 
 const SUBSIDY_TYPES = ['recommended', 'personal'] as const;
@@ -24,7 +24,7 @@ export const PaymentPage: React.FC = () => {
   const [showSubsidyPolicyDetail, setShowSubsidyPolicyDetail] = useState(false);
 
   // Form states
-  const [selectedMethod, setSelectedMethod] = useState<string>('credit_card');
+  const [selectedMethod, setSelectedMethod] = useState<string>('신용카드');
   const [activeAccordion, setActiveAccordion] = useState<Record<string, boolean>>({
     shipping: true,
     items: true,
@@ -36,6 +36,10 @@ export const PaymentPage: React.FC = () => {
 
   const [deliveryMemo, setDeliveryMemo] = useState('문 앞에 놓아주세요.');
   const [agreeTerms, setAgreeTerms] = useState(true);
+
+  // 배송 메모 "직접 입력" 슬라이드다운 (개선 항목 4)
+  const [isCustomMemo, setIsCustomMemo] = useState(false);
+  const [customMemoText, setCustomMemoText] = useState('');
 
   // 주문자 연락처/이메일 (수정 가능)
   const [ordererPhonePrefix, setOrdererPhonePrefix] = useState('010');
@@ -82,6 +86,16 @@ export const PaymentPage: React.FC = () => {
   const handleProceedWithoutSubsidy = () => {
     setShowSubsidyConfirm(false);
     processPayment(selectedMethod, true, deliveryMemo);
+  };
+
+  // 지원금 일괄 적용 토글 (개선 항목 7) — ON: 지원 혜택이 가장 큰 도서에 자동 적용, OFF: 전체 해제하고 개별 수동 적용으로 전환
+  const isSubsidyAllApplied = missedSubsidyTypes.length === 0 && cartStats.totalCompanySubsidy > 0;
+  const handleToggleSubsidyAll = () => {
+    if (isSubsidyAllApplied) {
+      selectedItems.filter((i) => i.isSubsidyApplied).forEach((i) => removeCartSubsidy(i.id));
+    } else {
+      handleApplyMissedSubsidy();
+    }
   };
 
   // 결제 페이지 진입 시 1회, 지원 대상인데 미적용인 유형이 있으면 지원 혜택이 가장 큰 도서 자동으로 적용한다.
@@ -157,7 +171,7 @@ export const PaymentPage: React.FC = () => {
 
               {/* 세부 이용 안내 목록 — 기본 접힘, 필요할 때만 펼쳐서 확인 */}
               <div className='bg-white/90 rounded-lg border border-[#d1ebd9] text-xs text-[#334155]'>
-                <button type='button' onClick={() => setShowSubsidyPolicyDetail((prev) => !prev)} className='w-full flex items-center justify-between gap-1 p-3.5 font-bold text-[#181718] text-xs'>
+                <button type='button' aria-expanded={showSubsidyPolicyDetail} onClick={() => setShowSubsidyPolicyDetail((prev) => !prev)} className='w-full flex items-center justify-between gap-1 p-3.5 font-bold text-[#181718] text-xs'>
                   <span className='flex items-center gap-1'>
                     <ShieldCheck className='w-4 h-4 text-[#1f976b]' />
                     <span>이용 안내 및 복합결제 규정 자세히 보기</span>
@@ -180,34 +194,35 @@ export const PaymentPage: React.FC = () => {
               </div>
             </div>
 
-            {/* 지원금 적용 상태 배너 — 진입 시 지원 혜택이 가장 큰 도서 자동 적용되며, 적용 결과와 변경 방법을 안내한다 */}
-            {cartStats.totalCompanySubsidy > 0 ? (
-              <div className='border-2 border-[#1f976b] bg-[#e8f5ef] rounded-lg p-4 flex items-center gap-2.5 text-sm text-[#181718] shadow-xs'>
-                <CheckCircle2 className='w-5 h-5 text-[#1f976b] flex-shrink-0' />
-                <div>
-                  <p className='font-bold text-[#1f976b]'>지원 혜택이 가장 큰 도서에 회사 지원금이 자동으로 적용되었어요.</p>
-                  <p className='text-[#555a5c]'>
-                    {' '}
-                    다른 도서에 적용하고 싶다면 아래 주문상품 목록의 <b>[지원금 적용하기]</b> 버튼을 클릭해 변경할 수 있어요.
-                  </p>
+            {/* 지원금 일괄 적용 토글 — 개선 항목 7 */}
+            <div className='border-2 border-[#1f976b] bg-[#e8f5ef] rounded-lg p-4 space-y-2 shadow-xs'>
+              <div className='flex items-center justify-between gap-3'>
+                <div className='flex items-center gap-2'>
+                  <Wallet className='w-4 h-4' style={{ color: 'var(--color-foreground-secondary)' }} />
+                  <span className='text-sm' style={{ fontWeight: 600, color: 'var(--color-foreground)' }}>
+                    회사 지원금 전체 적용
+                  </span>
                 </div>
+                <button type='button' role='switch' aria-checked={isSubsidyAllApplied} aria-label='회사 지원금 전체 적용' onClick={handleToggleSubsidyAll} className='toggle'>
+                  <span className='toggle__handle' />
+                </button>
               </div>
-            ) : (
-              missedSubsidyTypes.length > 0 && (
-                <div className='border-2 border-[#1f976b] bg-[#e8f5ef] rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm text-[#181718] shadow-xs'>
-                  <div className='flex items-center gap-2.5'>
-                    <Sparkles className='w-5 h-5 text-[#1f976b] flex-shrink-0' />
-                    <div>
-                      <span className='font-bold text-[#1f976b]'>아직 회사 지원금을 적용하지 않았어요.</span>
-                      <span className='text-[#555a5c]'> 버튼 한 번으로 지원 혜택이 가장 큰 도서 최대 혜택을 적용할 수 있어요.</span>
-                    </div>
-                  </div>
-                  <button type='button' onClick={handleApplyMissedSubsidy} className='px-4 py-2 bg-[#1f976b] hover:bg-[#187e59] text-white font-bold rounded-md text-sm transition-colors shadow-2xs whitespace-nowrap'>
-                    최대 혜택 적용하기
-                  </button>
-                </div>
-              )
-            )}
+              <p className='text-xs' style={{ color: 'var(--color-foreground-secondary)' }}>
+                {isSubsidyAllApplied ? (
+                  <>
+                    지원 혜택이 가장 큰 도서에 회사 지원금이 적용되었어요. 다른 도서로 바꾸려면 아래 주문상품 목록의 <b>[지원금 적용하기]</b> 버튼을 클릭하세요.
+                  </>
+                ) : (
+                  '토글을 켜면 지원 혜택이 가장 큰 도서에 회사 지원금이 자동으로 적용돼요.'
+                )}
+              </p>
+              {missedSubsidyTypes.length > 0 && cartStats.totalCompanySubsidy > 0 && (
+                <p className='text-xs flex items-center gap-1' style={{ color: 'var(--color-warning)' }}>
+                  <AlertCircle className='w-3.5 h-3.5 flex-shrink-0' style={{ color: 'var(--color-warning)' }} />
+                  아직 지원금이 적용되지 않은 도서가 있어요. 초과분은 직접 결제됩니다.
+                </p>
+              )}
+            </div>
             {/* 2. 주문상품 Accordion */}
             <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white'>
               <div onClick={() => toggleSection('items')} className='px-5 py-4 flex items-center justify-between cursor-pointer bg-white hover:bg-[#f6f6f6] select-none border-b border-[#edf0f1]'>
@@ -398,17 +413,53 @@ export const PaymentPage: React.FC = () => {
                     <div className='text-[#80888a]'>{selectedAddress.jibunAddress}</div>
                   </div>
 
-                  {/* 배송 메모 */}
+                  {/* 배송 메모 — 개선 항목 4: "직접 입력" 선택 시 textarea 슬라이드 다운 */}
                   <div className='grid grid-cols-[100px_1fr] items-start gap-2 pt-1'>
                     <span className='font-medium text-[#555a5c] pt-2'>배송 메모</span>
                     <div className='space-y-1 max-w-lg'>
-                      <select value={deliveryMemo} onChange={(e) => setDeliveryMemo(e.target.value)} className='w-full h-10 px-3 border border-[#cbd2d4] rounded text-sm bg-white focus:outline-none focus:border-[#df0000]'>
+                      <select
+                        value={isCustomMemo ? '직접 입력' : deliveryMemo}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '직접 입력') {
+                            setIsCustomMemo(true);
+                            setDeliveryMemo(customMemoText);
+                          } else {
+                            setIsCustomMemo(false);
+                            setCustomMemoText('');
+                            setDeliveryMemo(val);
+                          }
+                        }}
+                        className='w-full h-10 px-3 border border-[#cbd2d4] rounded text-sm bg-white focus:outline-none focus:border-[#df0000]'
+                      >
                         <option value='문 앞에 놓아주세요.'>문 앞에 놓아주세요.</option>
                         <option value='배송 전 미리 연락해 주세요.'>배송 전 미리 연락해 주세요.</option>
                         <option value='경비실에 맡겨 주세요.'>경비실에 맡겨 주세요.</option>
                         <option value='택배함에 보관해 주세요.'>택배함에 보관해 주세요.</option>
                         <option value='직접 수령하겠습니다.'>직접 수령하겠습니다.</option>
+                        <option value='직접 입력'>직접 입력</option>
                       </select>
+
+                      <div className='delivery-memo' data-open={isCustomMemo}>
+                        <div className='relative pt-2'>
+                          <textarea
+                            value={customMemoText}
+                            onChange={(e) => {
+                              const val = e.target.value.slice(0, 100);
+                              setCustomMemoText(val);
+                              setDeliveryMemo(val);
+                            }}
+                            maxLength={100}
+                            placeholder='배송 기사님께 전달할 메모를 입력해주세요.'
+                            className='w-full h-20 resize-none px-3 py-2 border border-[#cbd2d4] rounded text-sm focus:outline-none focus:border-2 focus:border-[#df0000] placeholder-[#9da6a8]'
+                          />
+                          <div className='flex items-center justify-end gap-1 text-[11px] mt-1' style={{ color: customMemoText.length >= 100 ? 'var(--color-danger)' : 'var(--color-foreground-secondary)' }}>
+                            <PenLine className='w-3.5 h-3.5' style={{ color: 'var(--color-muted)' }} />
+                            <span>{customMemoText.length}/100</span>
+                          </div>
+                        </div>
+                      </div>
+
                       <p className='text-[12px] text-[#80888a]'>• 택배사 송장에 표기되는 메시지입니다.</p>
                     </div>
                   </div>
@@ -567,9 +618,9 @@ export const PaymentPage: React.FC = () => {
                       <option value='02'>02</option>
                     </select>
                     <span>-</span>
-                    <input type='text' maxLength={4} value={ordererPhoneMid} onChange={(e) => setOrdererPhoneMid(e.target.value.replace(/[^0-9]/g, ''))} className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]' />
+                    <input type='text' maxLength={4} value={ordererPhoneMid} onChange={(e) => setOrdererPhoneMid(e.target.value.replace(/[^0-9]/g, ''))} className='w-16 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]' />
                     <span>-</span>
-                    <input type='text' maxLength={4} value={ordererPhoneEnd} onChange={(e) => setOrdererPhoneEnd(e.target.value.replace(/[^0-9]/g, ''))} className='w-14 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#df0000]' />
+                    <input type='text' maxLength={4} value={ordererPhoneEnd} onChange={(e) => setOrdererPhoneEnd(e.target.value.replace(/[^0-9]/g, ''))} className='w-16 px-2 py-1 bg-white rounded border border-[#cbd2d4] text-center focus:outline-none focus:border-[#524040]' />
                   </div>
                 </div>
 
@@ -630,8 +681,9 @@ export const PaymentPage: React.FC = () => {
                 </label>
               </div>
 
-              {/* Big Red Payment Button */}
-              <button type='submit' className='w-full py-3.5 rounded-lg bg-[#df0000] hover:bg-[#ea2e2e] text-white font-bold text-base shadow-md transition-colors '>
+              {/* 결제하기 — 화면당 유일한 Primary CTA (개선 항목 2) */}
+              <button type='submit' className='btn btn--primary btn--lg w-full gap-2'>
+                <CreditCard className='w-4 h-4' style={{ color: 'var(--white)' }} />
                 결제하기
               </button>
             </div>

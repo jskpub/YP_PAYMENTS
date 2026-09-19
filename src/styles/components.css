@@ -281,3 +281,236 @@ textarea:disabled {
   background: var(--color-primary);
   transition: width var(--transition-base);
 }
+
+/* --------------------------------------------------------------------------
+   [10] Custom Checkbox — 장바구니결제 UI 개선.md 개선 항목 5
+-------------------------------------------------------------------------- */
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  flex-shrink: 0;
+  border-radius: var(--checkbox-border-radius);
+  border: var(--checkbox-border);
+  background: var(--white);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.checkbox[aria-checked='true'] {
+  background: var(--checkbox-checked-bg);
+  border: var(--checkbox-checked-border);
+}
+
+.checkbox:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   [11] Cart Row — 선택 행 하이라이트
+-------------------------------------------------------------------------- */
+
+.cart-row {
+  background: var(--white);
+  border-left: 3px solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.cart-row[data-selected='true'] {
+  background: var(--color-primary-soft);
+  border-left: 3px solid var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   [12] Stepper (수량 증감 버튼) — 개선 항목 6
+-------------------------------------------------------------------------- */
+
+.stepper-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--btn-height-md);
+  height: var(--btn-height-md);
+  border: 1px solid var(--color-border);
+  background: var(--white);
+  color: var(--color-foreground);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.stepper-btn:hover:not(:disabled) {
+  background: var(--color-surface);
+}
+
+.stepper-btn:disabled {
+  background: var(--color-surface);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.stepper-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   [13] Toggle Switch — 개선 항목 7
+-------------------------------------------------------------------------- */
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  border-radius: var(--radius-full);
+  background: var(--toggle-off-bg);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toggle[aria-checked='true'] {
+  background: var(--toggle-on-bg);
+}
+
+.toggle__handle {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: var(--toggle-handle-size);
+  height: var(--toggle-handle-size);
+  border-radius: var(--radius-full);
+  background: var(--toggle-handle-color);
+  transition: transform var(--transition-fast);
+}
+
+.toggle[aria-checked='true'] .toggle__handle {
+  transform: translateX(calc(var(--toggle-width) - var(--toggle-handle-size) - 6px));
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   [14] Progress Bar — 개선 항목 9
+-------------------------------------------------------------------------- */
+
+.progress-bar {
+  height: var(--progress-height);
+  border-radius: var(--progress-border-radius);
+  background: var(--progress-bg);
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: var(--progress-border-radius);
+  transition: width 300ms ease-in-out, background-color var(--transition-base);
+}
+
+.progress-bar__fill--success {
+  background: var(--progress-fill-success);
+}
+
+/* --------------------------------------------------------------------------
+   [15] Accordion — 개선 항목 8
+-------------------------------------------------------------------------- */
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: var(--accordion-header-bg);
+  padding: var(--accordion-header-padding);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body-md);
+  font-weight: 600;
+  line-height: var(--line-height-body);
+  color: var(--color-foreground);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.accordion-header:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.accordion-header__icon {
+  transition: transform var(--transition-fast);
+}
+
+.accordion-header[aria-expanded='true'] .accordion-header__icon {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  background: var(--accordion-content-bg);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-foreground-secondary);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--transition-base);
+}
+
+.accordion-content[data-open='true'] {
+  max-height: 600px;
+  padding: var(--accordion-content-padding);
+}
+
+/* --------------------------------------------------------------------------
+   [16] Delivery Memo Slide-down — 개선 항목 4
+-------------------------------------------------------------------------- */
+
+.delivery-memo {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--transition-base);
+}
+
+.delivery-memo[data-open='true'] {
+  max-height: 120px;
+}
+
+/* --------------------------------------------------------------------------
+   [17] Tooltip — 개선 항목 6
+-------------------------------------------------------------------------- */
+
+.tooltip {
+  position: absolute;
+  background: var(--tooltip-bg);
+  color: var(--tooltip-color);
+  font-size: var(--tooltip-font-size);
+  border-radius: var(--tooltip-border-radius);
+  padding: var(--tooltip-padding);
+  z-index: var(--z-tooltip);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   [18] Badge / Pill
+-------------------------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--badge-border-radius);
+  padding: var(--badge-padding);
+  font-size: var(--badge-font-size);
+  font-weight: 700;
+}

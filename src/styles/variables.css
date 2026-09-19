@@ -135,4 +135,124 @@
 
   --transition-fast: 150ms ease-out;
   --transition-base: 250ms ease-out;
+
+  /* --------------------------------------------------------------------------
+     [7] Component Tokens — 장바구니/결제하기/주문완료 UI 개선 (장바구니결제 UI 개선.md)
+  -------------------------------------------------------------------------- */
+
+  /* 레이아웃 */
+  --layout-sidebar-width: 320px; /* 결제 사이드바 고정 너비 */
+  --layout-content-gap: var(--spacing-lg); /* 콘텐츠 영역 간격 */
+
+  /* 반경 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px; /* 토글, 뱃지 pill */
+
+  /* 버튼 */
+  --btn-height-lg: 52px; /* 메인 CTA */
+  --btn-height-md: 44px; /* 일반 버튼 */
+  --btn-height-sm: 36px; /* 소형 버튼 */
+  --btn-font-weight: 600;
+  --btn-padding-x: var(--spacing-md);
+
+  /* 입력 필드 */
+  --input-height: 44px;
+  --input-padding-x: var(--spacing-md);
+  --input-padding-y: 12px;
+  --input-border-radius: var(--radius-md);
+  --input-border-color: var(--color-border);
+  --input-border-focus: var(--color-primary);
+  --input-bg: var(--white);
+  --input-placeholder-color: var(--color-muted);
+
+  /* 체크박스 */
+  --checkbox-size: 20px;
+  --checkbox-border-radius: var(--radius-sm);
+  --checkbox-border: 1.5px solid var(--color-border);
+  --checkbox-checked-bg: var(--color-primary);
+  --checkbox-checked-border: 1.5px solid var(--color-primary);
+
+  /* 토글 */
+  --toggle-width: 44px;
+  --toggle-height: 24px;
+  --toggle-handle-size: 18px;
+  --toggle-on-bg: var(--color-primary);
+  --toggle-off-bg: var(--color-border);
+  --toggle-handle-color: var(--white);
+
+  /* 툴팁 */
+  --tooltip-bg: var(--color-foreground);
+  --tooltip-color: var(--white);
+  --tooltip-border-radius: var(--radius-sm);
+  --tooltip-padding: 6px 10px;
+  --tooltip-font-size: var(--font-size-body-sm);
+
+  /* 토스트 */
+  --toast-bg: var(--color-foreground);
+  --toast-color: var(--white);
+  --toast-border-radius: var(--radius-md);
+  --toast-padding: var(--spacing-sm) var(--spacing-md);
+  --toast-font-size: var(--font-size-body-sm);
+
+  /* 뱃지 */
+  --badge-border-radius: var(--radius-full);
+  --badge-padding: 2px 8px;
+  --badge-font-size: var(--font-size-caption);
+
+  /* 프로그레스 바 */
+  --progress-height: 12px;
+  --progress-border-radius: var(--radius-full);
+  --progress-bg: var(--color-surface);
+  --progress-fill: var(--color-primary);
+  --progress-fill-success: var(--color-success);
+
+  /* 아코디언 */
+  --accordion-header-bg: var(--color-surface);
+  --accordion-header-padding: 12px var(--spacing-md);
+  --accordion-content-bg: var(--white);
+  --accordion-content-padding: 12px var(--spacing-md);
+
+  /* 비활성 상태 */
+  --color-disabled-bg: var(--wgrey02);
+  --color-disabled-text: var(--color-muted);
+
+  /* z-index 스케일 */
+  --z-tooltip: 100;
+  --z-toast: 200;
+  --z-modal: 300;
+  --z-overlay: 400;
+}
+
+/* ==========================================================================
+   장바구니/결제하기/주문완료 UI 개선 — 공용 keyframes & reduced-motion 대응
+   ========================================================================== */
+
+@keyframes checkScale {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-icon {
+  animation: checkScale 400ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-icon,
+  .accordion-content,
+  .delivery-memo,
+  .progress-bar {
+    animation: none !important;
+    transition: none !important;
+  }
 }
