@@ -31,8 +31,6 @@ interface ShopContextType {
 
   // Cart
   cart: CartItem[];
-  cartTab: 'normal' | 'nowdream';
-  setCartTab: (tab: 'normal' | 'nowdream') => void;
   addToCart: (book: Book, format?: BookFormat, quantity?: number, directToPayment?: boolean) => void;
   updateQuantity: (id: string, newQty: number) => void;
   removeFromCart: (id: string) => void;
@@ -98,10 +96,6 @@ interface ShopContextType {
   selectedOrderForReceipt: Order | null;
   setSelectedOrderForReceipt: (order: Order | null) => void;
 
-  // Estimate Modal
-  isEstimateModalOpen: boolean;
-  setIsEstimateModalOpen: (open: boolean) => void;
-
   // Search
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -116,7 +110,6 @@ const ShopContext = createContext<ShopContextType | undefined>(undefined);
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activePage, setActivePage] = useState<PageTab>('intranet');
   const [myPageTab, setMyPageTab] = useState<'subsidy' | 'orders' | 'refund'>('subsidy');
-  const [cartTab, setCartTab] = useState<'normal' | 'nowdream'>('normal');
   const [selectedBookForDetail, setSelectedBookForDetail] = useState<Book | null>(null);
   const [selectedGiftId, setSelectedGiftId] = useState<string>('g-01');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -173,7 +166,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Receipt & Estimate Modals
   const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
   const [selectedOrderForReceipt, setSelectedOrderForReceipt] = useState<Order | null>(null);
-  const [isEstimateModalOpen, setIsEstimateModalOpen] = useState(false);
 
   // Subsidy Ledger (B2B Rule Engine State)
   const [subsidyLedger, setSubsidyLedger] = useState<SubsidyLedger>(() => {
@@ -756,8 +748,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         selectedBookForDetail,
         setSelectedBookForDetail,
         cart,
-        cartTab,
-        setCartTab,
         addToCart,
         updateQuantity,
         removeFromCart,
@@ -789,8 +779,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsReceiptModalOpen,
         selectedOrderForReceipt,
         setSelectedOrderForReceipt,
-        isEstimateModalOpen,
-        setIsEstimateModalOpen,
         searchQuery,
         setSearchQuery,
         toastMessage,

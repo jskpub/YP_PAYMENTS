@@ -1,12 +1,12 @@
 import React from 'react';
 import { useShop } from '../context/ShopContext';
 import { StepIndicator } from '../components/StepIndicator';
-import { Truck, Trash2, Bookmark, Printer, ChevronRight, HelpCircle, X, Plus, Minus, Check, ChevronDown, Info, CreditCard, ShoppingBag, Award, BookOpen, Smartphone, ShieldCheck, CheckCircle2, Circle } from 'lucide-react';
+import { Truck, Trash2, Bookmark, ChevronRight, HelpCircle, X, Plus, Minus, Check, ChevronDown, Info, CreditCard, ShoppingBag, Award, BookOpen, Smartphone, ShieldCheck, CheckCircle2, Circle } from 'lucide-react';
 import { MOCK_BOOKS } from '../data/mockBooks';
 import { BookCoverImage } from '../components/BookCoverImage';
 
 export const CartPage: React.FC = () => {
-  const { cart, cartTab, setCartTab, cartStats, updateQuantity, removeFromCart, removeSelectedFromCart, toggleItemSelection, toggleAllSelection, selectedAddress, setIsAddressModalOpen, setAddressModalTab, setActivePage, setIsEstimateModalOpen, addToCart, showToast } = useShop();
+  const { cart, cartStats, updateQuantity, removeFromCart, removeSelectedFromCart, toggleItemSelection, toggleAllSelection, selectedAddress, setIsAddressModalOpen, setAddressModalTab, setActivePage, addToCart, showToast } = useShop();
 
   const allSelected = cart.length > 0 && cart.every((i) => i.selected);
   const selectedItems = cart.filter((i) => i.selected);
@@ -36,22 +36,6 @@ export const CartPage: React.FC = () => {
         <div className='grid grid-cols-1 lg:grid-cols-[1fr_310px] gap-8 items-start'>
           {/* LEFT COLUMN: Cart Items and Tables */}
           <div className='space-y-5'>
-            {/* Cart Type Tabs (일반배송 vs 나우드림) */}
-            <div className='flex border-b border-[#dadada] text-base font-semibold'>
-              <button onClick={() => setCartTab('normal')} className={`py-3 px-6 transition-colors relative ${cartTab === 'normal' ? 'border-t-2 border-x border-[#181718] border-b-white bg-white text-[#181718] font-bold rounded-t-lg -mb-[1px]' : 'text-[#80888a] bg-[#f6f6f6] hover:text-[#181718]'}`}>
-                일반배송 장바구니 ({cart.length})
-              </button>
-              <button
-                onClick={() => {
-                  setCartTab('nowdream');
-                  showToast('나우드림(매장픽업) 장바구니에 담긴 상품이 없습니다.');
-                }}
-                className={`py-3 px-6 transition-colors relative ${cartTab === 'nowdream' ? 'border-t-2 border-x border-[#181718] border-b-white bg-white text-[#181718] font-bold rounded-t-lg -mb-[1px]' : 'text-[#80888a] bg-[#f6f6f6] hover:text-[#181718]'}`}
-              >
-                나우드림 장바구니 (0)
-              </button>
-            </div>
-
             {/* Free Shipping Progress Bar (Matching cart.png) */}
             <div className='border border-[#f5baba] bg-[#fffafa] rounded-lg p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs'>
               <div className='flex items-center gap-3'>
@@ -163,8 +147,6 @@ export const CartPage: React.FC = () => {
                               {isEbook ? <Smartphone className='w-3 h-3' /> : <BookOpen className='w-3 h-3' />}
                               {isEbook ? '전자책' : '종이책'}
                             </span>
-
-                            <span className='text-[10px] text-[#555a5c] bg-[#edf0f1] px-1.5 py-0.5 rounded font-medium'>소득공제</span>
                           </div>
 
                           {/* 제목 및 저자 */}
@@ -251,21 +233,11 @@ export const CartPage: React.FC = () => {
                 <button onClick={removeSelectedFromCart} className='px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-medium text-[#595959]'>
                   선택 삭제
                 </button>
-                <button onClick={() => showToast('선택한 도서가 내 서재에 보관되었습니다.')} className='px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-medium text-[#595959]'>
-                  내 서재 담기
-                </button>
-                <button onClick={() => showToast('나우드림(매장픽업) 장바구니로 이동되었습니다.')} className='px-3 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-medium text-[#595959]'>
-                  나우드림 장바구니로 이동
-                </button>
               </div>
 
               <div className='flex items-center gap-2'>
                 <button onClick={() => setActivePage('explore')} className='px-4 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-semibold text-[#181718]'>
                   쇼핑 계속하기
-                </button>
-                <button onClick={() => setIsEstimateModalOpen(true)} className='px-4 py-1.5 rounded border border-[#cbd2d4] bg-white hover:bg-[#f6f6f6] font-semibold text-[#181718] flex items-center gap-1'>
-                  <Printer className='w-3.5 h-3.5' />
-                  견적서 출력
                 </button>
               </div>
             </div>

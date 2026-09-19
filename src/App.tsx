@@ -10,7 +10,6 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { DeliveryModal } from './components/DeliveryModal';
 import { ReceiptModal } from './components/ReceiptModal';
-import { EstimateModal } from './components/EstimateModal';
 import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
 import { PrototypeRecommendedBooksPage } from './pages/PrototypeRecommendedBooksPage';
@@ -86,7 +85,6 @@ const AppContent: React.FC = () => {
       {/* Modals */}
       <DeliveryModal />
       <ReceiptModal />
-      <EstimateModal />
     </div>
   );
 };

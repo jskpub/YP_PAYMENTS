@@ -171,8 +171,6 @@ export const OrderCompletePage: React.FC = () => {
                                 </>
                               )}
                             </span>
-
-                            <span className="text-[10px] text-[#555a5c] bg-[#edf0f1] px-1.5 py-0.5 rounded">소득공제</span>
                           </div>
 
                           <div className="font-bold text-sm text-[#181718]">{item.title}</div>

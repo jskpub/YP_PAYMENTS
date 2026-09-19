@@ -72,10 +72,6 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
             <span className="cursor-pointer hover:text-yp-red">매장안내</span>
             <span className="text-yp-gray-200">|</span>
             <span className="cursor-pointer hover:text-yp-red">혜택안내</span>
-            <span className="text-yp-gray-200">|</span>
-            <span className="cursor-pointer font-medium text-emerald-700 hover:text-yp-red">
-              나우드림
-            </span>
           </div>
 
           <div className="relative flex items-center gap-3">
@@ -148,7 +144,7 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-3 divide-x divide-yp-gray-200 bg-white text-center text-[11px] font-medium text-yp-gray-700">
+                    <div className="grid grid-cols-2 divide-x divide-yp-gray-200 bg-white text-center text-[11px] font-medium text-yp-gray-700">
                       <button
                         type="button"
                         //   onClick={() => goPending('주문/배송 조회')}
@@ -162,13 +158,6 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({
                         className="cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red disabled:cursor-not-allowed"
                       >
                         취소/반품/교환
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => goPending('내 서재')}
-                        className="cursor-pointer py-2.5 transition-colors hover:bg-yp-gray-50 hover:text-yp-red"
-                      >
-                        내 서재
                       </button>
                     </div>
                   </div>
