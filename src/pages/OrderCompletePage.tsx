@@ -194,16 +194,16 @@ export const OrderCompletePage: React.FC = () => {
                           <div className='font-bold text-body-xs text-[#181718]'>{item.title}</div>
                         </div>
                       </td>
-                      <td className='p-3 text-right align-top'>
+                      <td className='p-3 text-right align-center'>
                         <div>
                           {discountRate > 0 && <span className='text-[#df0000] font-bold mr-1'>{discountRate}%</span>}
                           <span className='font-bold text-[#181718]'>{item.sellingPrice.toLocaleString()}원</span>
                         </div>
                         {item.quantity >= 2 && <div className='text-caption text-[#80888a] font-normal mt-0.5'>(1권당 {unitPrice.toLocaleString()}원)</div>}
                       </td>
-                      <td className='p-3 text-center font-medium'>{item.quantity}</td>
-                      <td className='p-3 text-right font-semibold align-top space-y-1'>{isSubsidyApplied && item.companySubsidy > 0 ? <span className={`font-bold ${item.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.companySubsidy.toLocaleString()}원</span> : null}</td>
-                      <td className='p-3 text-right pr-5 font-bold align-top text-[#181718]'>{item.employeePayment.toLocaleString()}원</td>
+                      <td className='p-3 text-center font-medium align-center'>{item.quantity}</td>
+                      <td className='p-3 text-right font-semibold align-center space-y-1'>{isSubsidyApplied && item.companySubsidy > 0 ? <span className={`font-bold ${item.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.companySubsidy.toLocaleString()}원</span> : null}</td>
+                      <td className='p-3 text-right pr-5 font-bold align-center text-[#181718]'>{item.employeePayment.toLocaleString()}원</td>
                     </tr>
                   );
                 })}

@@ -136,7 +136,7 @@ export const CartPage: React.FC = () => {
                           추천도서
                         </span>
                         <div className='font-bold text-body-xs text-[#181718]'>
-                          회사 100% 지원 (월 1권){' '}
+                          회사 100% 지원{' '}
                           <span className='text-caption text-[#555a5c] leading-tight font-normal'>
                             *직원 부담금 <strong>0원</strong> (월 1권 한도)
                           </span>
@@ -144,12 +144,12 @@ export const CartPage: React.FC = () => {
                       </div>
                       <div className='flex items-center gap-3'>
                         {!subsidyLedger.recommendedUsed ? (
-                          <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#16a34a] bg-[#f0fdf4] border border-[#bbf7d0] px-2.5 py-1 rounded-full'>
-                            ✓ 이번 달 1권 지원 가능
+                          <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
+                            이번 달 1권 지원 가능
                           </span>
                         ) : (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>
-                            ○ 지원금 사용 완료
+                            지원금 한도 소진
                           </span>
                         )}
                         {isRecommendedOpen ? <ChevronUp className='w-5 h-5 text-[#80888a]' /> : <ChevronDown className='w-5 h-5 text-[#80888a]' />}
@@ -162,16 +162,16 @@ export const CartPage: React.FC = () => {
                         {subsidyLedger.recommendedUsed && (
                           <div className='px-5 py-2.5 bg-[#ffebeb] border-[#fca5a5] text-[red] text-caption font-bold flex items-center gap-2'>
                             <AlertCircle className='w-4 h-4 text-[red] flex-shrink-0' />
-                            <span className="font-normal">추천도서 지원 한도가 소진되어, 추천 도서는 본인 부담으로 결제됩니다.</span>
+                            <span className="font-normal">추천도서의 지원 한도가 소진되어, 추천 도서는 본인 부담으로 결제됩니다.</span>
                           </div>
                         )}
                         <div className='overflow-x-auto'>
-                          <table className='w-full text-caption text-left border-collapse'>
+                          <table className='w-full table-fixed text-caption text-left border-collapse'>
                             <thead className='bg-[#f6f6f6] text-[#80888a] font-semibold border-b border-[#edf0f1]'>
                               <tr>
                                 <th className='p-3 pl-5'>도서 정보</th>
-                                <th className='p-3 text-center'>주문금액 / 수량</th>
-                                <th className='p-3 text-center pr-9'>
+                                <th className='p-3 text-center w-[160px]'>주문금액 / 수량</th>
+                                <th className='p-3 text-center pr-9 w-[180px]'>
                                   <div className='inline-flex items-center justify-center gap-1'>
                                     <span>배송일정</span>
                                     <button
@@ -325,7 +325,7 @@ export const CartPage: React.FC = () => {
                       className='px-5 py-4 flex flex-wrap items-center justify-between gap-2 bg-[#ffffff] hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'
                     >
                       <div className='flex items-center gap-2.5'>
-                        <span className='text-caption-lg px-2.5 py-1 rounded-md font-extrabold flex items-center gap-1 bg-[#eff6ff] text-[#2563eb] border border-[#bfdbfe]'>
+                        <span className='text-caption-lg px-2.5 py-1 rounded-md font-extrabold flex items-center gap-1 bg-[#ecfdf5] text-[#059669] border border-[#a7f3d0]'>
                           <BookOpen className='w-3.5 h-3.5' />
                           개인도서
                         </span>
@@ -338,12 +338,12 @@ export const CartPage: React.FC = () => {
                       </div>
                       <div className='flex items-center gap-3'>
                         {!subsidyLedger.personalUsed ? (
-                          <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#16a34a] bg-[#f0fdf4] border border-[#bbf7d0] px-2.5 py-1 rounded-full'>
-                            ✓ 이번 달 1권 지원 가능
+                          <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
+                            이번 달 1권 지원 가능
                           </span>
                         ) : (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>
-                            ○ 지원금 사용 완료
+                            지원금 한도 소진
                           </span>
                         )}
                         {isPersonalOpen ? <ChevronUp className='w-5 h-5 text-[#80888a]' /> : <ChevronDown className='w-5 h-5 text-[#80888a]' />}
@@ -356,16 +356,16 @@ export const CartPage: React.FC = () => {
                         {subsidyLedger.personalUsed && (
                           <div className='px-5 py-2.5 bg-[#ffebeb]  border-[#fca5a5] text-[red] text-caption font-bold flex items-center gap-2'>
                             <AlertCircle className='w-4 h-4 text-[red] flex-shrink-0' />
-                            <span className="font-normal">개인도서 지원 한도가 소진되어, 개인 도서는 본인 부담으로 결제됩니다.</span>
+                            <span className="font-normal">개인도서의 지원 한도가 소진되어, 개인 도서는 본인 부담으로 결제됩니다.</span>
                           </div>
                         )}
                         <div className='overflow-x-auto'>
-                          <table className='w-full text-caption text-left border-collapse'>
+                          <table className='w-full table-fixed text-caption text-left border-collapse'>
                             <thead className='bg-[#f6f6f6] text-[#80888a] font-semibold border-b border-[#edf0f1]'>
                               <tr>
                                 <th className='p-3 pl-5'>도서 정보</th>
-                                <th className='p-3 text-center'>주문금액 / 수량</th>
-                                <th className='p-3 text-center pr-9'>
+                                <th className='p-3 text-center w-[160px]'>주문금액 / 수량</th>
+                                <th className='p-3 text-center pr-9 w-[180px]'>
                                   <div className='inline-flex items-center justify-center gap-1'>
                                     <span>배송일정</span>
                                     <button
@@ -528,47 +528,7 @@ export const CartPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Cart Notices — 개선 항목 8 안내사항 아코디언 (필독 항목이라 기본 펼침) */}
-            <div className='border-t border-[#dadada] pt-5 space-y-3'>
-              <div className='border border-[#edf0f1] rounded-md overflow-hidden'>
-                <button type='button' role='button' aria-expanded={openNotices.b2b} onClick={() => toggleNotice('b2b')} className='accordion-header'>
-                  <span>B2B 복합결제 및 주문 안내사항</span>
-                  <ChevronDown className='accordion-header__icon w-[18px] h-[18px]' style={{ color: 'var(--color-foreground-secondary)' }} />
-                </button>
-                <div className='accordion-content' data-open={openNotices.b2b} aria-hidden={!openNotices.b2b}>
-                  <ul className='list-disc list-inside space-y-0.5 text-body-xs'>
-                    <li>
-                      <strong>추천도서</strong>: 100% 회사 지원 (월 1권 한도, <strong>종이도서만 지원</strong>)
-                    </li>
-                    <li>
-                      <strong>개인도서</strong>: 50% 회사 지원 (최대 10,000원 한도, <strong>종이도서 또는 전자도서</strong>)
-                    </li>
-                    <li>지원금을 초과하는 금액은 신용카드, 카카오페이, 네이버페이 등 개인 결제수단으로 복합결제됩니다.</li>
-                    <li>회원 로그인 후 장바구니에 상품을 담으시면 30일간 자동 보관 됩니다.</li>
-                  </ul>
-                </div>
-              </div>
 
-              <div className='border border-[#edf0f1] rounded-md overflow-hidden'>
-                <button type='button' role='button' aria-expanded={openNotices.delivery} onClick={() => toggleNotice('delivery')} className='accordion-header'>
-                  <span>일반배송상품(택배수령) 안내사항</span>
-                  <ChevronDown className='accordion-header__icon w-[18px] h-[18px]' style={{ color: 'var(--color-foreground-secondary)' }} />
-                </button>
-                <div className='accordion-content' data-open={openNotices.delivery} aria-hidden={!openNotices.delivery}>
-                  <ul className='list-disc list-inside space-y-0.5 text-body-xs'>
-                    <li>재고 여부에 따라 품절/지연될 수 있으며, 이 경우 별도로 안내드립니다.</li>
-                    <li>
-                      당일배송은 서울 및 수도권 인근지역에서 12:00 까지 주문 시 가능합니다.
-                      <ul className='list-item list-inside space-y-0.5 pl-5 font-bold'>
-                        <li>- 네이버페이, 지마켓, 옥션, 쿠팡 등의 제휴사 주문은 연동시간에 따라 당일배송이 어려울 수 있습니다.</li>
-                        <li>- 직장, 기관 등의 배송지는 당일배송이 어려울 수 있으며, 학교 배송지는 당일배송이 불가합니다.</li>
-                      </ul>
-                    </li>
-                    <li>배송지가 동일하더라도 여러건으로 진행된 주문이 각각의 배송료가 부과됩니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
 
             {/* Recommendations / Carousel: 오늘의 책 & 최근 본 상품 */}
             <div className='pt-6 space-y-8' style={{ display: 'none' }}>
@@ -687,23 +647,7 @@ export const CartPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* 당월 지원 한도 소진 알림 카피 */}
-              {subsidyLedger.recommendedUsed && subsidyLedger.personalUsed ? (
-                <div className='bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-caption text-red-600 font-medium leading-relaxed flex items-start gap-1.5'>
-                  <span className='shrink-0'>💡</span>
-                  <span><strong>당월 도서 지원금(추천·개인)</strong>이 모두 소진되어 전액 본인 부담으로 결제됩니다.</span>
-                </div>
-              ) : subsidyLedger.recommendedUsed && cart.some((i) => i.book.bookType === 'recommended') ? (
-                <div className='bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-caption text-gray-700 font-medium leading-relaxed flex items-start gap-1.5'>
-                  <span className='shrink-0'>💡</span>
-                  <span><strong>추천도서</strong>의 경우 지원금 한도가 소진되어 <br /> 작원 부담금으로 결제됩니다.</span>
-                </div>
-              ) : subsidyLedger.personalUsed && cart.some((i) => i.book.bookType === 'personal') ? (
-                <div className='bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-caption text-gray-700 font-medium leading-relaxed flex items-start gap-1.5'>
-                  <span className='shrink-0'>💡</span>
-                  <span><strong>개인도서</strong>의 경우 지원금 한도가 소진되어 <br />작원 부담금으로 결제됩니다.</span>
-                </div>
-              ) : null}
+
 
               {/* Action Button: 주문하기 — 화면당 유일한 Primary CTA */}
               <button type='button' onClick={handleOrderClick} className='btn btn--primary btn--lg w-full gap-2'>

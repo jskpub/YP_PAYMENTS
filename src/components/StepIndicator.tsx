@@ -26,7 +26,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
           <React.Fragment key={step.key}>
             <div
               disabled={step.key === 'complete'}
-              className={`flex items-center gap-1.5 transition-colors ${isActive ? 'font-bold text-[#181718]' : isPast ? 'text-[#595959] hover:text-[#181718]' : 'text-[#9c9c9c] hover:text-[#595959]'}`}
+              className={`flex items-center gap-1.5 transition-colors ${isActive ? 'font-bold text-[#181718]' : isPast ? 'text-[#595959]' : 'text-[#9c9c9c] '}`}
             >
               <span>{step.label}</span>
             </div>
@@ -35,6 +35,6 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
           </React.Fragment>
         );
       })}
-    </div>
+    </div >
   );
 };
