@@ -249,8 +249,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ruleExplanation: isEbook ? '추천도서는 종이도서만 100% 지원 가능합니다. (전자책 지원불가)' : canApply ? 'B2B 기업 추천도서 100% 전액 지원 (월 1권)' : '이번 달 추천도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
         canApply,
       };
-    } else if (book.bookType === 'personal') {
-      // 개인도서: MIN(판매금액 * 50%, 10,000원) (월 1권 한도)
+    } else {
+      // 개인도서(일반도서 포함): MIN(판매금액 * 50%, 10,000원) (월 1권 한도)
       const canApply = !subsidyLedger.personalUsed;
       const singleSubsidy = Math.min(Math.floor(singlePrice * 0.5), 10000);
       const companySubsidy = canApply && quantity > 0 ? singleSubsidy : 0;
@@ -261,35 +261,22 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ruleExplanation: canApply ? `개인도서 50% 지원 (최대 10,000원 지원, -${companySubsidy.toLocaleString()}원 차감)` : '이번 달 개인도서 지원 한도(월 1권)를 이미 사용하셨습니다.',
         canApply,
       };
-    } else {
-      // 일반도서: B2B 지원금 미적용 (회사지원금 0원, 직원 전액부담)
-      return {
-        companySubsidy: 0,
-        employeePayment: totalSelling,
-        ruleExplanation: 'B2B 지원금 미적용 일반도서 (전액 본인부담)',
-        canApply: false,
-      };
     }
   };
 
   // Re-calculate cart item subsidies according to B2B Rules:
   // 1) Recommended Book: 100% company subsidy for 1 copy (employee payment = 0 KRW for 1st copy)
   // 2) Personal Book: MIN(sellingPrice * 50%, 10,000 KRW) company subsidy for 1 copy
-  // 3) General Book: 0 KRW company subsidy (100% employee payment regardless of quantity)
-  // 4) Quantities >= 2 for Recommended/Personal: Subsidy applies to 1 copy ONLY; additional copies are 100% employee payment.
+  // 3) Quantities >= 2 for Recommended/Personal: Subsidy applies to 1 copy ONLY; additional copies are 100% employee payment.
   const recalculateCartItem = (item: CartItem): CartItem => {
     const freshBook = MOCK_BOOKS.find((b) => b.id === item.book.id) || item.book;
     const singlePrice = freshBook.sellingPrice;
     const totalSelling = singlePrice * item.quantity;
-    const isGeneral = freshBook.bookType === 'general';
-    const isApplied = !isGeneral && item.isSubsidyApplied === true; // 기본적으로 지원금 미적용 상태 (버튼 클릭 시에만 true)
+    const isApplied = item.isSubsidyApplied === true; // 기본적으로 지원금 미적용 상태 (버튼 클릭 시에만 true)
     let singleSubsidy = 0;
     let note = '';
 
-    if (isGeneral) {
-      singleSubsidy = 0;
-      note = 'B2B 지원금 미적용 일반도서 (전액 본인부담)';
-    } else if (isApplied) {
+    if (isApplied) {
       if (freshBook.bookType === 'recommended') {
         // 추천도서: 100% 회사 지원 (1권만 지원)
         singleSubsidy = singlePrice;
@@ -310,7 +297,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return {
       ...item,
       book: freshBook,
-      isSubsidyApplied: isGeneral ? false : isApplied,
+      isSubsidyApplied: isApplied,
       subsidyNote: note,
       itemSellingPrice: totalSelling,
       itemCompanySubsidy: companySubsidy,
@@ -338,7 +325,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return changed ? next : items;
   };
 
-  // Initial cart with 3 book types (1 copy each): Recommended (18,000 KRW), Personal (20,000 KRW), General (4,950 KRW)
+  // Initial cart with 3 book types (1 copy each): Recommended (18,000 KRW), Personal (20,000 KRW), Personal (4,950 KRW)
   // All items default to isSubsidyApplied: false
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (localStorage.getItem('yp_cart_reset_version') !== CART_RESET_VERSION) {
@@ -359,7 +346,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const recBook = MOCK_BOOKS.find((b) => b.id === 'b-04') || MOCK_BOOKS[3]; // 추천도서 18,000원 ('제이')
     const perBook = MOCK_BOOKS.find((b) => b.id === 'b-07') || MOCK_BOOKS[6]; // 개인도서 20,000원 ('인생을 바꾸는 투자학개론')
-    const genBook = MOCK_BOOKS.find((b) => b.id === 'b-01') || MOCK_BOOKS[0]; // 일반도서 4,950원 ('소설 보다 가을 2026')
+    const genBook = MOCK_BOOKS.find((b) => b.id === 'b-01') || MOCK_BOOKS[0]; // 개인도서 4,950원 ('소설 보다 가을 2026')
 
     const item1: CartItem = recalculateCartItem({
       id: 'cart-1',

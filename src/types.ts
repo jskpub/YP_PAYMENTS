@@ -3,7 +3,7 @@
  * Web 표준 가이드 및 B2B 복합결제 PRD 기준
  */
 
-export type BookType = 'recommended' | 'personal' | 'general'; // 추천도서 | 개인도서 | 일반도서(지원금 미적용)
+export type BookType = 'recommended' | 'personal'; // 추천도서 | 개인도서 (일반도서는 개인도서에 포함)
 export type BookFormat = 'paper' | 'ebook'; // 종이도서 | 전자도서
 export type PageTab = 'intranet' | 'home' | 'recommended' | 'best' | 'new' | 'explore' | 'cart' | 'gift' | 'payment' | 'complete' | 'mypage';
 

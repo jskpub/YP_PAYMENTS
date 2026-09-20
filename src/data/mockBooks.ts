@@ -46,7 +46,7 @@ export const MOCK_BOOKS: Book[] = [
     discountRate: 10,
     rewardPoint: 270,
     format: 'paper',
-    bookType: 'general', // 일반도서 (B2B 지원금 미적용)
+    bookType: 'personal', // 개인도서: 50% = 2,475원 지원
     tags: ['한국소설', '문학선집', '계간지', '가을신작'],
     description: '젊은 작가들의 가장 빛나는 순간을 포착한 단편 소설 모음집. 가을의 정취와 문학적 통찰이 어우러진 깊이 있는 작품들로 채워져 있습니다.',
     rating: 4.8,

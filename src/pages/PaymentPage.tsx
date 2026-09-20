@@ -347,59 +347,57 @@ export const PaymentPage: React.FC = () => {
                             <div className='h-[18px]'>{item.isSubsidyApplied && item.itemCompanySubsidy > 0 ? <span className={`font-bold ${item.book.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.itemCompanySubsidy.toLocaleString()}원</span> : null}</div>
 
                             {/* 회사 지원금 적용 토글 버튼 및 상태 문구 */}
-                            {item.book.bookType !== 'general' && (
-                              <div className='flex flex-col items-end gap-1'>
-                                {(() => {
-                                  const type = item.book.bookType;
-                                  const isExhausted = type === 'recommended' ? subsidyLedger.recommendedUsed : subsidyLedger.personalUsed;
+                            <div className='flex flex-col items-end gap-1'>
+                              {(() => {
+                                const type = item.book.bookType;
+                                const isExhausted = type === 'recommended' ? subsidyLedger.recommendedUsed : subsidyLedger.personalUsed;
 
-                                  // 케이스 C: 이번 달 지원금 결제 완료로 소진된 경우
-                                  if (isExhausted) {
-                                    return (
-                                      <>
-                                        <button type='button' disabled aria-pressed={false} className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-bold bg-[#f6f6f6] text-[#9c9c9c] border border-[#cbd2d4] cursor-not-allowed whitespace-nowrap shadow-2xs'>
-                                          <Circle className='w-3 h-3 text-[#9c9c9c]' />
-                                          적용 불가
-                                        </button>
-                                        <span className='text-caption text-[#df0000] font-normal whitespace-nowrap'>이번 달 {type === 'recommended' ? '추천도서' : '개인도서'} 1권 소진</span>
-                                      </>
-                                    );
-                                  }
-
-                                  // 케이스 B: 지원금 적용됨
-                                  if (item.isSubsidyApplied) {
-                                    return (
-                                      <>
-                                        <button
-                                          type='button'
-                                          aria-pressed={true}
-                                          onClick={() => removeCartSubsidy(item.id)}
-                                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-bold text-white border transition-all cursor-pointer whitespace-nowrap shadow-2xs ${type === 'personal' ? 'bg-[#1f976b] border-[#1f976b]' : 'bg-[#df0000] border-[#df0000]'}`}
-                                        >
-                                          <CheckCircle2 className='w-4 h-4' />
-                                          지원금 적용됨
-                                        </button>
-                                      </>
-                                    );
-                                  }
-
-                                  // 케이스 A: 미적용 (기본 상태) — 버튼임을 명확히 인지하도록 강조 스타일 + 행동 유도형 문구 사용
+                                // 케이스 C: 이번 달 지원금 결제 완료로 소진된 경우
+                                if (isExhausted) {
                                   return (
-                                    <button
-                                      type='button'
-                                      aria-pressed={false}
-                                      onClick={() => applyCartSubsidy(item.id)}
-                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption  bg-white transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
-                                        type === 'recommended' ? 'text-[#df0000] border-2 border-[#df0000] hover:bg-[#df0000] hover:text-white' : 'text-[#1f976b] border-2 border-[#1f976b] hover:bg-[#1f976b] hover:text-white'
-                                      }`}
-                                    >
-                                      <Circle className='w-3.5 h-3.5' />
-                                      지원금 적용하기
-                                    </button>
+                                    <>
+                                      <button type='button' disabled aria-pressed={false} className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-bold bg-[#f6f6f6] text-[#9c9c9c] border border-[#cbd2d4] cursor-not-allowed whitespace-nowrap shadow-2xs'>
+                                        <Circle className='w-3 h-3 text-[#9c9c9c]' />
+                                        적용 불가
+                                      </button>
+                                      <span className='text-caption text-[#df0000] font-normal whitespace-nowrap'>이번 달 {type === 'recommended' ? '추천도서' : '개인도서'} 1권 소진</span>
+                                    </>
                                   );
-                                })()}
-                              </div>
-                            )}
+                                }
+
+                                // 케이스 B: 지원금 적용됨
+                                if (item.isSubsidyApplied) {
+                                  return (
+                                    <>
+                                      <button
+                                        type='button'
+                                        aria-pressed={true}
+                                        onClick={() => removeCartSubsidy(item.id)}
+                                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-bold text-white border transition-all cursor-pointer whitespace-nowrap shadow-2xs ${type === 'personal' ? 'bg-[#1f976b] border-[#1f976b]' : 'bg-[#df0000] border-[#df0000]'}`}
+                                      >
+                                        <CheckCircle2 className='w-4 h-4' />
+                                        지원금 적용됨
+                                      </button>
+                                    </>
+                                  );
+                                }
+
+                                // 케이스 A: 미적용 (기본 상태) — 버튼임을 명확히 인지하도록 강조 스타일 + 행동 유도형 문구 사용
+                                return (
+                                  <button
+                                    type='button'
+                                    aria-pressed={false}
+                                    onClick={() => applyCartSubsidy(item.id)}
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption  bg-white transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+                                      type === 'recommended' ? 'text-[#df0000] border-2 border-[#df0000] hover:bg-[#df0000] hover:text-white' : 'text-[#1f976b] border-2 border-[#1f976b] hover:bg-[#1f976b] hover:text-white'
+                                    }`}
+                                  >
+                                    <Circle className='w-3.5 h-3.5' />
+                                    지원금 적용하기
+                                  </button>
+                                );
+                              })()}
+                            </div>
                           </td>
                           <td className='p-3 text-right pr-5 font-bold text-[#181718]'>{item.itemEmployeePayment.toLocaleString()}원</td>
                         </tr>

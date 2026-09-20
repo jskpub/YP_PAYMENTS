@@ -133,7 +133,6 @@ export const CartPage: React.FC = () => {
                 {cart.map((item) => {
                   const isRecommended = item.book.bookType === 'recommended';
                   const isPersonal = item.book.bookType === 'personal';
-                  const isGeneral = item.book.bookType === 'general';
                   const isEbook = item.format === 'ebook';
 
                   return (
@@ -146,19 +145,12 @@ export const CartPage: React.FC = () => {
                         <BookCoverImage title={item.book.title} coverImage={item.book.coverImage} coverBackground={item.book.coverBackground} className='w-20 h-28 rounded shadow-xs border border-[#edf0f1] flex-shrink-0' titleClassName='text-[10px]' />
 
                         <div className='space-y-2 min-w-0 flex-1'>
-                          {/* 1. 도서 메타데이터 뱃지 (추천도서 / 개인도서 / 일반도서) */}
+                          {/* 1. 도서 메타데이터 뱃지 (추천도서) */}
                           <div className='flex items-center gap-1.5 flex-wrap'>
                             {isRecommended && (
                               <span className='text-caption px-2 py-0.5 rounded font-extrabold flex items-center gap-1 bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]'>
                                 <Award className='w-3 h-3' />
                                 추천도서
-                              </span>
-                            )}
-
-                            {isGeneral && (
-                              <span className='text-caption px-2 py-0.5 rounded font-extrabold flex items-center gap-1 bg-[#f6f6f6] text-[#555a5c] border border-[#cbd2d4]'>
-                                <Award className='w-3 h-3' />
-                                일반도서
                               </span>
                             )}
 

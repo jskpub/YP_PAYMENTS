@@ -18,7 +18,7 @@ const toAdapterBook = (book: PrototypeBook): Book => ({
   discountRate: book.discountRate,
   rewardPoint: book.pointReward,
   format: 'paper',
-  bookType: book.supportType,
+  bookType: book.supportType === 'recommended' ? 'recommended' : 'personal', // 일반도서는 개인도서에 포함
   tags: book.tags || [],
   description: book.description,
   rating: book.rating,
