@@ -12,6 +12,6 @@ export const BizMallBrandLogo: React.FC<BizMallBrandLogoProps> = ({ size = 'md',
       <img src='https://cdn.ypbooks.co.kr/image/logo/202512/d4bd4b8c-948f-4703-9cd2-0be0cccadf27.png' alt='영풍문고' />
     </div>
 
-    <span className='rounded-md bg-yp-red px-2 py-0.5 text-[10px] font-extrabold tracking-wider text-white'>비즈몰</span>
+    <span className='rounded-md bg-yp-red px-2 py-0.5 text-caption-sm font-semibold tracking-wider text-white'>비즈몰</span>
   </div>
 );

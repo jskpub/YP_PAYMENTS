@@ -85,36 +85,40 @@
   --color-danger-soft: var(--red01);
 
   /* --------------------------------------------------------------------------
-     [3] Typography Tokens
+     [3] Typography Tokens — KRDS 표준 타이포그래피 스케일 반영
      기반 폰트: Pretendard GOV (로컬 woff), Apple SD Gothic Neo (fallback)
   -------------------------------------------------------------------------- */
 
   --font-sans: 'Pretendard GOV', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, Roboto, sans-serif;
   --font-family-base: var(--font-sans);
 
-  /* 헤딩 */
-  --font-size-h1: 2rem; /* 32px */
-  --font-size-h2: 1.625rem; /* 26px */
-  --font-size-h3: 1.375rem; /* 22px */
-  --font-size-h4: 1.1875rem; /* 19px */
+  --font-size-h1: 2rem; /* 32px (heading-xl) */
+  --font-size-h2: 1.625rem; /* 26px (heading-lg) */
+  --font-size-h3: 1.375rem; /* 22px (heading-md) */
+  --font-size-h4: 1.1875rem; /* 19px (heading-sm) */
 
-  /* 본문 */
-  --font-size-body-lg: 1.0625rem; /* 17px */
-  --font-size-body-md: 0.9375rem; /* 15px */
-  --font-size-body-sm: 0.8125rem; /* 13px */
-  --font-size-caption: 0.75rem; /* 12px */
+  --font-size-body-lg: 1.0625rem; /* 17px : 데스크톱 기본 본문 (Standard) */
+  --font-size-body-md: 1rem; /* 16px : 데스크톱 보조 본문 / 모바일 기본 본문 */
+  --font-size-body-sm: 0.9375rem; /* 15px : 모바일 보조 본문 / 조밀한 UI */
+  --font-size-body-xs: 0.875rem; /* 14px : 폼 레이블, 상세 텍스트 */
 
-  /* 줄간격 & 자간 */
+  --font-size-caption-lg: 0.8125rem; /* 13px : 배지, 부가 주석 */
+  --font-size-caption-sm: 0.75rem; /* 12px : 최소 가독 한계 주석 */
+  --font-size-caption: var(--font-size-caption-sm); /* 기존 코드 호환용 12px */
+
+  --font-size-body-base: var(--font-size-body-lg); /* 17px 기본값 명시 */
+
   --line-height-heading: 1.4;
   --line-height-body: 1.5;
-  --letter-spacing-default: 0;
+  --letter-spacing-default: -0.01em; /* Pretendard 국문 최적 자간 */
 
   /* --------------------------------------------------------------------------
-     [4] Spacing Tokens — 8px 기반 스케일
+     [4] Spacing Tokens — 4px / 8px 기반 유연한 스케일 (12px 보완)
   -------------------------------------------------------------------------- */
 
   --spacing-xs: 0.25rem; /*  4px */
   --spacing-sm: 0.5rem; /*  8px */
+  --spacing-md-sm: 0.75rem; /* 12px : 입력 폼/뱃지 등에 자주 쓰이는 중간 간격 */
   --spacing-md: 1rem; /* 16px */
   --spacing-lg: 1.5rem; /* 24px */
   --spacing-xl: 2rem; /* 32px */
@@ -187,19 +191,19 @@
   --tooltip-color: var(--white);
   --tooltip-border-radius: var(--radius-sm);
   --tooltip-padding: 6px 10px;
-  --tooltip-font-size: var(--font-size-body-sm);
+  --tooltip-font-size: var(--font-size-caption-lg); /* 13px */
 
   /* 토스트 */
   --toast-bg: var(--color-foreground);
   --toast-color: var(--white);
   --toast-border-radius: var(--radius-md);
   --toast-padding: var(--spacing-sm) var(--spacing-md);
-  --toast-font-size: var(--font-size-body-sm);
+  --toast-font-size: var(--font-size-body-xs); /* 14px (가독성 향상) */
 
   /* 뱃지 */
   --badge-border-radius: var(--radius-full);
   --badge-padding: 2px 8px;
-  --badge-font-size: var(--font-size-caption);
+  --badge-font-size: var(--font-size-caption); /* 12px */
 
   /* 프로그레스 바 */
   --progress-height: 12px;

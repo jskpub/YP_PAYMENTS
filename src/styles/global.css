@@ -37,4 +37,22 @@
     Temp 고객사(삼성전자) 인트라넷 목업 전용
   ------------------------------------------------------------------ */
   --color-sec-blue: #0072ce;
+
+  /* ------------------------------------------------------------------
+     타이포그래피 시맨틱 토큰 → Tailwind 폰트 사이즈 유틸리티
+     variables.css [3] KRDS 타이포그래피 스케일을 그대로 노출한다.
+     예) className="text-h1" / "text-body-sm" / "text-caption"
+  ------------------------------------------------------------------ */
+  --text-h1: var(--font-size-h1); /* 32px */
+  --text-h2: var(--font-size-h2); /* 26px */
+  --text-h3: var(--font-size-h3); /* 22px */
+  --text-h4: var(--font-size-h4); /* 19px */
+  --text-body-lg: var(--font-size-body-lg); /* 17px */
+  --text-body-md: var(--font-size-body-md); /* 16px */
+  --text-body-sm: var(--font-size-body-sm); /* 15px */
+  --text-body-xs: var(--font-size-body-xs); /* 14px */
+  --text-body-base: var(--font-size-body-base); /* 17px, body-lg와 동일 */
+  --text-caption-lg: var(--font-size-caption-lg); /* 13px */
+  --text-caption-sm: var(--font-size-caption-sm); /* 12px */
+  --text-caption: var(--font-size-caption); /* 12px, caption-sm과 동일 */
 }

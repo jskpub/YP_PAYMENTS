@@ -1,7 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useShop } from '../context/ShopContext';
-import { X, AlertCircle, Search, Check } from 'lucide-react';
+import { X, AlertCircle, Loader2 } from 'lucide-react';
 import { Address } from '../types';
+
+// 카카오(다음) 우편번호 서비스 — https://postcode.map.kakao.com/guide (API 키 불필요)
+const POSTCODE_SCRIPT_SRC = 'https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+
+let postcodeScriptPromise: Promise<void> | null = null;
+const loadPostcodeScript = (): Promise<void> => {
+  if ((window as any).daum?.Postcode) return Promise.resolve();
+  if (!postcodeScriptPromise) {
+    postcodeScriptPromise = new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = POSTCODE_SCRIPT_SRC;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        script.remove();
+        postcodeScriptPromise = null; // 실패 시 다음 시도에서 재로드할 수 있게 초기화
+        reject(new Error('postcode script load failed'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return postcodeScriptPromise;
+};
+
+interface PostcodeResult {
+  zonecode: string;
+  roadAddress: string;
+  jibunAddress: string;
+  autoJibunAddress: string;
+  userSelectedType: 'R' | 'J';
+  bname: string;
+  buildingName: string;
+  apartment: 'Y' | 'N';
+}
 
 export const DeliveryModal: React.FC = () => {
   const { isAddressModalOpen, setIsAddressModalOpen, addressModalTab, setAddressModalTab, addresses, selectedAddress, setSelectedAddress, addAddress, showToast } = useShop();
@@ -25,35 +59,51 @@ export const DeliveryModal: React.FC = () => {
 
   // Address Search Picker state
   const [showAddressPicker, setShowAddressPicker] = useState(false);
-  const [addressSearchTerm, setAddressSearchTerm] = useState('');
+  const [postcodeStatus, setPostcodeStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [postcodeRetry, setPostcodeRetry] = useState(0);
+  const postcodeContainerRef = useRef<HTMLDivElement>(null);
+  const detailAddressRef = useRef<HTMLInputElement>(null);
 
-  const sampleAddresses = [
-    {
-      post: '03154',
-      road: '서울특별시 종로구 청계천로 41 (서린동, 영풍빌딩)',
-      jibun: '서울특별시 종로구 서린동 33 영풍빌딩',
-    },
-    {
-      post: '06110',
-      road: '서울특별시 강남구 강남대로 542 (논현동, 영풍빌딩)',
-      jibun: '서울특별시 강남구 논현동 142-3',
-    },
-    {
-      post: '06544',
-      road: '서울특별시 서초구 신반포로 176 (반포동, 센트럴시티)',
-      jibun: '서울특별시 서초구 반포동 19-3 센트럴시티 영풍문고',
-    },
-    {
-      post: '04050',
-      road: '서울특별시 마포구 양화로 160 (동교동, 홍대입구역 복합역사)',
-      jibun: '서울특별시 마포구 동교동 160-5',
-    },
-    {
-      post: '05551',
-      road: '서울특별시 송파구 올림픽로 300 (신천동, 롯데월드몰)',
-      jibun: '서울특별시 송파구 신천동 29 롯데월드몰 캐주얼동',
-    },
-  ];
+  // 주소 검색 팝업이 열리면 카카오 우편번호 서비스를 임베드 방식으로 렌더링한다.
+  useEffect(() => {
+    if (!showAddressPicker) return;
+    let cancelled = false;
+    setPostcodeStatus('loading');
+
+    loadPostcodeScript()
+      .then(() => {
+        const container = postcodeContainerRef.current;
+        if (cancelled || !container) return;
+        new (window as any).daum.Postcode({
+          width: '100%',
+          height: '100%',
+          oncomplete: (data: PostcodeResult) => {
+            // 도로명 주소 선택 시 법정동/건물명을 참고항목으로 덧붙인다 (카카오 가이드 예제 방식).
+            let road = data.roadAddress;
+            if (data.userSelectedType === 'R') {
+              const extra: string[] = [];
+              if (data.bname && /[동로가]$/.test(data.bname)) extra.push(data.bname);
+              if (data.buildingName && data.apartment === 'Y') extra.push(data.buildingName);
+              if (extra.length > 0) road += ` (${extra.join(', ')})`;
+            }
+            setPostalCode(data.zonecode);
+            setRoadAddress(road);
+            setJibunAddress(data.jibunAddress || data.autoJibunAddress);
+            setShowAddressPicker(false);
+            setTimeout(() => detailAddressRef.current?.focus(), 0);
+          },
+        }).embed(container);
+        setPostcodeStatus('ready');
+      })
+      .catch(() => {
+        if (!cancelled) setPostcodeStatus('error');
+      });
+
+    return () => {
+      cancelled = true;
+      if (postcodeContainerRef.current) postcodeContainerRef.current.innerHTML = '';
+    };
+  }, [showAddressPicker, postcodeRetry]);
 
   if (!isAddressModalOpen) return null;
 
@@ -65,13 +115,6 @@ export const DeliveryModal: React.FC = () => {
       setPhoneMid('1354');
       setPhoneEnd('5678');
     }
-  };
-
-  const handlePickAddress = (item: { post: string; road: string; jibun: string }) => {
-    setPostalCode(item.post);
-    setRoadAddress(item.road);
-    setJibunAddress(item.jibun);
-    setShowAddressPicker(false);
   };
 
   const handleSubmitNewAddress = (e: React.FormEvent) => {
@@ -248,7 +291,7 @@ export const DeliveryModal: React.FC = () => {
                   연락처1<span className='text-[#df0000]'>*</span>
                 </label>
                 <div className='flex items-center gap-2'>
-                  <select value={phonePrefix} onChange={(e) => setPhonePrefix(e.target.value)} className='w-20 h-10 px-2 border border-[#cbd2d4] rounded focus:border-[#df0000] focus:outline-none text-sm bg-white'>
+                  <select value={phonePrefix} onChange={(e) => setPhonePrefix(e.target.value)} className='w-20 h-10 px-2 pr-7 border border-[#cbd2d4] rounded focus:border-[#df0000] focus:outline-none text-sm bg-white'>
                     <option value='010'>010</option>
                     <option value='011'>011</option>
                     <option value='016'>016</option>
@@ -303,7 +346,7 @@ export const DeliveryModal: React.FC = () => {
 
                   <input type='text' readOnly value={roadAddress} placeholder='도로명' className='w-full h-10 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm text-[#181718]' />
                   <input type='text' readOnly value={jibunAddress} placeholder='지번' className='w-full h-10 px-3 border border-[#cbd2d4] rounded bg-[#f6f6f6] text-sm text-[#181718]' />
-                  <input type='text' value={detailAddress} onChange={(e) => setDetailAddress(e.target.value)} placeholder='상세주소' className='w-full h-10 px-3 border border-[#cbd2d4] rounded focus:border-[#df0000] focus:outline-none text-sm placeholder-[#9da6a8]' />
+                  <input ref={detailAddressRef} type='text' value={detailAddress} onChange={(e) => setDetailAddress(e.target.value)} placeholder='상세주소' className='w-full h-10 px-3 border border-[#cbd2d4] rounded focus:border-[#df0000] focus:outline-none text-sm placeholder-[#9da6a8]' />
 
                   <div className='pt-1'>
                     <label className='flex items-center gap-2 cursor-pointer text-xs text-[#555a5c]'>
@@ -337,32 +380,27 @@ export const DeliveryModal: React.FC = () => {
               <div className='bg-white w-full max-w-lg rounded-lg shadow-xl overflow-hidden border border-[#cbd2d4]'>
                 <div className='bg-[#181718] text-white px-4 py-3 flex items-center justify-between'>
                   <span className='font-bold text-sm'>우편번호 & 도로명 주소 검색</span>
-                  <button onClick={() => setShowAddressPicker(false)} className='text-neutral-400 hover:text-white'>
+                  <button type='button' onClick={() => setShowAddressPicker(false)} className='text-neutral-400 hover:text-white' aria-label='닫기'>
                     <X className='w-4 h-4' />
                   </button>
                 </div>
-                <div className='p-4 space-y-3'>
-                  <div className='flex gap-2'>
-                    <input type='text' value={addressSearchTerm} onChange={(e) => setAddressSearchTerm(e.target.value)} placeholder='도로명 또는 건물명 검색 (예: 종로, 강남대로, 서초구)' className='flex-1 h-10 px-3 border border-[#cbd2d4] rounded text-sm focus:outline-none focus:border-[#df0000]' />
-                    <button type='button' className='px-4 bg-[#df0000] text-white rounded text-sm font-bold flex items-center gap-1'>
-                      <Search className='w-4 h-4' />
-                      검색
-                    </button>
-                  </div>
-                  <div className='text-xs text-[#80888a]'>아래 검색 예시 주소를 클릭하여 바로 입력하실 수 있습니다.</div>
-                  <div className='max-h-60 overflow-y-auto divide-y divide-[#edf0f1] border border-[#cbd2d4] rounded'>
-                    {sampleAddresses
-                      .filter((a) => !addressSearchTerm || a.road.includes(addressSearchTerm) || a.jibun.includes(addressSearchTerm))
-                      .map((item, i) => (
-                        <div key={i} onClick={() => handlePickAddress(item)} className='p-3 hover:bg-[#ffebeb]/40 cursor-pointer text-left transition-colors'>
-                          <div className='flex items-center gap-2'>
-                            <span className='bg-[#edf0f1] text-[#181718] px-2 py-0.5 rounded text-xs font-bold'>{item.post}</span>
-                            <span className='text-sm font-bold text-[#181718]'>{item.road}</span>
-                          </div>
-                          <div className='text-xs text-[#80888a] mt-1'>지번: {item.jibun}</div>
-                        </div>
-                      ))}
-                  </div>
+                <div className='relative h-[470px] bg-white'>
+                  {/* 카카오 우편번호 서비스 임베드 영역 */}
+                  <div ref={postcodeContainerRef} className='w-full h-full' />
+                  {postcodeStatus === 'loading' && (
+                    <div className='absolute inset-0 flex items-center justify-center gap-2 text-sm text-[#80888a] bg-white'>
+                      <Loader2 className='w-4 h-4 animate-spin' />
+                      주소 검색을 불러오는 중...
+                    </div>
+                  )}
+                  {postcodeStatus === 'error' && (
+                    <div className='absolute inset-0 flex flex-col items-center justify-center gap-3 text-sm text-[#555a5c] bg-white'>
+                      <span>주소 검색 서비스를 불러오지 못했습니다.</span>
+                      <button type='button' onClick={() => setPostcodeRetry((n) => n + 1)} className='h-9 px-4 border border-[#cbd2d4] rounded bg-white hover:bg-[#f6f6f6] font-semibold'>
+                        다시 시도
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
