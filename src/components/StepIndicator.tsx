@@ -24,18 +24,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => 
 
         return (
           <React.Fragment key={step.key}>
-            <button
-              onClick={() => {
-                if (step.key !== 'complete') {
-                  setActivePage(step.key as PageTab);
-                }
-              }}
+            <div
               disabled={step.key === 'complete'}
               className={`flex items-center gap-1.5 transition-colors ${isActive ? 'font-bold text-[#181718]' : isPast ? 'text-[#595959] hover:text-[#181718]' : 'text-[#9c9c9c] hover:text-[#595959]'}`}
             >
-              {isActive && <span className='w-5 h-5 rounded-full bg-[#181718] text-white flex items-center justify-center text-xs font-bold'>{step.number}</span>}
               <span>{step.label}</span>
-            </button>
+            </div>
 
             {idx < steps.length - 1 && <ChevronRight className='w-4 h-4 mx-2 sm:mx-3 text-[#cbd2d4]' />}
           </React.Fragment>

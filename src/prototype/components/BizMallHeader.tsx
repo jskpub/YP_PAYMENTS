@@ -197,7 +197,7 @@ export const BizMallHeader: React.FC<BizMallHeaderProps> = ({ employeeName, bene
           <span>
             <span className='block text-[10px] font-bold text-yp-gray-500'>{benefit.cycleLabel} 남은 지원금</span>
             <span className='mt-0.5 block text-sm font-extrabold leading-none text-yp-red'>
-              개인 {benefit.personalBook.remainingAmount.toLocaleString()}원 · 추천 {benefit.recommendedBook.limitCount - benefit.recommendedBook.usedCount}권
+              개인 {benefit.personalBook.limitCount - benefit.personalBook.usedCount}권 · 추천 {benefit.recommendedBook.limitCount - benefit.recommendedBook.usedCount}권
             </span>
           </span>
         </button>

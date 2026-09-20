@@ -97,7 +97,7 @@ export const OrderCompletePage: React.FC = () => {
         {/* Complex B2B Settlement Summary (복합결제 분할 명세서) */}
         <div className='bg-white rounded-xl border border-[#cbd2d4] p-6 space-y-4 shadow-sm'>
           <h2 className='text-body-md font-bold text-[#181718] border-b border-[#dadada] pb-3 flex items-center justify-between'>
-            <span>B2B 복합결제 정산 내역</span>
+            <span>복합결제 정산 내역</span>
             <span className='text-caption font-normal text-[#80888a]'>단일 주문번호 기준 회사지원금 + 직원부담금 통합 승인</span>
           </h2>
 
@@ -108,21 +108,21 @@ export const OrderCompletePage: React.FC = () => {
               <div className='text-h4 font-bold text-[#181718] mt-1'>{order.totalSellingPrice.toLocaleString()}원</div>
             </div>
 
-            <ChevronRight className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
+
+            <Minus className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
 
             <div className='w-full sm:flex-1 bg-[#e8f5ef] p-4 rounded-lg border border-[#a3d9bc] text-center' aria-label={`회사 지원금 차감 ${order.totalCompanySubsidy.toLocaleString()}원`}>
               <span className='text-caption text-[#1f976b] font-semibold inline-flex items-center gap-1'>
-                <Minus className='w-3.5 h-3.5' style={{ color: 'var(--color-primary)' }} />
                 회사 지원금 (독서 지원금 차감)
               </span>
               <div className='text-h4 font-bold text-[#1f976b] mt-1'>{order.totalCompanySubsidy.toLocaleString()}원</div>
             </div>
 
-            <ChevronRight className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
+
+            <Equal className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
 
             <div className='w-full sm:flex-1 bg-[#fffafa] p-4 rounded-lg border border-[#f9cdcd] text-center' aria-label={`실 결제금액 ${order.finalPaidAmount.toLocaleString()}원`}>
               <span className='text-caption text-[#df0000] font-semibold inline-flex items-center gap-1'>
-                <Equal className='w-3.5 h-3.5' style={{ color: 'var(--color-foreground)' }} />
                 직원 결제금액
               </span>
               <div className='text-h4 font-black text-[#df0000] mt-1'>{order.finalPaidAmount.toLocaleString()}원</div>
