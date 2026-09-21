@@ -63,7 +63,7 @@ export const PaymentPage: React.FC = () => {
   const [isRecommendedOpen, setIsRecommendedOpen] = useState(true);
   const [isPersonalOpen, setIsPersonalOpen] = useState(true);
 
-  const [deliveryMemo, setDeliveryMemo] = useState('문 앞에 놓아주세요.');
+  const [deliveryMemo, setDeliveryMemo] = useState('부재시 경비실에 맡겨주세요.');
 
   const [agreeTerms, setAgreeTerms] = useState(true);
 
@@ -765,10 +765,11 @@ export const PaymentPage: React.FC = () => {
                         }}
                         className='w-full h-10 px-3 border border-[#cbd2d4] rounded text-body-xs bg-white focus:outline-none focus:border-[#df0000]'
                       >
-                        <option value='문 앞에 놓아주세요.'>문 앞에 놓아주세요.</option>
-                        <option value='배송 전 미리 연락해 주세요.'>배송 전 미리 연락해 주세요.</option>
-                        <option value='경비실에 맡겨 주세요.'>경비실에 맡겨 주세요.</option>
-                        <option value='택배함에 보관해 주세요.'>택배함에 보관해 주세요.</option>
+                        <option value='부재시 경비실에 맡겨주세요.'>부재시 경비실에 맡겨주세요.</option>
+                        <option value='부재시 전화주시거나 문자 남겨 주세요.'>부재시 전화주시거나 문자 남겨 주세요.</option>
+                        <option value=' 현관 앞에 놓아주세요'> 현관 앞에 놓아주세요</option>
+                        <option value='배송전 미리 연락주세요.'>배송전 미리 연락주세요.</option>
+                        <option value='파손의 위험이 있습니다. 배송시 주의해주세요.'>파손의 위험이 있습니다. 배송시 주의해주세요.</option>
                         <option value='직접 수령하겠습니다.'>직접 수령하겠습니다.</option>
                         <option value='직접 입력'>직접 입력</option>
                       </select>

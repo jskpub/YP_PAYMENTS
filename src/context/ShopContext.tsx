@@ -142,7 +142,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
           localStorage.setItem('yp_addresses', JSON.stringify(sanitized));
           return sanitized;
         }
-      } catch (e) { }
+      } catch (e) {}
     }
     const sanitizedInit = INITIAL_ADDRESSES.map(sanitizeAddressItem);
     localStorage.setItem('yp_addresses', JSON.stringify(sanitizedInit));
@@ -178,7 +178,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) { }
+      } catch (e) {}
     }
     return DEFAULT_SUBSIDY_LEDGER;
   });
@@ -445,7 +445,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         finalPaidAmount: 0,
         pointsUsed: 0,
         deliveryAddress: INITIAL_ADDRESSES[0],
-        deliveryMemo: '문 앞에 놓아주세요.',
+        deliveryMemo: '부재시 경비실에 맡겨주세요.',
         paymentMethod: 'B2B 회사 전액 지원 (0원 결제)',
         culturalDeduction: true,
         status: '배송완료',
@@ -644,7 +644,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       pointsUsed: 0,
       earnedPoints: totalRewardPoints,
       deliveryAddress: selectedAddress,
-      deliveryMemo: deliveryMemo || '문 앞에 놓아주세요.',
+      deliveryMemo: deliveryMemo || '부재시 경비실에 맡겨주세요.',
       paymentMethod,
       culturalDeduction,
       status: '결제완료',
@@ -710,12 +710,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       prev.map((o) =>
         o.orderId === orderId
           ? {
-            ...o,
-            status: '주문취소',
-            isRefunded: true,
-            refundDate,
-            refundReason: reason,
-          }
+              ...o,
+              status: '주문취소',
+              isRefunded: true,
+              refundDate,
+              refundReason: reason,
+            }
           : o,
       ),
     );

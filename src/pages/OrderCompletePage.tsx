@@ -108,23 +108,17 @@ export const OrderCompletePage: React.FC = () => {
               <div className='text-h4 font-bold text-[#181718] mt-1'>{order.totalSellingPrice.toLocaleString()}원</div>
             </div>
 
-
             <Minus className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
 
             <div className='w-full sm:flex-1 bg-[#e8f5ef] p-4 rounded-lg border border-[#a3d9bc] text-center' aria-label={`회사 지원금 차감 ${order.totalCompanySubsidy.toLocaleString()}원`}>
-              <span className='text-caption text-[#1f976b] font-semibold inline-flex items-center gap-1'>
-                회사 지원금 (독서 지원금 차감)
-              </span>
+              <span className='text-caption text-[#1f976b] font-semibold inline-flex items-center gap-1'>회사 지원금 (독서 지원금 차감)</span>
               <div className='text-h4 font-bold text-[#1f976b] mt-1'>{order.totalCompanySubsidy.toLocaleString()}원</div>
             </div>
-
 
             <Equal className='hidden sm:block w-5 h-5 flex-shrink-0' style={{ color: 'var(--color-foreground-secondary)' }} aria-hidden='true' />
 
             <div className='w-full sm:flex-1 bg-[#fffafa] p-4 rounded-lg border border-[#f9cdcd] text-center' aria-label={`실 결제금액 ${order.finalPaidAmount.toLocaleString()}원`}>
-              <span className='text-caption text-[#df0000] font-semibold inline-flex items-center gap-1'>
-                직원 결제금액
-              </span>
+              <span className='text-caption text-[#df0000] font-semibold inline-flex items-center gap-1'>직원 결제금액</span>
               <div className='text-h4 font-black text-[#df0000] mt-1'>{order.finalPaidAmount.toLocaleString()}원</div>
             </div>
           </div>
@@ -202,7 +196,9 @@ export const OrderCompletePage: React.FC = () => {
                         {item.quantity >= 2 && <div className='text-caption text-[#80888a] font-normal mt-0.5'>(1권당 {unitPrice.toLocaleString()}원)</div>}
                       </td>
                       <td className='p-3 text-center font-medium align-center'>{item.quantity}</td>
-                      <td className='p-3 text-right font-semibold align-center space-y-1'>{isSubsidyApplied && item.companySubsidy > 0 ? <span className={`font-bold ${item.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.companySubsidy.toLocaleString()}원</span> : null}</td>
+                      <td className='p-3 text-right font-semibold align-center space-y-1'>
+                        {isSubsidyApplied && item.companySubsidy > 0 ? <span className={`font-bold ${item.bookType === 'recommended' ? 'text-[#df0000]' : 'text-[#1f976b]'}`}>-{item.companySubsidy.toLocaleString()}원</span> : null}
+                      </td>
                       <td className='p-3 text-right pr-5 font-bold align-center text-[#181718]'>{item.employeePayment.toLocaleString()}원</td>
                     </tr>
                   );
@@ -232,7 +228,7 @@ export const OrderCompletePage: React.FC = () => {
           </div>
           <div className='grid grid-cols-[100px_1fr] gap-2 text-caption'>
             <span className='text-[#80888a]'>배송 메모</span>
-            <span className='text-[#595959]'>{order.deliveryMemo || '문 앞에 놓아주세요.'}</span>
+            <span className='text-[#595959]'>{order.deliveryMemo || '부재시 경비실에 맡겨주세요.'}</span>
           </div>
         </div>
 

@@ -31,7 +31,6 @@ function createBookCover(bg: string, title: string, author: string, accentColor:
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
-
 export const MOCK_BOOKS: Book[] = [
   {
     id: 'b-01',
@@ -251,7 +250,7 @@ export const INITIAL_ADDRESSES: Address[] = [
     jibunAddress: '서울특별시 종로구 서린동 33 영풍빌딩',
     detailAddress: '102동 1404호',
     isDefault: true,
-    deliveryMemo: '문 앞에 놓아주세요. (부재 시 연락 바랍니다)',
+    deliveryMemo: '부재시 경비실에 맡겨주세요. (부재 시 연락 바랍니다)',
   },
   {
     id: 'addr-02',
