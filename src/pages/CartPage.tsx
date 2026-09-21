@@ -145,7 +145,7 @@ export const CartPage: React.FC = () => {
                       <div className='flex items-center gap-3'>
                         {!subsidyLedger.recommendedUsed ? (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
-                            이번 달 1권 지원 가능
+                            지원금 사용 가능
                           </span>
                         ) : (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>
@@ -339,7 +339,7 @@ export const CartPage: React.FC = () => {
                       <div className='flex items-center gap-3'>
                         {!subsidyLedger.personalUsed ? (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
-                            이번 달 1권 지원 가능
+                            지원금 사용 가능
                           </span>
                         ) : (
                           <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>

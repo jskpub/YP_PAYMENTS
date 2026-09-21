@@ -123,15 +123,11 @@ export const PaymentPage: React.FC = () => {
     if (wasApplied && bookType === 'personal') {
       const remainingPersonal = selectedItems.filter((i) => i.id !== item.id && i.book.bookType === 'personal');
       if (remainingPersonal.length > 0) {
-        const highestDiscountItem = remainingPersonal.reduce(
-          (best, cur) => (cur.itemSellingPrice > best.itemSellingPrice ? cur : best),
-          remainingPersonal[0]
-        );
+        const highestDiscountItem = remainingPersonal.reduce((best, cur) => (cur.itemSellingPrice > best.itemSellingPrice ? cur : best), remainingPersonal[0]);
         applyCartSubsidy(highestDiscountItem.id);
       }
     }
   };
-
 
   // 유형별로 지원 혜택이 가장 큰 도서 지원금을 적용한다 (직원 입장에서 가장 이득이 되는 기본 선택).
   const handleApplyMissedSubsidy = () => {
@@ -157,8 +153,8 @@ export const PaymentPage: React.FC = () => {
     const itemsOfType = selectedItems.filter((i) => i.book.bookType === type);
     const applied = itemsOfType.find((i) => i.isSubsidyApplied);
     if (!applied) return false;
-    const mostExpensive = itemsOfType.reduce((best, cur) => (cur.itemSellingPrice > best.itemSellingPrice ? cur : best), itemsOfType[0]);
-    return applied.id === mostExpensive.id;
+    const maxPrice = Math.max(...itemsOfType.map((i) => i.itemSellingPrice));
+    return applied.itemSellingPrice === maxPrice;
   };
 
   const isMaxBenefitApplied = relevantSubsidyTypes.length > 0 && relevantSubsidyTypes.every(isMaxBenefitAppliedForType);
@@ -316,13 +312,9 @@ export const PaymentPage: React.FC = () => {
                       </div>
                       <div>
                         <div className='flex items-center gap-2 flex-wrap'>
-                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>
-                            이번 달 도서 지원금(추천·개인도서)이 모두 소진되었습니다.
-                          </h4>
+                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>이번 달 도서 지원금(추천·개인도서)이 모두 소진되었습니다.</h4>
                         </div>
-                        <p className='text-body-xs text-[#1E3A8A]/80 mt-0.5 leading-relaxed font-normal'>
-                          (전액 직원 부담금으로 결제됩니다.)
-                        </p>
+                        <p className='text-body-xs text-[#1E3A8A]/80 mt-0.5 leading-relaxed font-normal'>(전액 직원 부담금으로 결제됩니다.)</p>
                       </div>
                     </div>
                     <div className='inline-flex items-center gap-1.5 bg-white border border-[#BFDBFE] text-[#1E3A8A] text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-2xs shrink-0 self-start md:self-auto'>
@@ -338,11 +330,7 @@ export const PaymentPage: React.FC = () => {
                       </div>
                       <div>
                         <div className='flex items-center gap-2 flex-wrap'>
-                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>
-                            {subsidyLedger.recommendedUsed
-                              ? '이번 달 추천도서 지원금이 모두 소진되었습니다.'
-                              : '이번 달 개인도서 지원금이 모두 소진되었습니다.'}
-                          </h4>
+                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>{subsidyLedger.recommendedUsed ? '이번 달 추천도서 지원금이 모두 소진되었습니다.' : '이번 달 개인도서 지원금이 모두 소진되었습니다.'}</h4>
                         </div>
                         <p className='text-body-xs text-[#1E3A8A]/80 mt-0.5 leading-relaxed font-normal'>
                           {subsidyLedger.recommendedUsed
@@ -379,9 +367,7 @@ export const PaymentPage: React.FC = () => {
                       </div>
                       <div>
                         <div className='flex items-center gap-2 flex-wrap'>
-                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>
-                            지원 혜택이 가장 큰 도서에 지원금이 자동 적용되었습니다.
-                          </h4>
+                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>지원 혜택이 가장 큰 도서에 지원금이 자동 적용되었습니다.</h4>
                         </div>
                       </div>
                     </div>
@@ -399,9 +385,7 @@ export const PaymentPage: React.FC = () => {
                       </div>
                       <div>
                         <div className='flex items-center gap-2 flex-wrap'>
-                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>
-                            [최대혜택 적용하기]를 눌러 가장 큰 할인 혜택을 확인해 보세요.
-                          </h4>
+                          <h4 className='font-extrabold text-sm text-[#1E3A8A] tracking-tight'>[최대혜택 적용하기]를 눌러 가장 큰 할인 혜택을 확인해 보세요.</h4>
                         </div>
                       </div>
                     </div>
@@ -423,29 +407,18 @@ export const PaymentPage: React.FC = () => {
                 <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white p-10 text-center space-y-3 shadow-2xs'>
                   <p className='font-bold text-body-xs text-[#555a5c]'>선택된 주문 상품이 없습니다.</p>
                   <p className='text-caption text-[#80888a]'>주문서에서 제외된 도서는 장바구니에 보존되어 있습니다.</p>
-                  <button
-                    type='button'
-                    onClick={() => setActivePage('cart')}
-                    className='px-4 py-2 bg-[#df0000] hover:bg-[#ea2e2e] text-white text-caption font-bold rounded transition-colors shadow-2xs cursor-pointer'
-                  >
+                  <button type='button' onClick={() => setActivePage('cart')} className='px-4 py-2 bg-[#df0000] hover:bg-[#ea2e2e] text-white text-caption font-bold rounded transition-colors shadow-2xs cursor-pointer'>
                     장바구니로 이동
                   </button>
-
                 </div>
-
               ) : (
                 <>
-                  <div className='text-[#df0000] text-caption font-normal bg-white border-[#edf0f1]'>
-                    ※ [지원금 적용하기] 버튼을 클릭하면 해당 도서에 지원금이 적용됩니다.
-                  </div>
+                  <div className='text-[#df0000] text-caption font-normal bg-white border-[#edf0f1]'>※ [지원금 적용하기] 버튼을 클릭하면 해당 도서에 지원금이 적용됩니다.</div>
                   {/* 1) 추천도서 주문 목록 카드 */}
                   {selectedItems.some((i) => i.book.bookType === 'recommended') && (
                     <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white shadow-2xs'>
                       {/* 아코디언 카드 헤더 */}
-                      <div
-                        onClick={() => setIsRecommendedOpen(!isRecommendedOpen)}
-                        className='px-5 py-4 flex flex-wrap items-center justify-between gap-2 bg-[#ffffff] hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'
-                      >
+                      <div onClick={() => setIsRecommendedOpen(!isRecommendedOpen)} className='px-5 py-4 flex flex-wrap items-center justify-between gap-2 bg-[#ffffff] hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'>
                         <div className='flex items-center gap-2.5'>
                           <span className='text-caption-lg px-2.5 py-1 rounded-md font-extrabold flex items-center gap-1 bg-[#ffebeb] text-[#df0000] border border-[#fca5a5]'>
                             <Award className='w-3.5 h-3.5' />
@@ -460,13 +433,9 @@ export const PaymentPage: React.FC = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                           {subsidyLedger.recommendedUsed ? (
-                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>
-                              지원금 한도 소진
-                            </span>
+                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>지원금 한도 소진</span>
                           ) : (
-                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
-                              이번 달 1권 지원 가능
-                            </span>
+                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>지원금 사용 가능</span>
                           )}
                           {isRecommendedOpen ? <ChevronUp className='w-5 h-5 text-[#80888a]' /> : <ChevronDown className='w-5 h-5 text-[#80888a]' />}
                         </div>
@@ -478,7 +447,7 @@ export const PaymentPage: React.FC = () => {
                           {subsidyLedger.recommendedUsed && (
                             <div className='px-5 py-2.5 bg-[#ffebeb] border-[#fca5a5] text-[red] text-caption font-bold flex items-center gap-2'>
                               <AlertCircle className='w-4 h-4 text-[red] flex-shrink-0' />
-                              <span className="font-normal">추천도서의 지원 한도가 소진되어, 추천 도서는 본인 부담으로 결제됩니다.</span>
+                              <span className='font-normal'>추천도서의 지원 한도가 소진되어, 추천 도서는 본인 부담으로 결제됩니다.</span>
                             </div>
                           )}
                           <div className='overflow-x-auto'>
@@ -504,13 +473,7 @@ export const PaymentPage: React.FC = () => {
                                         {/* 1. 상품정보 */}
                                         <td className='p-3.5 pl-5 align-middle'>
                                           <div className='flex items-center gap-3'>
-                                            <BookCoverImage
-                                              title={item.book.title}
-                                              coverImage={item.book.coverImage}
-                                              coverBackground={item.book.coverBackground}
-                                              className='w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0 shadow-xs'
-                                              titleClassName='text-[8px]'
-                                            />
+                                            <BookCoverImage title={item.book.title} coverImage={item.book.coverImage} coverBackground={item.book.coverBackground} className='w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0 shadow-xs' titleClassName='text-[8px]' />
                                             <div className='space-y-1 min-w-0 flex-1 pr-6'>
                                               <div className='flex items-center gap-1.5 flex-wrap'>
                                                 <span className={`text-caption px-2 py-0.5 rounded-lg border font-medium inline-flex items-center gap-1 ${isEbook ? 'bg-[#eef2ff] text-[#4338ca] border-[#c7d2fe]' : 'bg-[#f6f6f6] text-[#555a5c] border-[#cbd2d4]'}`}>
@@ -544,9 +507,7 @@ export const PaymentPage: React.FC = () => {
                                             </span>
                                           ) : item.isSubsidyApplied ? (
                                             <div className='flex flex-col items-center gap-0.5'>
-                                              <span className='font-bold text-[#df0000] text-caption'>
-                                                -{item.itemCompanySubsidy.toLocaleString()}원
-                                              </span>
+                                              <span className='font-bold text-[#df0000] text-caption'>-{item.itemCompanySubsidy.toLocaleString()}원</span>
                                               <button
                                                 type='button'
                                                 onClick={() => removeCartSubsidy(item.id)}
@@ -572,13 +533,7 @@ export const PaymentPage: React.FC = () => {
                                         {/* 5. 직원 결제액 및 제외 버튼 */}
                                         <td className='p-3 text-right align-middle font-bold text-[#181718] relative pr-16'>
                                           <span>{item.itemEmployeePayment.toLocaleString()}원</span>
-                                          <button
-                                            type='button'
-                                            onClick={() => handleExcludeItem(item)}
-                                            className='btn-book-remove'
-                                            title='이번 결제에서 제외 (장바구니에는 보존)'
-                                            aria-label='상품 제외'
-                                          >
+                                          <button type='button' onClick={() => handleExcludeItem(item)} className='btn-book-remove' title='이번 결제에서 제외 (장바구니에는 보존)' aria-label='상품 제외'>
                                             ✕
                                           </button>
                                         </td>
@@ -597,10 +552,7 @@ export const PaymentPage: React.FC = () => {
                   {selectedItems.some((i) => i.book.bookType === 'personal') && (
                     <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white shadow-2xs'>
                       {/* 아코디언 카드 헤더 */}
-                      <div
-                        onClick={() => setIsPersonalOpen(!isPersonalOpen)}
-                        className='px-5 py-4 flex flex-wrap items-center justify-between gap-2 bg-[#ffffff] hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'
-                      >
+                      <div onClick={() => setIsPersonalOpen(!isPersonalOpen)} className='px-5 py-4 flex flex-wrap items-center justify-between gap-2 bg-[#ffffff] hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'>
                         <div className='flex items-center gap-2.5'>
                           <span className='text-caption-lg px-2.5 py-1 rounded-md font-extrabold flex items-center gap-1 bg-[#ecfdf5] text-[#059669] border border-[#a7f3d0]'>
                             <BookOpen className='w-3.5 h-3.5' />
@@ -615,13 +567,9 @@ export const PaymentPage: React.FC = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                           {subsidyLedger.personalUsed ? (
-                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>
-                              지원금 한도 소진
-                            </span>
+                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[red] bg-[#f1f5f9] border border-[red] px-2.5 py-1 rounded-full'>지원금 한도 소진</span>
                           ) : (
-                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>
-                              이번 달 1권 지원 가능
-                            </span>
+                            <span className='inline-flex items-center gap-1 text-caption-lg font-bold text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] px-2.5 py-1 rounded-full'>지원금 사용 가능</span>
                           )}
                           {isPersonalOpen ? <ChevronUp className='w-5 h-5 text-[#80888a]' /> : <ChevronDown className='w-5 h-5 text-[#80888a]' />}
                         </div>
@@ -633,11 +581,10 @@ export const PaymentPage: React.FC = () => {
                           {subsidyLedger.personalUsed && (
                             <div className='px-5 py-2.5 bg-[#ffebeb]  border-[#fca5a5] text-[red] text-caption font-bold flex items-center gap-2'>
                               <AlertCircle className='w-4 h-4 text-[red] flex-shrink-0' />
-                              <span className="font-normal">개인도서의 지원 한도가 소진되어, 개인 도서는 본인 부담으로 결제됩니다.</span>
+                              <span className='font-normal'>개인도서의 지원 한도가 소진되어, 개인 도서는 본인 부담으로 결제됩니다.</span>
                             </div>
                           )}
                           <div className='overflow-x-auto'>
-
                             <table className='w-full table-fixed text-caption text-left border-collapse'>
                               <thead className='bg-[#f6f6f6] text-[#80888a] font-semibold border-b border-[#edf0f1]'>
                                 <tr>
@@ -660,13 +607,7 @@ export const PaymentPage: React.FC = () => {
                                         {/* 1. 상품정보 */}
                                         <td className='p-3.5 pl-5 align-middle'>
                                           <div className='flex items-center gap-3'>
-                                            <BookCoverImage
-                                              title={item.book.title}
-                                              coverImage={item.book.coverImage}
-                                              coverBackground={item.book.coverBackground}
-                                              className='w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0 shadow-xs'
-                                              titleClassName='text-[8px]'
-                                            />
+                                            <BookCoverImage title={item.book.title} coverImage={item.book.coverImage} coverBackground={item.book.coverBackground} className='w-14 h-20 rounded border border-[#edf0f1] flex-shrink-0 shadow-xs' titleClassName='text-[8px]' />
                                             <div className='space-y-1 min-w-0 flex-1 pr-6'>
                                               <div className='flex items-center gap-1.5 flex-wrap'>
                                                 <span className={`text-caption px-2 py-0.5 rounded-lg border font-medium inline-flex items-center gap-1 ${isEbook ? 'bg-[#eef2ff] text-[#4338ca] border-[#c7d2fe]' : 'bg-[#f6f6f6] text-[#555a5c] border-[#cbd2d4]'}`}>
@@ -700,9 +641,7 @@ export const PaymentPage: React.FC = () => {
                                             </span>
                                           ) : item.isSubsidyApplied ? (
                                             <div className='flex flex-col items-center gap-0.5'>
-                                              <span className='font-bold text-[#059669] text-caption'>
-                                                -{item.itemCompanySubsidy.toLocaleString()}원
-                                              </span>
+                                              <span className='font-bold text-[#059669] text-caption'>-{item.itemCompanySubsidy.toLocaleString()}원</span>
                                               <button
                                                 type='button'
                                                 onClick={() => removeCartSubsidy(item.id)}
@@ -728,13 +667,7 @@ export const PaymentPage: React.FC = () => {
                                         {/* 5. 직원 결제액 및 제외 버튼 */}
                                         <td className='p-3 text-right align-middle font-bold text-[#181718] relative pr-9'>
                                           <span>{item.itemEmployeePayment.toLocaleString()}원</span>
-                                          <button
-                                            type='button'
-                                            onClick={() => handleExcludeItem(item)}
-                                            className='btn-book-remove'
-                                            title='이번 결제에서 제외 (장바구니에는 보존)'
-                                            aria-label='상품 제외'
-                                          >
+                                          <button type='button' onClick={() => handleExcludeItem(item)} className='btn-book-remove' title='이번 결제에서 제외 (장바구니에는 보존)' aria-label='상품 제외'>
                                             ✕
                                           </button>
                                         </td>
@@ -945,8 +878,9 @@ export const PaymentPage: React.FC = () => {
                           key={item.id}
                           type='button'
                           onClick={() => setSelectedMethod(item.id)}
-                          className={`relative h-12 rounded border text-caption font-semibold flex items-center justify-center transition-all ${selectedMethod === item.id ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]' : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
-                            }`}
+                          className={`relative h-12 rounded border text-caption font-semibold flex items-center justify-center transition-all ${
+                            selectedMethod === item.id ? 'border-[#df0000] bg-[#ffebeb]/40 text-[#df0000] ring-1 ring-[#df0000]' : 'border-[#cbd2d4] bg-white text-[#555a5c] hover:border-[#80888a]'
+                          }`}
                         >
                           {item.badge && <span className={`absolute top-1 right-1 text-caption text-white px-1 rounded font-bold ${item.badgeColor}`}>{item.badge}</span>}
                           <span>{item.name}</span>
@@ -974,7 +908,13 @@ export const PaymentPage: React.FC = () => {
             {/* 7. B2B 복합결제 & 일반배송 안내사항 Accordions (CartPage에서 이관) */}
             <div className='border-t border-[#dadada] pt-5 space-y-3'>
               <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white shadow-2xs'>
-                <button type='button' role='button' aria-expanded={activeAccordion.b2b} onClick={() => toggleSection('b2b')} className='w-full px-5 py-3.5 flex items-center justify-between font-bold text-body-xs text-[#181718] bg-white hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'>
+                <button
+                  type='button'
+                  role='button'
+                  aria-expanded={activeAccordion.b2b}
+                  onClick={() => toggleSection('b2b')}
+                  className='w-full px-5 py-3.5 flex items-center justify-between font-bold text-body-xs text-[#181718] bg-white hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'
+                >
                   <span>B2B 복합결제 및 주문 안내사항</span>
                   {activeAccordion.b2b ? <ChevronUp className='w-4 h-4 text-[#80888a]' /> : <ChevronDown className='w-4 h-4 text-[#80888a]' />}
                 </button>
@@ -987,12 +927,8 @@ export const PaymentPage: React.FC = () => {
                       <li>
                         <strong>개인도서</strong>: 50% 회사 지원 (최대 10,000원 한도, <strong>종이도서 또는 전자도서</strong>)
                       </li>
-                      <li>
-                        구매 한도 및 갱신: 지원 한도는 매월 1일 리셋되며 당월 미사용분은 다음 달로 이월되지 않습니다.
-                      </li>
-                      <li>
-                        복합결제 및 주문 관리: 회사 지원금이 차감된 후, 남은 직원 부담금만 선택한 결제수단으로 결제되며 하나의 주문번호로 통합 관리됩니다.
-                      </li>
+                      <li>구매 한도 및 갱신: 지원 한도는 매월 1일 리셋되며 당월 미사용분은 다음 달로 이월되지 않습니다.</li>
+                      <li>복합결제 및 주문 관리: 회사 지원금이 차감된 후, 남은 직원 부담금만 선택한 결제수단으로 결제되며 하나의 주문번호로 통합 관리됩니다.</li>
                       <li>지원금을 초과하는 금액은 신용카드, 카카오페이, 네이버페이 등 개인 결제수단으로 복합결제됩니다.</li>
                     </ul>
                   </div>
@@ -1000,7 +936,13 @@ export const PaymentPage: React.FC = () => {
               </div>
 
               <div className='border border-[#cbd2d4] rounded-lg overflow-hidden bg-white shadow-2xs'>
-                <button type='button' role='button' aria-expanded={activeAccordion.delivery} onClick={() => toggleSection('delivery')} className='w-full px-5 py-3.5 flex items-center justify-between font-bold text-body-xs text-[#181718] bg-white hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'>
+                <button
+                  type='button'
+                  role='button'
+                  aria-expanded={activeAccordion.delivery}
+                  onClick={() => toggleSection('delivery')}
+                  className='w-full px-5 py-3.5 flex items-center justify-between font-bold text-body-xs text-[#181718] bg-white hover:bg-[#f6f6f6] select-none cursor-pointer border-b border-[#edf0f1]'
+                >
                   <span>일반배송상품(택배수령) 안내사항</span>
                   {activeAccordion.delivery ? <ChevronUp className='w-4 h-4 text-[#80888a]' /> : <ChevronDown className='w-4 h-4 text-[#80888a]' />}
                 </button>
@@ -1106,9 +1048,7 @@ export const PaymentPage: React.FC = () => {
               {/* 총 결제금액(직원 부담금) */}
               <div className='border-t border-[#dadada] pt-3'>
                 <div className='flex justify-between items-center'>
-                  <span className='font-bold text-body-xs text-[#181718]'>
-                    최종 결제금액
-                  </span>
+                  <span className='font-bold text-body-xs text-[#181718]'>최종 결제금액</span>
                   <div className='text-right'>
                     <span className='text-h2 font-black text-[#df0000]'>{cartStats.finalPaymentAmount.toLocaleString()}</span>
                     <span className='text-body-xs font-bold text-[#df0000] ml-1'>원</span>
@@ -1120,17 +1060,23 @@ export const PaymentPage: React.FC = () => {
               {subsidyLedger.recommendedUsed && subsidyLedger.personalUsed ? (
                 <div className='bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-3 text-caption text-[#334155] font-medium leading-relaxed flex items-start gap-2 shadow-2xs'>
                   <span className='shrink-0 text-body-xs'>💡</span>
-                  <span className='break-keep'><strong>추천도서 및 개인도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.</span>
+                  <span className='break-keep'>
+                    <strong>추천도서 및 개인도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.
+                  </span>
                 </div>
               ) : subsidyLedger.recommendedUsed && selectedItems.some((i) => i.book.bookType === 'recommended') ? (
                 <div className='bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-3 text-caption text-[#334155] font-medium leading-relaxed flex items-start gap-2 shadow-2xs'>
                   <span className='shrink-0 text-body-xs'>💡</span>
-                  <span><strong>추천도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.</span>
+                  <span>
+                    <strong>추천도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.
+                  </span>
                 </div>
               ) : subsidyLedger.personalUsed && selectedItems.some((i) => i.book.bookType === 'personal') ? (
                 <div className='bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-3 text-caption text-[#334155] font-medium leading-relaxed flex items-start gap-2 shadow-2xs'>
                   <span className='shrink-0 text-body-xs'>💡</span>
-                  <span><strong>개인도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.</span>
+                  <span>
+                    <strong>개인도서</strong>의 경우 지원금 한도가 소진되어 직원 부담금으로 결제됩니다.
+                  </span>
                 </div>
               ) : null}
 
@@ -1152,78 +1098,57 @@ export const PaymentPage: React.FC = () => {
               </button>
 
               {/* 안전 링크: 장바구니로 돌아가 상품 수정 */}
-              <button
-                type='button'
-                onClick={() => setActivePage('cart')}
-                className='w-full text-center py-1 text-body-xs text-[#64748b] hover:text-[#181718] flex items-center justify-center gap-1 cursor-pointer transition-colors font-medium border rounded-lg py-4'
-              >
+              <button type='button' onClick={() => setActivePage('cart')} className='w-full text-center py-1 text-body-xs text-[#64748b] hover:text-[#181718] flex items-center justify-center gap-1 cursor-pointer transition-colors font-medium border rounded-lg py-4'>
                 ‹ 장바구니로 돌아가 상품 수정
               </button>
             </div>
           </div>
         </form>
-      </div >
+      </div>
 
       {/* 최대혜택 미적용 단일 안내 팝업 */}
-      {
-        showSubsidyConfirm && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4' onClick={() => setShowSubsidyConfirm(false)}>
-            <div className='relative bg-white rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-xl' onClick={(e) => e.stopPropagation()}>
-              {/* 우측 상단 [X] 닫기 버튼 */}
-              <button
-                type='button'
-                onClick={() => setShowSubsidyConfirm(false)}
-                className='absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100 cursor-pointer'
-                aria-label='닫기'
-              >
-                <X className='w-5 h-5' />
-              </button>
+      {showSubsidyConfirm && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4' onClick={() => setShowSubsidyConfirm(false)}>
+          <div className='relative bg-white rounded-2xl p-6 max-w-sm w-full space-y-5 shadow-xl' onClick={(e) => e.stopPropagation()}>
+            {/* 우측 상단 [X] 닫기 버튼 */}
+            <button type='button' onClick={() => setShowSubsidyConfirm(false)} className='absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-full hover:bg-slate-100 cursor-pointer' aria-label='닫기'>
+              <X className='w-5 h-5' />
+            </button>
 
-              {/* 헤더 & 타이틀 */}
-              <div className='flex items-center gap-3 pt-1 pr-6'>
-                <div className='w-10 h-10 rounded-full bg-red-50 text-[#df0000] flex items-center justify-center shrink-0 border border-red-100'>
-                  <Sparkles className='w-5 h-5 text-[#df0000]' />
-                </div>
-                <div>
-                  <h3 className='font-extrabold text-base text-[#181718] tracking-tight'>최대 혜택이 적용되지 않았습니다</h3>
-                </div>
+            {/* 헤더 & 타이틀 */}
+            <div className='flex items-center gap-3 pt-1 pr-6'>
+              <div className='w-10 h-10 rounded-full bg-red-50 text-[#df0000] flex items-center justify-center shrink-0 border border-red-100'>
+                <Sparkles className='w-5 h-5 text-[#df0000]' />
               </div>
-
-              {/* 액션 버튼 (가로 2열 배치) */}
-              <div className='flex gap-2.5 pt-1'>
-                <button
-                  type='button'
-                  onClick={handleProceedWithoutSubsidy}
-                  className='flex-1 py-3 rounded-lg border border-[#cbd2d4] text-body-xs font-semibold text-[#595959] hover:bg-[#f6f6f6] transition-colors cursor-pointer'
-                >
-                  그대로 진행
-                </button>
-                <button
-                  type='button'
-                  onClick={handleApplyMaxBenefitOnly}
-                  className='flex-1 py-3 rounded-lg bg-[#df0000] hover:bg-[#ea2e2e] text-white text-body-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer'
-                >
-                  <Sparkles className='w-4 h-4 text-white' />
-                  <span>최대혜택 적용하기</span>
-                </button>
+              <div>
+                <h3 className='font-extrabold text-base text-[#181718] tracking-tight'>최대 혜택이 적용되지 않았습니다</h3>
               </div>
             </div>
+
+            {/* 액션 버튼 (가로 2열 배치) */}
+            <div className='flex gap-2.5 pt-1'>
+              <button type='button' onClick={handleProceedWithoutSubsidy} className='flex-1 py-3 rounded-lg border border-[#cbd2d4] text-body-xs font-semibold text-[#595959] hover:bg-[#f6f6f6] transition-colors cursor-pointer'>
+                그대로 진행
+              </button>
+              <button type='button' onClick={handleApplyMaxBenefitOnly} className='flex-1 py-3 rounded-lg bg-[#df0000] hover:bg-[#ea2e2e] text-white text-body-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer'>
+                <Sparkles className='w-4 h-4 text-white' />
+                <span>최대혜택 적용하기</span>
+              </button>
+            </div>
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* 결제 진행중 팝업 — 06_checkout.html #modalProgress 대응 */}
-      {
-        isPaymentProcessing && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'>
-            <div className='bg-white rounded-lg p-8 max-w-sm w-full space-y-3 shadow-xl text-center'>
-              <Loader2 className='w-8 h-8 mx-auto animate-spin' style={{ color: 'var(--color-primary)' }} />
-              <h3 className='font-bold text-body-md text-[#181718]'>결제 진행 중입니다…</h3>
-              <p className='text-caption text-[#80888a]'>잠시만 기다려 주세요.</p>
-            </div>
+      {isPaymentProcessing && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'>
+          <div className='bg-white rounded-lg p-8 max-w-sm w-full space-y-3 shadow-xl text-center'>
+            <Loader2 className='w-8 h-8 mx-auto animate-spin' style={{ color: 'var(--color-primary)' }} />
+            <h3 className='font-bold text-body-md text-[#181718]'>결제 진행 중입니다…</h3>
+            <p className='text-caption text-[#80888a]'>잠시만 기다려 주세요.</p>
           </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
